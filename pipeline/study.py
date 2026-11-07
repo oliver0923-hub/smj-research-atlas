@@ -90,22 +90,45 @@ def tag(label):
 
 
 def finding_status(segment):
-    """Support and significance are separate. Absence of p-values means unknown."""
+    """Conservative explicit support / significance cues, with negation priority.
+
+    Unsupported != statistically insignificant; a p-value for a different
+    coefficient should never be inferred as hypothesis-level significance.
+    """
     s=segment.lower()
-    if re.search(r"\b(partial(?:ly)?\s+support(?:ed)?|mixed\s+(?:support|evidence|results?))\b",s):
-        support="partially_supported" if "partial" in s else "mixed"
-    elif re.search(r"\b(not\s+supported|unsupported|fail(?:ed|s)?\s+to\s+support|no\s+support\s+for)\b",s):
+    partial=re.search(r"\b(partial(?:ly)?\s+support(?:ed)?|mixed\s+(?:support|evidence|results?))\b",s)
+    negative=re.search(
+        r"\b(?:not\s+supported|unsupported|"
+        r"fail(?:ed|s)?\s+to\s+(?:(?:find|provide|offer)\s+)?(?:any\s+)?support|"
+        r"(?:do|does|did|can|could|would)\s+not\s+(?:(?:find|provide|offer)\s+)?(?:any\s+)?(?:support|confirm)|"
+        r"(?:no|lack(?:s|ed)?\s+of|little)\s+(?:(?:statistical(?:ly)?|significant|empirical|clear|strong)\s+){0,3}support|"
+        r"no\s+evidence\s+(?:in\s+)?support\s+of|"
+        r"did\s+not\s+find\s+evidence\s+(?:in\s+)?support\s+of|"
+        r"not\s+confirmed)\b",s)
+    positive=re.search(r"\b(support(?:ed|s)?|confirm(?:ed|s)?)\b",s)
+    if partial:
+        support="partially_supported" if "partial" in partial.group(0) else "mixed"
+    elif negative:
         support="not_supported"
-    elif re.search(r"\b(support(?:ed|s)?|confirm(?:ed|s)?)\b",s):
+    elif positive:
         support="supported"
-    else:support="unknown"
-    if re.search(r"\b(non[- ]?significant|not\s+significant|insignificant|lack\s+of\s+significance)\b",s):
+    else:
+        support="unknown"
+
+    insignificant=re.search(
+        r"\b(?:non[- ]?significant|insignificant|"
+        r"not\s+(?:statistically\s+)?significant|"
+        r"no\s+(?:statistically\s+)?significant\s+(?:effect|relationship|association|coefficient)|"
+        r"lack\s+of\s+(?:statistical\s+)?significance|"
+        r"fails?\s+to\s+(?:reach|achieve)\s+(?:statistical\s+)?significance)\b",s)
+    significant=re.search(r"\b(?:statistically\s+)?significant\b",s)
+    explicit_p=re.search(r"\bp\s*<\s*(?:0?\.05|0?\.01|0?\.001)\b",s)
+    if insignificant:
         significance="not_significant"
-    elif re.search(r"\b(significant|statistically\s+significant)\b",s):
+    elif significant or explicit_p:
         significance="significant"
-    elif re.search(r"\bp\s*<\s*(?:0?\.0(?:1|5|01|001)|\.001)\b",s):
-        significance="significant"
-    else:significance="unknown"
+    else:
+        significance="unknown"
     return support,significance
 
 
