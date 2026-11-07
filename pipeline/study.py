@@ -99,9 +99,9 @@ def finding_status(segment):
     partial=re.search(r"\b(partial(?:ly)?\s+support(?:ed)?|mixed\s+(?:support|evidence|results?))\b",s)
     negative=re.search(
         r"\b(?:not\s+supported|unsupported|"
-        r"fail(?:ed|s)?\s+to\s+(?:find\s+)?support|"
-        r"(?:do|does|did|can|could|would)\s+not\s+(?:find\s+)?(?:support|confirm)|"
-        r"(?:no|lack(?:s|ed)?\s+of|little)\s+(?:statistical\s+)?support|"
+        r"fail(?:ed|s)?\s+to\s+(?:(?:find|provide|offer)\s+)?(?:any\s+)?support|"
+        r"(?:do|does|did|can|could|would)\s+not\s+(?:(?:find|provide|offer)\s+)?(?:any\s+)?(?:support|confirm)|"
+        r"(?:no|lack(?:s|ed)?\s+of|little)\s+(?:(?:statistical(?:ly)?|significant|empirical|clear|strong)\s+){0,3}support|"
         r"no\s+evidence\s+(?:in\s+)?support\s+of|"
         r"did\s+not\s+find\s+evidence\s+(?:in\s+)?support\s+of|"
         r"not\s+confirmed)\b",s)
