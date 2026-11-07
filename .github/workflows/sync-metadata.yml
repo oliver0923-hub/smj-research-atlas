@@ -1,63 +1,95 @@
-name: SMJ metadata sync
+name: Autonomous data release
 on:
   schedule:
     - cron: '23 2 * * *'
+    - cron: '47 3 * * 0'
+    - cron: '17 4 1 * *'
   workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [daily, weekly, monthly]
+        default: daily
 permissions:
+  actions: read
   contents: write
-  pull-requests: write
+  pages: write
+  id-token: write
 concurrency:
-  group: metadata-sync
+  group: atlas-publication
   cancel-in-progress: false
 jobs:
-  sync:
+  refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
       - run: pip install -e '.[test]'
-      - uses: dawidd6/action-download-artifact@v6
-        continue-on-error: true
-        with:
-          workflow: sync-metadata.yml
-          name: sync-checkpoints
-          path: data/staging
-          search_artifacts: true
-      - run: python -m pipeline.cli sync --max-pages 30
+      - run: git fetch origin atlas-data || true
+      - run: python -m pipeline.release restore
+      - run: python -m pipeline.release restore --from-ref origin/atlas-data
+      - name: Restore bounded prior checkpoints
+        run: python -m pipeline.release restore-checkpoints
         env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Run bounded autonomous update
+        env:
+          REQUESTED_MODE: ${{ inputs.mode }}
+          SCHEDULE: ${{ github.event.schedule }}
           CROSSREF_MAILTO: ${{ vars.CROSSREF_MAILTO }}
-      - run: python -m pytest
-      - run: python -m pipeline.cli build
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: sync-checkpoints
-          path: data/staging
-          if-no-files-found: ignore
-      - name: Record validated state digest
-        id: validated
-        run: echo "digest=$(sha256sum data/sync_state.json | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
-      - uses: peter-evans/create-pull-request@v7
-        id: proposal
-        continue-on-error: true
-        with:
-          branch: bot/metadata-update
-          title: 'data: update SMJ Crossref metadata'
-          body: 'Crossref metadata update. Inspect papers/audit/quarantine diff and coverage report. Variable review status is not automatically upgraded. Tests and offline validation run before PR creation.'
-          commit-message: 'data: sync Crossref metadata and coverage'
-          add-paths: |
-            data/
-            public/data/
-            docs/COVERAGE_REPORT.md
-      - name: Verify retained proposal branch when PR creation is unavailable
-        if: steps.proposal.outcome == 'failure'
-        env:
-          EXPECTED_STATE_DIGEST: ${{ steps.validated.outputs.digest }}
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
         run: |
-          git fetch origin bot/metadata-update
-          actual=$(git show FETCH_HEAD:data/sync_state.json | sha256sum | cut -d ' ' -f 1)
-          test "$actual" = "$EXPECTED_STATE_DIGEST"
-          echo "::warning::PR creation unavailable; validated data retained on bot/metadata-update. See job logs."
-          echo "Validated metadata is retained on [bot/metadata-update](https://github.com/${{ github.repository }}/compare/main...bot/metadata-update). PR creation was unavailable; inspect logs and review this branch before merging." >> "$GITHUB_STEP_SUMMARY"
+          mode="${REQUESTED_MODE:-daily}"
+          if [ "$SCHEDULE" = '47 3 * * 0' ]; then mode=weekly; fi
+          if [ "$SCHEDULE" = '17 4 1 * *' ]; then mode=monthly; fi
+          python -m pipeline.release refresh --mode "$mode"
+      - run: python -m pytest
+      - run: python -m pipeline.release gate
+      - run: python -m pipeline.cli build
+      - run: npm ci
+      - run: npm audit --audit-level=high
+      - run: npm run build
+        env:
+          SITE_URL: https://${{ github.repository_owner }}.github.io
+          BASE_PATH: /${{ github.event.repository.name }}/
+      - name: Commit validated data artifact only
+        run: |
+          git config user.name 'SMJ Atlas data bot'
+          git config user.email 'atlas-bot@users.noreply.github.com'
+          blob=$(git hash-object -w data/live_state.json.gz)
+          sub=$(printf '100644 blob %s	live_state.json.gz\n' "$blob" | git mktree)
+          tree=$(printf '040000 tree %s	data\n' "$sub" | git mktree)
+          parent=$(git rev-parse --verify origin/atlas-data 2>/dev/null || true)
+          if [ -n "$parent" ]; then
+            commit=$(printf 'Validated automatic data release\n' | git commit-tree "$tree" -p "$parent")
+          else
+            commit=$(printf 'Initial validated data release\n' | git commit-tree "$tree")
+          fi
+          git push origin "$commit:refs/heads/atlas-data"
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
+        with:
+          path: dist
+      - uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
+        id: deployment
+      - name: Preserve failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pipeline-diagnostics
+          path: |
+            data/staging/
+            data/staging/last_error.json
+            data/generated/coverage_report.json
+            data/pipeline_history.jsonl
+          if-no-files-found: ignore

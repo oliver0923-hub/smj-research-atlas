@@ -1,0 +1,319 @@
+{
+  "properties": {
+    "inference_origin": {
+      "enum": [
+        "publisher_metadata",
+        "crossref_metadata",
+        "openalex_metadata",
+        "deterministic_rule",
+        "model_inference",
+        "fulltext_extraction",
+        "human_review"
+      ],
+      "title": "Inference Origin",
+      "type": "string"
+    },
+    "evidence_grade": {
+      "enum": [
+        "E0_metadata",
+        "E1_abstract",
+        "E2_fulltext_section",
+        "E3_measurement_text"
+      ],
+      "title": "Evidence Grade",
+      "type": "string"
+    },
+    "validation_status": {
+      "enum": [
+        "validated_automatic",
+        "provisional",
+        "failed",
+        "insufficient_evidence"
+      ],
+      "title": "Validation Status",
+      "type": "string"
+    },
+    "source_url": {
+      "title": "Source Url",
+      "type": "string"
+    },
+    "evidence_locator": {
+      "title": "Evidence Locator",
+      "type": "string"
+    },
+    "source_hash": {
+      "title": "Source Hash",
+      "type": "string"
+    },
+    "heuristic_score": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Heuristic Score"
+    },
+    "algorithm_version": {
+      "title": "Algorithm Version",
+      "type": "string"
+    },
+    "retrieved_at": {
+      "title": "Retrieved At",
+      "type": "string"
+    },
+    "missing_reason": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Missing Reason",
+      "type": "object"
+    },
+    "variable_id": {
+      "title": "Variable Id",
+      "type": "string"
+    },
+    "paper_id": {
+      "title": "Paper Id",
+      "type": "string"
+    },
+    "variable_label_original": {
+      "title": "Variable Label Original",
+      "type": "string"
+    },
+    "construct_en": {
+      "title": "Construct En",
+      "type": "string"
+    },
+    "construct_zh": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Construct Zh"
+    },
+    "role": {
+      "default": "unknown",
+      "enum": [
+        "independent",
+        "dependent",
+        "mediator",
+        "moderator",
+        "control",
+        "instrument",
+        "selection",
+        "other",
+        "unknown"
+      ],
+      "title": "Role",
+      "type": "string"
+    },
+    "operational_definition": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Operational Definition"
+    },
+    "proxy_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Proxy Name"
+    },
+    "formula": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Formula"
+    },
+    "formula_source_text": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Formula Source Text"
+    },
+    "unit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unit"
+    },
+    "lag": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lag"
+    },
+    "sample_period": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sample Period"
+    },
+    "data_source": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Data Source"
+    },
+    "empirical_method": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Empirical Method"
+    },
+    "reported_association": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reported Association"
+    },
+    "source_page": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Page"
+    },
+    "source_span_start": {
+      "title": "Source Span Start",
+      "type": "integer"
+    },
+    "source_span_end": {
+      "title": "Source Span End",
+      "type": "integer"
+    },
+    "span_hash": {
+      "title": "Span Hash",
+      "type": "string"
+    },
+    "evidence_excerpt": {
+      "title": "Evidence Excerpt",
+      "type": "string"
+    },
+    "verification_status": {
+      "default": "fulltext_screened",
+      "title": "Verification Status",
+      "type": "string"
+    },
+    "extraction_method": {
+      "default": "deterministic_measurement_span_v1",
+      "title": "Extraction Method",
+      "type": "string"
+    },
+    "human_reviewer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Human Reviewer"
+    },
+    "field_evidence": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Field Evidence",
+      "type": "object"
+    }
+  },
+  "required": [
+    "inference_origin",
+    "evidence_grade",
+    "validation_status",
+    "source_url",
+    "evidence_locator",
+    "source_hash",
+    "algorithm_version",
+    "retrieved_at",
+    "variable_id",
+    "paper_id",
+    "variable_label_original",
+    "construct_en",
+    "source_span_start",
+    "source_span_end",
+    "span_hash",
+    "evidence_excerpt"
+  ],
+  "title": "OperationalVariable",
+  "type": "object"
+}

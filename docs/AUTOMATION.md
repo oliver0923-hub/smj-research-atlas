@@ -1,5 +1,10 @@
-# AUTOMATION
 
-sync-metadata.yml 每日 02:23 UTC（臺北 10:23）與手動觸發，保留跨 run staging artifact。完整成功才建立資料 PR。qa-weekly.yml 每週離線 QA。build-deploy.yml main 更新後部署。validate.yml 驗證 PR。尚未在遠端執行前，排程均只是已寫入設定。
 
-2026-11-07 實際遠端增量同步與測試已成功。預設 Actions 禁止建立 PR；PR 步驟失敗時，核對 bot/metadata-update 的 sync_state SHA256 與本次已驗證結果一致才視為成功，否則工作失敗。分支保留供人工比較，不自動合併。
+- 每日 02:23 UTC（臺北 10:23）：Crossref 增量，七日重疊及最近 90 日掃描。
+- 每週日 03:47 UTC（臺北 11:47）：有預算的 OpenAlex 補充與 OA 正文擷取。
+- 每月一日 04:17 UTC（臺北 12:17）：重算描述性分析與品質報告。
+- 每週日 05:11 UTC（臺北 13:11）：額外 coverage QA。
+- main 更新：測試、資料驗證與 Astro 建置後部署。
+
+不經人工 PR 核准。資料先通過 schema、DOI／關聯與證據一致性檢查、pytest、套件 audit、正式 build，才將白名單資料壓縮快照寫入 atlas-data 分支並部署。資料分支不能夾帶可執行原始碼；舊版本可由 Git 還原。失敗保留最近成功網站，GHA 日誌及 diagnostics artifact 記錄錯誤。Checkpoint 以白名單還原，禁止任意路徑寫入。
+

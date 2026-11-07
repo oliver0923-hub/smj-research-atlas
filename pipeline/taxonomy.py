@@ -6,6 +6,7 @@ from collections import Counter, defaultdict
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
+from .evidence import Origin, Grade, Validation
 
 ORIGINS = Literal['official_academic_organization', 'custom_research', 'algorithmic']
 
@@ -30,6 +31,9 @@ class Term(BaseModel):
     variable_id: str | None = None
     evidence_locator: str | None = None
     source_url: str | None = None
+    inference_origin: Origin | None = None
+    evidence_grade: Grade | None = None
+    validation_status: Validation | None = None
 
     @model_validator(mode='after')
     def provenance(self):
@@ -58,6 +62,12 @@ class Assignment(BaseModel):
     reviewer: str | None = None
     reviewed_at: str | None = None
     audit_log: list[dict] = Field(default_factory=list)
+    inference_origin: Origin | None = None
+    evidence_grade: Grade | None = None
+    validation_status: Validation | None = None
+    heuristic_score: float | None = Field(default=None,ge=0,le=1)
+    algorithm_version: str | None = None
+    source_hash: str | None = None
 
     @model_validator(mode='after')
     def human_gate(self):
@@ -197,10 +207,17 @@ def enrich_papers(papers, taxonomy, assignments):
         result['taxonomy_version'] = taxonomy['version']
         result['classifications'] = by_paper[paper['paper_id']]
         result['taxonomy_tags'] = {status:{level:[] for level in ['domain','research_topic','construct','operational_variable','theory']} for status in ['approved','suggested']}
+        result['taxonomy_tags'].update({status:{level:[] for level in ['domain','research_topic','construct','operational_variable','theory']} for status in ['automatic','provisional','active']})
         for a in result['classifications']:
             if a['review_status'] in result['taxonomy_tags']:
                 result['taxonomy_tags'][a['review_status']][nodes[a['term_id']]['level']].append(a['term_id'])
-        result['domain_codes'] = sorted(set(result['taxonomy_tags']['approved']['domain']))
-        result['theory_tags'] = sorted(set(result['taxonomy_tags']['approved']['theory']))
+            level=nodes[a['term_id']]['level']
+            if a.get('validation_status') in {'validated_automatic','provisional'} and a['review_status']!='rejected':
+                target='automatic' if a['validation_status']=='validated_automatic' else 'provisional'
+                result['taxonomy_tags'][target][level].append(a['term_id'])
+            if a['review_status']=='approved' or (a['review_status']!='rejected' and a.get('validation_status') in {'validated_automatic','provisional'}):
+                result['taxonomy_tags']['active'][level].append(a['term_id'])
+        result['domain_codes'] = sorted(set(result['taxonomy_tags']['active']['domain']))
+        result['theory_tags'] = sorted(set(result['taxonomy_tags']['active']['theory']))
         output.append(result)
     return output

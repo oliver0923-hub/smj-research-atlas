@@ -15,3 +15,12 @@ bootstrap-base64.txt
 public/data/
 data/generated/
 data/review_queue.jsonl
+.cache/
+
+# Controlled data artifact holds these normalized tables.
+data/enrichment.jsonl
+data/content_receipts.jsonl
+data/extraction_runs.jsonl
+data/papers.jsonl
+data/pipeline_history.jsonl
+data/publisher_check.json

@@ -86,6 +86,101 @@
       },
       "title": "Audit Log",
       "type": "array"
+    },
+    "inference_origin": {
+      "anyOf": [
+        {
+          "enum": [
+            "publisher_metadata",
+            "crossref_metadata",
+            "openalex_metadata",
+            "deterministic_rule",
+            "model_inference",
+            "fulltext_extraction",
+            "human_review"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Inference Origin"
+    },
+    "evidence_grade": {
+      "anyOf": [
+        {
+          "enum": [
+            "E0_metadata",
+            "E1_abstract",
+            "E2_fulltext_section",
+            "E3_measurement_text"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evidence Grade"
+    },
+    "validation_status": {
+      "anyOf": [
+        {
+          "enum": [
+            "validated_automatic",
+            "provisional",
+            "failed",
+            "insufficient_evidence"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Validation Status"
+    },
+    "heuristic_score": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Heuristic Score"
+    },
+    "algorithm_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Algorithm Version"
+    },
+    "source_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Hash"
     }
   },
   "required": [

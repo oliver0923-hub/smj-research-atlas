@@ -160,6 +160,63 @@
       ],
       "default": null,
       "title": "Source Url"
+    },
+    "inference_origin": {
+      "anyOf": [
+        {
+          "enum": [
+            "publisher_metadata",
+            "crossref_metadata",
+            "openalex_metadata",
+            "deterministic_rule",
+            "model_inference",
+            "fulltext_extraction",
+            "human_review"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Inference Origin"
+    },
+    "evidence_grade": {
+      "anyOf": [
+        {
+          "enum": [
+            "E0_metadata",
+            "E1_abstract",
+            "E2_fulltext_section",
+            "E3_measurement_text"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evidence Grade"
+    },
+    "validation_status": {
+      "anyOf": [
+        {
+          "enum": [
+            "validated_automatic",
+            "provisional",
+            "failed",
+            "insufficient_evidence"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Validation Status"
     }
   },
   "required": [

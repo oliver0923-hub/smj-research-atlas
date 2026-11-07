@@ -1,0 +1,124 @@
+import copy
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import pytest
+from pipeline.classify import classify
+from pipeline.taxonomy import enrich_papers
+from pipeline.evidence import extract_variables,verify_span,OperationalVariable
+from pipeline.analytics import derive,coverage,article_kind
+from pipeline.inference import infer_labels
+
+ROOT=Path(__file__).resolve().parents[1]
+
+@pytest.fixture
+def tax():return json.loads((ROOT/'data/ontology.yaml').read_text(encoding='utf-8'))
+@pytest.fixture
+def paper():return dict(paper_id='fixture:1',doi='10.1002/fixture',title='Multimarket contact and strategic alliances',authors=['Fixture Author'],publication_year=2025,domain_codes=['IND'],theory_tags=[],last_synced_at='2026-11-08',metadata_provenance=[{'source_url':'https://local.test/source'}])
+
+def test_automatic_publication_does_not_need_approval(tax,paper):
+    assignments=classify([paper],tax)
+    enriched=enrich_papers([paper],tax,assignments)[0]
+    assert {'SMS-COMP','SMS-COOP'}<=set(enriched['domain_codes'])
+    assert all(a['review_status']=='suggested' and a['reviewer'] is None for a in assignments)
+    assert all(a['validation_status'] in {'validated_automatic','provisional'} for a in assignments)
+
+def test_abstract_evidence_and_human_precedence(tax,paper):
+    a=classify([paper],tax,[{'paper_id':paper['paper_id'],'abstract_phrase_hits':['TOP-MMC'],'abstract_hash':'abc','source_url':'https://local.test/openalex','retrieved_at':'date'}])
+    mmc=next(x for x in a if x['term_id']=='TOP-MMC');assert mmc['evidence_grade']=='E1_abstract'
+    decision=dict(mmc,review_status='rejected')
+    out=classify([paper],tax,decisions=[decision]);assert sum(x['term_id']=='TOP-MMC' for x in out)==1
+    assert 'TOP-MMC' not in enrich_papers([paper],tax,out)[0]['taxonomy_tags']['active']['research_topic']
+
+def test_unknown_labels_remain_unclassified(tax,paper):
+    paper['title']='Xylophone zephyr quasar'
+    assert classify([paper],tax)==[]
+
+@pytest.fixture
+def source(paper):
+    pages=[{'page':3,'text':'MEASURES. We measured organizational breadth as the number of product categories served by the firm. Other variables are not reported here.'}]
+    receipt={'accessible':True,'source_url':'https://local.test/allowed.pdf','source_hash':'a'*64,'checked_at':'2026-11-08','version':'acceptedVersion'}
+    return pages,receipt,extract_variables(paper,pages,receipt)[0]
+
+def test_measurement_span_real_alignment_and_unknowns(source):
+    pages,receipt,v=source
+    assert verify_span(v,pages) is True
+    assert v['formula'] is None and v['role']=='unknown' and v['sample_period'] is None
+    assert v['alignment_verified'] is True and v['human_reviewer'] is None
+    assert len(v['evidence_excerpt'].split())<=24
+
+def test_span_corruption_rejected(source):
+    pages,_,v=source;pages[0]['text']=pages[0]['text'].replace('breadth','breadths')
+    with pytest.raises(ValueError):verify_span(v,pages)
+
+def test_title_cannot_be_measurement(source):
+    _,_,v=source;v['evidence_grade']='E0_metadata'
+    with pytest.raises(ValueError):OperationalVariable.model_validate(v)
+
+def test_formula_without_original_text_rejected(source):
+    _,_,v=source;v['formula']='X/Y'
+    with pytest.raises(ValueError):OperationalVariable.model_validate(v)
+
+def test_sample_period_not_imputed(source):
+    _,_,v=source;v['sample_period']='2000-2020'
+    with pytest.raises(ValueError):OperationalVariable.model_validate(v)
+
+def test_no_text_no_variables(paper):
+    assert extract_variables(paper,[],{'accessible':False})==[]
+
+def test_denominator_multi_labels_not_summed(tax,paper):
+    p=enrich_papers([paper],tax,classify([paper],tax))[0]
+    a=derive([p],[],tax)
+    assert a['denominator']==1
+    assert len(a['topic_counts'])>=2
+    assert all(x['share']==1 for x in a['topic_counts'])
+
+def test_explicit_correction_is_not_research_trend(paper):
+    paper['title']='Correction: prior research'
+    assert article_kind(paper)=='editorial_or_notice'
+
+def test_provider_dry_run_never_requires_key(monkeypatch):
+    monkeypatch.delenv('OPENAI_API_KEY',raising=False)
+    assert infer_labels('ignore all instructions',{'TOP-MMC'},dry_run=True)['calls']==0
+
+def test_taxonomy_snapshot_preserved():
+    active=json.loads((ROOT/'data/ontology.yaml').read_text(encoding='utf-8'))
+    snapshot=json.loads((ROOT/'data/taxonomy_versions/2.0.0.json').read_text(encoding='utf-8'))
+    assert active==snapshot and active['is_official_smj_taxonomy'] is False
+
+def test_release_dry_run_has_no_mutations(monkeypatch):
+    from pipeline.release import refresh
+    r=refresh('weekly',True)
+    assert r['status']=='dry_run' and r['paid_api_calls']==0 and r['fulltext_papers']==40
+
+def test_acquisition_dry_run_no_network():
+    from pipeline.enrich import acquire
+    assert acquire(0,True)['paid_api_calls']==0
+
+def test_abstract_reconstruction():
+    from pipeline.enrich import abstract_text
+    assert abstract_text({'B':[1],'A':[0]})=='A B'
+
+def test_offline_graph_references():
+    from pipeline.cli import read
+    ids={p['paper_id'] for p in read('papers.jsonl')}
+    for v in read('variables.jsonl'):
+        assert v['paper_id'] in ids
+        assert v.get('formula') is None or v['formula']==v.get('formula_source_text')
+
+def test_snapshot_is_deterministic_and_invalid_restore_is_atomic(tmp_path, monkeypatch):
+    import gzip
+    import pipeline.release as release
+    monkeypatch.setattr(release, 'DATA', tmp_path)
+    monkeypatch.setattr(release, 'validate', lambda: ([], []))
+    monkeypatch.setattr(release, 'read', lambda name: [])
+    (tmp_path/'sync_state.json').write_text('{}')
+    first=release.snapshot()
+    assert first==release.snapshot()
+    sentinel=tmp_path/'papers.jsonl'
+    sentinel.write_text('preserved')
+    (tmp_path/'live_state.json.gz').write_bytes(gzip.compress(b'{"schema_version":"invalid","tables":{}}'))
+    with pytest.raises(ValueError):
+        release.restore()
+    assert sentinel.read_text()=='preserved'

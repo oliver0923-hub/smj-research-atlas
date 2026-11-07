@@ -1,8 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import fs from 'node:fs';
-const file='public/data/coverage_report.json';
-const r=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):{papers:0,verified_papers:0,verified_variables:0,years:[]};
-const base=import.meta.env.BASE_URL;
+import Layout from "../layouts/Layout.astro";
+import ResearchApp from "../components/ResearchApp.astro";
 ---
-<Layout><div class="eyebrow">A living index of strategy research</div><h1>探索策略研究，<br/>從文獻走向可核查的證據。</h1><p class="lead">以 Strategic Management Journal 為起點，連結研究領域、理論與逐篇衡量方式。每個知識主張，保留回到來源的路徑。</p><div class="grid">{[['已收錄書目',r.papers,'Crossref DOI 去重後'],['衡量已驗證論文',r.verified_papers,'具備逐篇原始證據'],['已驗證變數',r.verified_variables,'非書目或摘要推測'],['變數驗證涵蓋率',r.papers?`${(r.verified_papers/r.papers*100).toFixed(1)}%`:'—','分母：目前收錄書目']].map(([label,n,note])=><article class="card"><div class="muted">{label}</div><div class="metric">{n}</div><div class="muted">{note}</div></article>)}</div><div class="notice"><strong>目前涵蓋率尚未稽核。</strong> 收錄年份：{r.years.length?`${r.years[0]}–${r.years.at(-1)}`:'尚無資料'}。書目存在不代表已閱讀全文，亦不代表已驗證研究方法或衡量。</div><div class="grid"><a class="card" href={`${base}landscape/`}><h2>研究領域地圖 ↗</h2><p class="muted">SMS Interest Groups 參照架構；Atlas 編製，非 SMJ 官方分類。</p></a><a class="card" href={`${base}papers/`}><h2>尋找文獻 ↗</h2><p class="muted">依標題、作者、年份與查核狀態搜尋。</p></a><a class="card" href={`${base}variables/`}><h2>比較變數衡量 ↗</h2><p class="muted">以逐篇來源與證據定位為基礎。</p></a></div><p class="muted">最近成功同步（UTC）：{r.last_successful_sync || '尚未成功同步'} · <a href={`${base}quality/`}>查看資料品質與限制</a></p></Layout>
+<Layout title="研究總覽"><ResearchApp kind="dashboard"/></Layout>

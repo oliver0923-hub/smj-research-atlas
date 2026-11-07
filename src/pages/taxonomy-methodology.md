@@ -1,95 +1,68 @@
 ---
 layout: ../layouts/Layout.astro
-title: 研究分類方法
+title: 自動研究方法與來源
 ---
 
-# 研究分類方法：Atlas Taxonomy v2.0.0
+# 自動研究資料系統 v3.0
 
-**本分類為 SMJ Research Atlas 編製，不是 Strategic Management Journal（SMJ）官方 taxonomy，也未獲 SMS 或 AOM 背書。** 原 v1 十二類僅為初步自訂工作分類，完整封存於 `data/taxonomy_versions/1.0.0.json`，不再作為現行 Level 1。
+Atlas 是獨立研究工具，**不是 SMJ 官方 taxonomy**。Domain 仍參照 SMS Interest Groups，Research Topic → Construct → Operational Variable 保持四層關係，Theory 為獨立多重維度。`data/taxonomy_versions/2.0.0.json` 與原始分類來源原封保留。新版本只改變證據、驗證及發布方式，不冒填人工 reviewer。
 
-來源核對日期：2026 年 11 月 7 日。官方網頁可能更新；此日期代表查核快照，不代表組織分類永久不變。中文譯名均由 Atlas 編製。
+## 自動發布與三個分離的欄位
 
-## 三種來源，各有不同用途
-
-1. **SMS Interest Groups：Level 1 的組織參照。** 保留官方列表上的英文名稱；將其當成網站 Domain 入口，是 Atlas 的編排決定。Research Methods 和 Teaching 是 Communities，並非本次採用的 Interest Groups，故不加入 Level 1。SMS 的會員選組限制不適用於論文標記；論文可有多個 Domain。[1]
-2. **AOM Strategic Management Division Domain Statement：範圍檢查。** 以策略決策及其前因／脈絡和結果檢查主題涵蓋，另檢查績效差異、政策、資源、治理、組織間關係與分析層次。對應表是 Atlas 自訂檢查，不是 AOM 對個別分類的認證，也不是已證明窮盡整個領域。[2]
-3. **Nag, Hambrick, and Chen（2007）：學術方法參照。** 出版社摘要說明，作者先以學者調查推導隱含的共同領域定義，再以跨領域學者明示的定義作補充。這支持讓研究社群的理解與文本證據相互對照的取徑；不能據此宣稱本文提供了本網站的四層 taxonomy、SMS 分組或變數分類。[3]
-
-本次對 [3] 核查範圍為出版社摘要與書目資訊，未取得完整方法段落；因此不聲稱重現其具體抽樣、詞彙分析或編碼程序，也不提供未核查的頁碼。下述結合演繹與歸納的實作，是 Atlas 的方法設計。
-
-## 四層架構與獨立維度
-
-| 層級 | 定義與用途 | 來源與界線 |
+| 欄位 | 內容 | 可以支持與不能支持 |
 | --- | --- | --- |
-| Domain（L1） | 以 SMS Interest Groups 作廣域入口 | 官方英文名稱參照；中文譯名與 L1 編排為 Atlas 自訂 |
-| Research Topic（L2） | 描述研究的現象、問題或策略活動 | 自訂工作分類，可跨多個 Domain；不由題目名稱推定理論 |
-| Construct（L3） | 區分具有理論意義的抽象概念 | 自訂構念詞彙；詞彙存在不表示任何論文已使用或驗證它 |
-| Operational Variable（L4） | 某篇論文對構念的實際衡量 | 必須連到真實 paper_id、variable_id 與來源定位；不放通用猜測公式 |
+| inference_origin | publisher_metadata、crossref_metadata、openalex_metadata、deterministic_rule、model_inference、fulltext_extraction、human_review | 記錄誰／哪種程序產生主張；只有實際人工行為可標 human_review |
+| evidence_grade | E0_metadata、E1_abstract、E2_fulltext_section、E3_measurement_text | 描述實際讀到的來源深度；E3 不保證量測效度或因果識別 |
+| validation_status | validated_automatic、provisional、failed、insufficient_evidence | 自動檢查來源、欄位與文字一致性；不等於專家同行審閱 |
 
-**Theory 是獨立、多重標記維度，不是第五層，也不置於 Domain 與 Topic 之間。** 同一理論可用於多種主題；同篇論文也可能運用多種理論。Multimarket Contact、M&A、International Strategy 在本版作研究主題，不直接當成理論。
+歷史 review_status 保留相容性，approved／rejected 的實際人工決定有優先權，但不再是正常瀏覽或發布的必要條件。正常排程不會呼叫人工確認命令。分類頁原網址 `taxonomy-review/` 改為「自動分類品質與證據」，不要求擁有者逐篇處理。
 
-層級關係允許多個 `parent_ids`，形成分層 DAG。它表示研究導覽與概念對應，不是因果關係。例如：競爭策略與合作策略可共同連至多市場接觸主題，再連到市場重疊構念；L4 仍需逐篇證據，不能從此路徑自動產生 overlap 公式。
+分類器先使用可解釋片語及同義詞規則，再以詞彙向量 cosine 產生暫定標記；這是 lexical similarity，**不是已驗證的深層語意理解**。來源、來源 hash、處理版本與時間均可查看。`heuristic_score` 只是規則／相似度分數，沒有 held-out 人工標註集，故不稱機率或正確率。選配模型 adapter 預設停用，無 API key 仍可運作；明確配置模型與每次呼叫預算後，才可使用 `pipeline.inference.infer_labels`，輸出只允許 taxonomy 已有的 ID。它不擷取變數或係數。
 
-## 每個分類如何記錄來源
+## 來源階層與合法取得
 
-`data/ontology.yaml` 保存來源登錄、節點、層級、版本、方法與範圍檢查；其 JSON 格式也是合法 YAML。每個節點包含 `id`、`level`、`parent_ids`、`origin`、`source_ids`、`method`、`version`、`review_status`、`reviewer`、`reviewed_at`。來源登錄另有 URL、查核日期、可支持的主張與證據定位。
+1. Crossref：SMJ 雙 ISSN、DOI 正規化、期刊名稱核對；保存線上／印刷日期及可得的更正關聯。
+2. OpenAlex：按 DOI 批次補充來源 ID、摘要特徵、引用數及 as-of 日期、外部分類和 OA 位置。外部分類不冒充 SMJ 標記。匿名 cursor 分頁需要 free API key 時，使用有預算的 DOI lookup，不假設付費更新過濾可用。
+3. 正文：只嘗試 OA accepted/published 位置，先檢查 robots，再用一般公開 HTTPS 請求；遇到拒絕不繞過。檢查標題與作者一致性，PDF/HTML 解析後記錄原始檔 hash、版本、來源與頁碼。
 
-| origin | 意義 | 不可推論的內容 |
-| --- | --- | --- |
-| official_academic_organization | 來源為官方學術組織的分類名稱；本版限 SMS IG Domain 名稱 | 不代表 SMJ 官方 taxonomy，不代表組織替論文分類 |
-| custom_research | Atlas 編製的研究分類、譯名、構念或理論詞彙及對應 | 不能標成組織官方子類，也不表示經全體學者驗證 |
-| algorithmic | 標題匹配、上層推導或詞彙成長產生的建議 | 不表示實際理論使用、構念衡量、因果發現或學界共識 |
+全文、PDF 與重建摘要只在忽略的 `.cache/` 暫存，不會提交 GitHub 或放進 Pages。公開版不重刊完整摘要，以免將 metadata 授權誤當成原始文字再散布授權。每篇只公開一筆短衡量摘錄（20 詞以內）及獨立撰寫的摘要式定義。OpenAlex 註記 OA 不代表任意重刊權；來源未提供明確 license 時，license 仍為 null，只做公開來源的暫時讀取及短證據定位。
 
-分類詞彙是否經人工核准，與詞彙來源是否可核對，是不同問題。本版工作節點的 `review_status` 保留 `needs_review`；沒有冒填 reviewer。自動產生的論文分類以 `suggested` 起始。
+## 逐篇變數如何產生
 
-## 演繹參照、歸納建議與人工裁決
+`deterministic_measurement_span_v1` 只接受正文中明確命名、位於衡量／變數脈絡的 measured／operationalized 等陳述。每篇目前最多取一個可對齊的 named measure，**不是完整變數清單**。名稱、角色與操作化分開：沒有角色文字便維持 unknown；沒有原文公式就保留 null，不把文字定義自行改寫成公式。
 
-**演繹部分：** 用 SMS 的組織入口建立 L1，以 AOM STR 作範圍檢查，再明列 Atlas 自訂的 L2／L3 與 Theory 詞彙。`scope_check` 記錄自訂對應與來源；方法、地理、產業、分析層次等保留為交叉 facets，避免把分類層次混為一談。
+E3 紀錄保存 PDF 頁碼（非假定為期刊印刷頁碼）、正規化字元範圍、span hash 與原始檔 hash。`verify_span` 重新取出該段文字、核對 hash 及短摘錄。公式必須與原文一致；sample period、lag、method、data source 或 findings 若無相符的來源文字不能填入。依少數明確文字模式可提供獨立中文摘要與 proxy 描述；未確認的欄位以 null 和 missing_reason 呈現。
 
-**既有分類的自動建議：** `title_phrase_and_domain_ancestor_v1` 正規化英文標題，對明列的片語作完整詞界匹配；命中 Topic 後，其 Domain ancestors 也只列為建議。Theory 僅在明列的理論片語出現時產生建議。絕不由標題自動指定 Construct、L4、formula 或 `measurement_verified`。False positives 與 false negatives 都可能存在；同義詞規則尚未做人工標註基準的準確率評估。
+目前方法／樣本／係數擷取尚非全面抽取器，尤其不能從標題中的 experiment、performance 或 mediating 推定 RCT、因果效果或中介檢驗。原文版本可能為作者接受稿，網站明列版本。自動通過只表示來源對齊，不等於衡量的理論效度或模型角色已由專家核實。
 
-**新興主題候選：** `title_bigram_document_frequency_v1` 從英文標題找雙詞組，以 corpus 目前最大刊年為終點，近期五年與之前五年比較。以文件數計算，每篇對同詞組最多計一次；近期至少三篇，平滑後普及比例至少 1.5，輸出排名前 20 筆：
+## 正規化資料與可重現性
 
-`ratio = ((recent_df + 1) / (recent_N + 2)) / ((baseline_df + 1) / (baseline_N + 2))`
+`research_graph.json` 提供 paper、claim、theory_tag、topic_tag、construct、operational_variable、variable_alias、measure_evidence、empirical_method、data_source、sample、finding、citation_provenance、extraction_run。未取得證據的表可為空；不填虛構樣本或 findings。相同名稱只做保守正規化，**不自動把語意相近、衡量不同的構念合併**。
 
-候選保留期間、兩期分子與分母、支持論文 ID、方法、來源與版本，不自動指定父節點，也不加入正式 ontology。近期未完整年度、歷史收錄差異、英文分詞及一般性詞組均可能造成偏誤；不能將成長比例解讀為統計顯著、理論新穎性或研究缺口。
+`measurement_paths.json` 是 v3 證據導覽的延伸，依同篇論文的自動 Topic 連接實際衡量，不改寫 v2 ontology，也不宣稱 Topic 與 Construct 之間已有理論等價或因果證明。
 
-## 人工審核與可執行指令
+## 分母、涵蓋率與描述性分析
 
-先建置候選：
+年度分布以目前索引書目為母體。只排除可明確辨認的社論、索引、更正等通知，其餘文章類型仍可能未完全核實。標記最近刊年為未完整年度。主題比例分母為選定年度／證據條件下的論文數；多重標記不加總成 100%。共現網絡與 Theory × Topic 只是同篇標記共現，不是因果關係。
 
-```sh
-python -m pipeline.cli build
-```
+角色／方法／資料來源只使用有 E3 記錄者，並顯示論文與變數分母；unknown 不當成沒有使用。描述性研究機會只列明確計數規則下的低共現組合，不宣稱新穎性或可發表的研究缺口。
 
-在 `data/generated/classifications.json` 與 `classification_review_queue.jsonl` 找到 assignment，閱讀來源並查核研究問題、理論與相關段落，再由實際審閱者執行（下列為指令格式，需替換內容）：
+出版社逐期頁面受 HTTP 403 限制，未完成整個出版母體對帳；expected_articles、missing coverage estimate 保持 null。卷期頁顯示的是已索引數量，不是出版社完整產量。
 
-```sh
-python -m pipeline.cli review-classification \
-  --assignment-id '實際 assignment_id' --decision approve \
-  --reviewer '實際審閱者' --note '核准理由及研究脈絡' \
-  --source-url 'https://合法的原始來源' --evidence-locator '實際章節／頁碼' \
-  --human-attestation
-```
+## 排程、品質閘門與失敗隔離
 
-拒絕時改用 `--decision reject`。程式強制要求人工確認旗標、reviewer、理由、來源、定位；`data/classifications.jsonl` 保存決定，`audit_log` 追加前後狀態、日期、理由與審閱者。**此命令不可放進自動排程，也不能由程式假扮人工審閱。** 技術上旗標是審閱者聲明，不是身分驗證服務；仍以 GitHub 提交與 code review 追蹤責任。
+- 每日 02:23 UTC（臺北 10:23）：Crossref 增量，七日重疊及最近 90 日掃描。
+- 每週日 03:47 UTC（臺北 11:47）：有預算的 OpenAlex 補充與 OA 正文擷取。
+- 每月一日 04:17 UTC（臺北 12:17）：重算描述性分析與品質報告。
+- 每週日 05:11 UTC（臺北 13:11）：額外 coverage QA。
+- main 更新：測試、資料驗證與 Astro 建置後部署。
 
-新興詞彙的審核則先判讀支持論文、詞義與時間偏誤，決定拒絕、併入同義詞或提出新 Topic。接受時在 ontology 新增具來源、方法、父節點與 reviewer 的節點，保留 `origin=algorithmic` 及原始候選依據，再經版本更新與 Git review 發布；不要讓建置工作自行核准新節點。
+不經人工 PR 核准。資料先通過 schema、DOI／關聯與證據一致性檢查、pytest、套件 audit、正式 build，才將白名單資料壓縮快照寫入 atlas-data 分支並部署。資料分支不能夾帶可執行原始碼；舊版本可由 Git 還原。失敗保留最近成功網站，GHA 日誌及 diagnostics artifact 記錄錯誤。Checkpoint 以白名單還原，禁止任意路徑寫入。
 
-## 多重分類、版本與遷移
+## 正式參考文獻與用途
 
-- `classifications.jsonl` 是人工決定的權威檔案，與 Crossref metadata sync 分開。自動建議使用穩定 ID；相同 paper／term 的人工接受或拒絕會阻止自動結果覆蓋或重複提出。
-- 各 assignment 保存自己的 taxonomy version。新增、拆分、合併或刪改類別須提出版本變更、封存完整快照與遷移說明；不能將舊分類直接標為新版人工確認。
-- v1 原始十二類與 paper 的舊代碼保留為 legacy 資料。v2 不自動套用舊代碼；需逐篇重新判讀。舊 Theory 欄位也不直接當成新版已核准理論。
-- 驗證會拒絕不存在的來源、版本不一致、Theory 作為階層 parent、錯誤層級關係、無逐篇證據的 L4、無人工審核事件的核准紀錄。
-- 本版沒有自動將批准的 Topic 向上升為批准的 Domain；若需兩層都成立，應分別記錄判讀。
+1. Strategic Management Society. (n.d.). *Interest groups & communities*. [官方分類名稱來源](https://www.strategicmanagement.net/connect-participate/interest-groups-communities/).
+2. Academy of Management, Strategic Management Division. (n.d.). *Strategic management (STR): Domain statement*. [領域涵蓋範圍](https://www.aom.org/divisions-and-interest-groups/strategic-management/).
+3. Nag, R., Hambrick, D. C., & Chen, M.-J. (2007). What is strategic management, really? Inductive derivation of a consensus definition of the field. *Strategic Management Journal, 28*(9), 935–955. [https://doi.org/10.1002/smj.615](https://doi.org/10.1002/smj.615).
 
-每個新版本都應規劃雙人獨立編碼、分歧裁決、跨年份抽樣及 precision／recall 等評估，才能估計分類品質。本次尚未完成這些效度與可靠度評估，不報告虛構的 agreement 或 accuracy。
-
-## 正式參考文獻
-
-1. Strategic Management Society. (n.d.). *Interest groups & communities*. Retrieved November 7, 2026, from https://www.strategicmanagement.net/connect-participate/interest-groups-communities/
-2. Academy of Management, Strategic Management Division. (n.d.). *Strategic management (STR): Domain statement*. Retrieved November 7, 2026, from https://www.aom.org/divisions-and-interest-groups/strategic-management/
-3. Nag, R., Hambrick, D. C., & Chen, M.-J. (2007). What is strategic management, really? Inductive derivation of a consensus definition of the field. *Strategic Management Journal, 28*(9), 935–955. https://doi.org/10.1002/smj.615
-
-出版社摘要核對頁：https://sms.onlinelibrary.wiley.com/doi/10.1002/smj.615 。[1]、[2] 支持組織名稱與範圍；[3] 支持方法論參照。Atlas 的四層設計、多對多連結、譯名、演算法與審核規則均為本專案設計。
+Nag et al. 以學者調查與跨領域學者明示定義探討領域共識；本專案只據已核查的出版社摘要作方法啟發，沒有宣稱重現全文方法，也沒有把 Atlas 四層設計歸為作者或 SMJ 的官方分類。歷史 v2 詳細說明仍保存於 repository 的 TAXONOMY_METHODOLOGY.md。

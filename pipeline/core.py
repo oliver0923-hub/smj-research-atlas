@@ -46,7 +46,7 @@ class Variable(BaseModel):
     @model_validator(mode='after')
     def supported(self):
         assert self.verification_status in STATUSES
-        assert self.role in {'independent','dependent','mediator','moderator','control','instrument','other'}
+        assert self.role in {'independent','dependent','mediator','moderator','control','instrument','selection','other','unknown'}
         if self.formula or self.verification_status in {'measurement_verified','human_reviewed'}:
             assert self.evidence_locator and self.source_url and self.source_hash, 'Primary source evidence required'
         if self.verification_status in {'measurement_verified','human_reviewed'}:
@@ -67,6 +67,7 @@ def normalize(raw):
     pub = date('published-print') or date('published-online') or date('published')
     if not pub: raise ValueError('Missing publication year')
     record = dict(paper_id='doi:'+doi, doi=doi, title=' '.join(raw.get('title', [])), authors=[' '.join(filter(None,[a.get('given'),a.get('family')])) for a in raw.get('author',[])], publication_year=int(pub[:4]), online_date=date('published-online'), print_date=date('published-print'), journal_issn=sorted(set(raw['ISSN'])), volume=raw.get('volume'), issue=raw.get('issue'), pages=raw.get('page') or raw.get('article-number'), article_type=raw.get('type'), abstract=None, doi_url='https://doi.org/'+doi, publisher_url=raw.get('URL'), oa_url=None, openalex_id=None, citation_count=None, citation_count_asof=None, domain_codes=[], theory_tags=[], method_tags=[], industry_tags=[], geography_tags=[], verification_status='metadata_only', metadata_provenance=[{'source':'Crossref','source_url':'https://api.crossref.org/works/'+doi,'indexed':raw.get('indexed',{}).get('date-time')}], last_synced_at=now(), curation_updated_at=None)
+    record.update(publication_year_basis='print' if date('published-print') else 'online' if date('published-online') else 'published',license_info=raw.get('license',[]),correction_relations=raw.get('relation',{}),update_notices=raw.get('update-to',[]),crossref_reference_count=raw.get('reference-count'))
     return Paper.model_validate(record).model_dump()
 
 CURATED = {'domain_codes','theory_tags','method_tags','industry_tags','geography_tags','verification_status','curation_updated_at','summary','oa_url','legacy_domain_codes','legacy_theory_tags','taxonomy_version','taxonomy_tags','classifications'}

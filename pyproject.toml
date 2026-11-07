@@ -2,7 +2,7 @@
 name = "smj-research-atlas"
 version = "0.1.0"
 requires-python = ">=3.11"
-dependencies = ["httpx>=0.28,<1", "pydantic>=2.10,<3", "PyYAML>=6,<7"]
+dependencies = ["httpx>=0.28,<1", "pydantic>=2.10,<3", "PyYAML>=6,<7", "PyMuPDF>=1.26,<2", "beautifulsoup4>=4.12,<5"]
 [project.optional-dependencies]
 test = ["pytest>=8,<9"]
 [tool.pytest.ini_options]

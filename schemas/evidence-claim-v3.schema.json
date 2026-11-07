@@ -1,0 +1,90 @@
+{
+  "properties": {
+    "inference_origin": {
+      "enum": [
+        "publisher_metadata",
+        "crossref_metadata",
+        "openalex_metadata",
+        "deterministic_rule",
+        "model_inference",
+        "fulltext_extraction",
+        "human_review"
+      ],
+      "title": "Inference Origin",
+      "type": "string"
+    },
+    "evidence_grade": {
+      "enum": [
+        "E0_metadata",
+        "E1_abstract",
+        "E2_fulltext_section",
+        "E3_measurement_text"
+      ],
+      "title": "Evidence Grade",
+      "type": "string"
+    },
+    "validation_status": {
+      "enum": [
+        "validated_automatic",
+        "provisional",
+        "failed",
+        "insufficient_evidence"
+      ],
+      "title": "Validation Status",
+      "type": "string"
+    },
+    "source_url": {
+      "title": "Source Url",
+      "type": "string"
+    },
+    "evidence_locator": {
+      "title": "Evidence Locator",
+      "type": "string"
+    },
+    "source_hash": {
+      "title": "Source Hash",
+      "type": "string"
+    },
+    "heuristic_score": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Heuristic Score"
+    },
+    "algorithm_version": {
+      "title": "Algorithm Version",
+      "type": "string"
+    },
+    "retrieved_at": {
+      "title": "Retrieved At",
+      "type": "string"
+    },
+    "missing_reason": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Missing Reason",
+      "type": "object"
+    }
+  },
+  "required": [
+    "inference_origin",
+    "evidence_grade",
+    "validation_status",
+    "source_url",
+    "evidence_locator",
+    "source_hash",
+    "algorithm_version",
+    "retrieved_at"
+  ],
+  "title": "EvidenceClaim",
+  "type": "object"
+}
