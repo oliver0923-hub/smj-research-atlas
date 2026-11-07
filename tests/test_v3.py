@@ -122,3 +122,8 @@ def test_snapshot_is_deterministic_and_invalid_restore_is_atomic(tmp_path, monke
     with pytest.raises(ValueError):
         release.restore()
     assert sentinel.read_text()=='preserved'
+
+
+def test_publisher_title_formatting_is_plain_text():
+    from pipeline.core import display_text
+    assert display_text("The <scp>CEO</scp> &amp; R&amp;D") == "The CEO & R&D"

@@ -3,7 +3,7 @@ import argparse, json, os, random, time, hashlib, gzip
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 import httpx, yaml
-from .core import normalize, upsert, now, Paper, Variable
+from .core import display_text, normalize, upsert, now, Paper, Variable
 from .taxonomy import validate_taxonomy, suggest_assignments, emerging_topics, enrich_papers, Assignment
 from .classify import classify
 from .analytics import derive, coverage, research_graph, article_kind
@@ -118,6 +118,7 @@ def build():
     by_variable={}
     for v in variables:by_variable.setdefault(v['paper_id'],[]).append(v)
     for p in papers:
+        p['title']=display_text(p['title'])
         p['enrichment']=extra.get(p['paper_id']);p['content_access']=content.get(p['paper_id'],{'accessible':False,'missing_reason':'not_yet_attempted'})
         p['variables']=by_variable.get(p['paper_id'],[]);p['is_retracted']=extra.get(p['paper_id'],{}).get('is_retracted');p['article_kind']=article_kind(p)
         p['unknown_details']={k:None for k in ['sample_period','data_source','empirical_method','reported_association']}

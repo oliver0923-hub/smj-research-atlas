@@ -1,10 +1,15 @@
 """Source-grounded metadata normalization. No full-text or measure inference."""
 import re
+import html
 from datetime import datetime, timezone
 from pydantic import BaseModel, Field, model_validator
 
 ISSNS = {'1097-0266', '0143-2095'}
 STATUSES = {'metadata_only', 'abstract_screened', 'fulltext_screened', 'measurement_verified', 'human_reviewed'}
+def display_text(value):
+    """Decode publisher formatting without interpreting markup in the browser."""
+    return html.unescape(re.sub(r"<[^>]+>", "", value))
+
 def now(): return datetime.now(timezone.utc).isoformat()
 def doi_key(value):
     value = re.sub(r'^https?://(?:dx\.)?doi.org/', '', value.strip().lower())
