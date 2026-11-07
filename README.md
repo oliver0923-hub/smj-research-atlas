@@ -1,4 +1,4 @@
-# SMJ Research Atlas v3
+# SMJ Research Atlas v3.1
 
 繁體中文、可自動更新的研究資料網站。正式站：https://oliver0923-hub.github.io/smj-research-atlas/
 
@@ -23,9 +23,9 @@ Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state
 - GitHub Actions → Autonomous data release → Run workflow 選 daily/weekly/monthly。正常排程每日臺北10:23、每週日11:47、每月一日12:17。通過測試、schema、audit、build 才寫資料分支並發布，不需要 PR 核准。
 
 ## 來源與資料
-Crossref + OpenAlex，完整摘要、PDF 與全文只在忽略的 .cache 暫存；不公開全文。data/variables.jsonl 保留可查核測量資料，公開來源與缺失原因可匯出CSV。來源推論與 evidence_grade、validation_status 分開；不冒填 human_reviewed 或校準正確率。
+Crossref + OpenAlex，完整摘要、PDF 與全文只在忽略的 .cache 暫存；不公開全文。data/variables.jsonl 保留可查核測量資料；data/study_claims.jsonl 保存有原文定位的 Hypothesis、Proposition、Finding、Robustness、Sensitivity 紀錄，公開來源與缺失原因可匯出CSV。來源推論與 evidence_grade、validation_status 分開；不冒填 human_reviewed 或校準正確率。
 
-詳見 [方法與文獻](docs/AUTONOMOUS_METHODOLOGY.md)、[基線稽核](docs/BASELINE_AUDIT.md)、[實際限制](docs/ACCEPTANCE_V3.md)。目前抽取器每篇最多一筆 named measure，不是完整變數清單。出版社完整目錄受存取限制，coverage_not_audited。Taxonomy 是 Atlas 編製，非 SMJ 官方分類。
+詳見 [方法與文獻](docs/AUTONOMOUS_METHODOLOGY.md)、[假設、結果與穩健性擷取](docs/STUDY_CLAIMS_METHODOLOGY.md)、[基線稽核](docs/BASELINE_AUDIT.md)、[v3 歷史驗收與限制](docs/ACCEPTANCE_V3.md)。新版會逐篇搜尋多個明確命名的衡量，但不等於完整 IV/DV/Control 清單；公式、角色和顯著性若沒有直接證據必須保留未知。出版社完整目錄受存取限制，coverage_not_audited。Taxonomy 是 Atlas 編製，非 SMJ 官方分類。
 
 ## 可還原與人工歷史
 Git 保留 v1/v2、原始bootstrap與每個資料分支快照。原有人工核准／拒絕優先；正常排程只做自動來源檢查，不執行 human-attestation。可選人工修正仍以 code review 追蹤，但不是擁有者必須處理的工作。
