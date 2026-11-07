@@ -127,3 +127,11 @@ def test_snapshot_is_deterministic_and_invalid_restore_is_atomic(tmp_path, monke
 def test_publisher_title_formatting_is_plain_text():
     from pipeline.core import display_text
     assert display_text("The <scp>CEO</scp> &amp; R&amp;D") == "The CEO & R&D"
+
+
+def test_live_manifest_rejects_stale_same_revision():
+    from pipeline.publication import matches_manifest
+    expected={"source_revision":"same", "workflow_run":"new", "generated_at":"new"}
+    assert not matches_manifest(expected,{**expected,"workflow_run":"old"})
+    assert not matches_manifest(expected,{**expected,"generated_at":"old"})
+    assert matches_manifest(expected,dict(expected))

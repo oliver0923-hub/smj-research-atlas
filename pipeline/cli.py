@@ -141,6 +141,8 @@ def build():
     graph=research_graph(papers,variables,assignments,runs)
     paths=[dict(paper_id=v['paper_id'],variable_id=v['variable_id'],construct_en=v['construct_en'],topic_ids=next(p['taxonomy_tags']['active']['research_topic'] for p in papers if p['paper_id']==v['paper_id']),source_url=v['source_url'],evidence_locator=v['evidence_locator'],evidence_grade=v.get('evidence_grade'),validation_status=v.get('validation_status'),binding_method='same-paper automatic topic context; not a theoretical equivalence claim') for v in variables]
     out=ROOT/'public'/'data'; out.mkdir(parents=True,exist_ok=True)
+    manifest={'source_revision':os.getenv('GITHUB_SHA'),'workflow_run':os.getenv('GITHUB_RUN_ID'),'generated_at':report['generated_at']}
+    write(out/'publication.json',json.dumps(manifest))
     # Search metadata only; full records are chunked into per-paper detail files.
     search_fields=['paper_id','doi','title','authors','publication_year','domain_codes','theory_tags','method_tags','verification_status','oa_url','metadata_provenance']
     search_fields+=['taxonomy_version','taxonomy_tags','legacy_domain_codes','legacy_theory_tags']
