@@ -73,13 +73,12 @@ def normalized(text):
 
 
 def sentences(text):
-    """Return likely complete sentence spans, retaining offsets in normalized text."""
-    # Do not split decimal p-values, initials, or numbered hypothesis labels.
-    for match in re.finditer(r"[^.!?]+(?:[.!?](?=\s+[A-Z]|\s*$)|$)",text):
-        begin,end=match.span()
-        left=text[begin:end]
-        if len(left.strip())>=25:
-            yield begin,end,left.strip()
+    """Return likely sentence spans without splitting p-values at decimals."""
+    boundaries=[0]+[m.end() for m in re.finditer(r"[.!?]\s+(?=[A-Z])",text)]+[len(text)]
+    for start,end in zip(boundaries,boundaries[1:]):
+        segment=text[start:end]
+        if len(segment.strip())>=25:
+            yield start,end,segment.strip()
 
 
 def tag(label):
@@ -141,6 +140,10 @@ def extract_study_claims(paper,pages,receipt):
         text=normalized(page["text"])
         for start,end,sentence in sentences(text):
             labels=list(LABEL.finditer(sentence))
+            unique_labels={tag(x.group(0)) for x in labels}
+            # Multiple hypothesis labels in one sentence require relation
+            # extraction, not one shared binary result.
+            if len(unique_labels)>1:continue
             label=tag(labels[0].group(0)) if labels else None
             # Hypothesis/proposition declaration must start near beginning.
             intro=INTRO.search(sentence)
