@@ -105,14 +105,22 @@ def parse_document(content,content_type):
     if content.startswith(b'%PDF'):
         import fitz
         with fitz.open(stream=content,filetype='pdf') as doc:
-            return [{'page':i+1,'text':page.get_text('text')} for i,page in enumerate(doc)],'pymupdf-v1'
+            return [{'page':i+1,'text':page.get_text('text',sort=True)} for i,page in enumerate(doc)],'pymupdf-v2-reading-order'
     if 'html' in content_type:
         from bs4 import BeautifulSoup
         soup=BeautifulSoup(content,'html.parser')
-        for el in soup(['script','style','nav','header','footer']):el.decompose()
-        body=soup.find('article') or soup.find('main') or soup.body or soup
-        text=body.get_text(' ',strip=True)
-        if soup.find('article') and len(text)>15000 and any(re.search(r'method|measure|data',h.get_text(),re.I) for h in soup.find_all(['h2','h3','h4'])):return [{'page':None,'text':text}],'beautifulsoup-v1'
+        for el in soup(['script','style','nav','header','footer','form','aside']):el.decompose()
+        body=(soup.find('article') or soup.find('main') or
+              soup.find(attrs={'role':'main'}) or soup.select_one('#main-content'))
+        if body is not None:
+            text=body.get_text(' ',strip=True)
+            headings=body.find_all(['h1','h2','h3','h4','h5'])
+            has_method_heading=any(re.search(r'method|measure|data|empiric|variable|research design',
+                                             h.get_text(' ',strip=True),re.I) for h in headings)
+            # Structured author manuscripts and repository pages need not use
+            # an <article> tag nor exceed 15K characters.
+            if len(text)>=5000 and has_method_heading:
+                return [{'page':None,'text':text}],'beautifulsoup-v2-structured'
     raise ValueError('Not an inspectable full-text document')
 
 def acquire(max_papers=40,dry_run=False):
@@ -154,14 +162,24 @@ def acquire(max_papers=40,dry_run=False):
                     text=' '.join(p['text'] for p in pages)
                     words=set(re.findall(r'[a-z]{4,}',paper['title'].lower()));begin=set(re.findall(r'[a-z]{4,}',text[:12000].lower()))
                     families=[a.split()[-1].lower() for a in paper.get('authors',[]) if a.split()]
-                    if not words or len(words&begin)/len(words)<.85 or not any(f in text[:12000].lower() for f in families):raise ValueError('title_author_identity_mismatch')
-                    if len(text)<15000:raise ValueError('fulltext_too_short')
+                    title_match=len(words&begin)/len(words) if words else 0
+                    author_match=any(f in text[:12000].lower() for f in families)
+                    # When Crossref lacks authors, require a visible matching DOI.
+                    doi_match=paper['doi'].lower() in text[:12000].lower()
+                    if title_match<.70 or not (author_match or (not families and doi_match)):
+                        raise ValueError('title_author_identity_mismatch')
+                    if len(text)<5000:raise ValueError('fulltext_too_short')
                     receipt.update(accessible=True,source_url=str(response.url),license=loc.get('license'),version=loc.get('version'),rights_basis='OpenAlex OA accepted/published source; transient reading and short evidence only',source_hash=hashlib.sha256(response.content).hexdigest(),text_hash=hashlib.sha256(text.encode()).hexdigest(),parser_version=parser,missing_reason=None,page_count=len(pages))
                     write(CACHE/'fulltext'/(key+'.json'),json.dumps({'pages':pages,'receipt':receipt},ensure_ascii=False))
                     records=extract_variables(paper,pages,receipt)
                     receipt['extraction_algorithm_version']=EXTRACTION_VERSION
+                    # A new successful parse replaces this paper's prior
+                    # automatic claims: old source hashes would otherwise
+                    # disagree with the new receipt and fail publication QA.
+                    variables={vid:v for vid,v in variables.items()
+                               if v['paper_id']!=paper['paper_id'] or v.get('human_reviewer')}
                     for v in records:
-                        if v['variable_id'] not in variables or not variables[v['variable_id']].get('human_reviewer'):variables[v['variable_id']]=v
+                        if v['variable_id'] not in variables:variables[v['variable_id']]=v
                     break
                 except Exception as exc:
                     receipt['failures'].append({'url':url,'reason':type(exc).__name__+':'+str(exc)[:160]})
