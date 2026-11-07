@@ -1,4 +1,4 @@
-# 自動研究資料系統 v3.0
+# 自動研究資料系統 v3.1
 
 Atlas 是獨立研究工具，**不是 SMJ 官方 taxonomy**。Domain 仍參照 SMS Interest Groups，Research Topic → Construct → Operational Variable 保持四層關係，Theory 為獨立多重維度。`data/taxonomy_versions/2.0.0.json` 與原始分類來源原封保留。新版本只改變證據、驗證及發布方式，不冒填人工 reviewer。
 
@@ -20,15 +20,15 @@ Atlas 是獨立研究工具，**不是 SMJ 官方 taxonomy**。Domain 仍參照 
 2. OpenAlex：按 DOI 批次補充來源 ID、摘要特徵、引用數及 as-of 日期、外部分類和 OA 位置。外部分類不冒充 SMJ 標記。匿名 cursor 分頁需要 free API key 時，使用有預算的 DOI lookup，不假設付費更新過濾可用。
 3. 正文：只嘗試 OA accepted/published 位置，先檢查 robots，再用一般公開 HTTPS 請求；遇到拒絕不繞過。檢查標題與作者一致性，PDF/HTML 解析後記錄原始檔 hash、版本、來源與頁碼。
 
-全文、PDF 與重建摘要只在忽略的 `.cache/` 暫存，不會提交 GitHub 或放進 Pages。公開版不重刊完整摘要，以免將 metadata 授權誤當成原始文字再散布授權。每篇只公開一筆短衡量摘錄（20 詞以內）及獨立撰寫的摘要式定義。OpenAlex 註記 OA 不代表任意重刊權；來源未提供明確 license 時，license 仍為 null，只做公開來源的暫時讀取及短證據定位。
+全文、PDF 與重建摘要只在忽略的 `.cache/` 暫存，不會提交 GitHub 或放進 Pages。公開版不重刊完整摘要，以免將 metadata 授權誤當成原始文字再散布授權。每筆已擷取變數只公開短衡量摘錄（20 詞以內）及獨立撰寫的摘要式定義；不同變數可有多筆。OpenAlex 註記 OA 不代表任意重刊權；來源未提供明確 license 時，license 仍為 null，只做公開來源的暫時讀取及短證據定位。
 
 ## 逐篇變數如何產生
 
-`deterministic_measurement_span_v1` 只接受正文中明確命名、位於衡量／變數脈絡的 measured／operationalized 等陳述。每篇目前最多取一個可對齊的 named measure，**不是完整變數清單**。名稱、角色與操作化分開：沒有角色文字便維持 unknown；沒有原文公式就保留 null，不把文字定義自行改寫成公式。
+`measurement-span-v2-multi` 會依明確命名、變數段落脈絡的 measured／operationalized／defined／calculated 等文字模式，跨頁搜尋多筆、同名去重並各自驗證原文位置。**不是完整變數清單**，尤其尚不能全面解析表格、公式、附錄與跨段落定義。名稱、角色與操作化分開：沒有角色文字便維持 unknown；沒有原文公式就保留 null，不把文字定義自行改寫成公式。
 
 E3 紀錄保存 PDF 頁碼（非假定為期刊印刷頁碼）、正規化字元範圍、span hash 與原始檔 hash。`verify_span` 重新取出該段文字、核對 hash 及短摘錄。公式必須與原文一致；sample period、lag、method、data source 或 findings 若無相符的來源文字不能填入。依少數明確文字模式可提供獨立中文摘要與 proxy 描述；未確認的欄位以 null 和 missing_reason 呈現。
 
-目前方法／樣本／係數擷取尚非全面抽取器，尤其不能從標題中的 experiment、performance 或 mediating 推定 RCT、因果效果或中介檢驗。原文版本可能為作者接受稿，網站明列版本。自動通過只表示來源對齊，不等於衡量的理論效度或模型角色已由專家核實。
+已加入來源對齊的 H/P 假設、實證 Finding、Robustness、Sensitivity 文字紀錄；其支持狀態和顯著性分開，不能由假設支持推出顯著。詳見 `docs/STUDY_CLAIMS_METHODOLOGY.md`。目前方法／樣本／係數擷取尚非全面抽取器，尤其不能從標題中的 experiment、performance 或 mediating 推定 RCT、因果效果或中介檢驗。原文版本可能為作者接受稿，網站明列版本。自動通過只表示來源對齊，不等於衡量的理論效度或模型角色已由專家核實。
 
 ## 正規化資料與可重現性
 
