@@ -188,3 +188,11 @@ def test_deployment_recovers_only_explicit_stale_conflict(monkeypatch,tmp_path):
     assert publication.deploy()['status']=='pages_api_success'
     assert posted==['deploy','cancel','deploy']
     assert (tmp_path/'output').read_text().startswith('page_url=https://')
+
+
+def test_pages_versions_are_unique_for_scheduled_same_commit():
+    from pipeline.publication import deployment_version
+    sha="a"*40
+    assert deployment_version(sha,1,1)!=deployment_version(sha,2,1)
+    assert deployment_version(sha,1,1)!=deployment_version(sha,1,2)
+    with pytest.raises(ValueError):deployment_version("invalid",1,1)

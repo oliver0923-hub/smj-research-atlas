@@ -26,10 +26,16 @@ def can_cancel_conflict(runs,current_run,now_utc=None):
     clock=now_utc or datetime.now(timezone.utc)
     return all((clock-datetime.fromisoformat(r['updated_at'].replace('Z','+00:00'))).total_seconds()>=120 for r in owned)
 
+def deployment_version(sha,run,attempt):
+    # Pages build versions are unique build strings, not necessarily a commit SHA.
+    if not re.fullmatch(r'[a-f0-9]{40}',sha) or not str(run).isdigit() or not str(attempt).isdigit():raise ValueError('Invalid build identity')
+    return sha+'-'+str(run)+'-'+str(attempt)
+
 def deploy():
     """Use the documented Pages API, recovering only a stale completed Atlas deployment."""
     repo=os.environ['GITHUB_REPOSITORY'];run=os.environ['GITHUB_RUN_ID'];sha=os.environ['GITHUB_SHA']
     if repo!='oliver0923-hub/smj-research-atlas':raise ValueError('Unexpected publication target')
+    version=deployment_version(sha,run,os.getenv('GITHUB_RUN_ATTEMPT','1'))
     root='https://api.github.com/repos/'+repo
     headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
     with httpx.Client(timeout=40,headers=headers) as client:
@@ -39,20 +45,20 @@ def deploy():
         deployment=None
         for attempt in range(30):
             oidc=client.get(os.environ['ACTIONS_ID_TOKEN_REQUEST_URL'],headers={'Authorization':'Bearer '+os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN']});oidc.raise_for_status()
-            r=client.post(root+'/pages/deployments',json={'artifact_id':artifacts[0]['id'],'pages_build_version':sha,'oidc_token':oidc.json()['value']})
+            r=client.post(root+'/pages/deployments',json={'artifact_id':artifacts[0]['id'],'pages_build_version':version,'oidc_token':oidc.json()['value']})
             if r.is_success:deployment=r.json();break
             message=r.json().get('message','')
-            match=re.search(r'in progress deployment.*?cancel ([0-9a-f]{40})',message,re.I)
+            match=re.search(r'in progress deployment.*?cancel ([0-9a-f]{40}(?:-[0-9]+-[0-9]+)?)',message,re.I)
             if r.status_code!=400 or not match:r.raise_for_status()
             stale=match[1]
-            prior=client.get(root+'/actions/runs',params={'head_sha':stale,'per_page':100});prior.raise_for_status()
+            prior=client.get(root+'/actions/runs',params={'head_sha':stale[:40],'per_page':100});prior.raise_for_status()
             if can_cancel_conflict(prior.json()['workflow_runs'],run):
                 cancelled=client.post(root+'/pages/deployments/'+stale+'/cancel')
-                if cancelled.status_code not in {200,202,204,404,409}:cancelled.raise_for_status()
+                if cancelled.status_code not in {200,202,204,404,409}:raise RuntimeError('Stale deployment recovery rejected: '+str(cancelled.status_code)+' '+cancelled.json().get('message','')[:300])
                 print(json.dumps({'status':'retired_stale_atlas_deployment','revision':stale}),flush=True)
             time.sleep(10)
         if not deployment:raise RuntimeError('Pages conflict remained after bounded retries')
-        deployment_id=str(deployment.get('id') or deployment.get('status_url','').split('/')[-1] or sha)
+        deployment_id=str(deployment.get('id') or version)
         for attempt in range(60):
             state=client.get(root+'/pages/deployments/'+deployment_id);state.raise_for_status();status=state.json()['status']
             if status=='succeed':
@@ -60,7 +66,7 @@ def deploy():
                 output=os.getenv('GITHUB_OUTPUT')
                 if output:
                     with open(output,'a',encoding='utf-8') as f:f.write('page_url='+url+'\n')
-                return {'status':'pages_api_success','page_url':url,'revision':sha}
+                return {'status':'pages_api_success','page_url':url,'revision':sha,'build_version':version}
             if status in {'deployment_failed','deployment_perms_error','deployment_content_failed','deployment_cancelled','deployment_lost'}:raise RuntimeError('Pages status '+status)
             time.sleep(5)
         raise RuntimeError('Pages status did not complete within budget')
