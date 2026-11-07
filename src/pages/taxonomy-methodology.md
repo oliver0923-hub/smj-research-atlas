@@ -76,4 +76,4 @@ Nag et al. 以學者調查與跨領域學者明示定義探討領域共識；本
 週更擷取來源後重新執行 theory／topic 規則與正文量測抽取。每次建置以同一快照生成變數字典、理論導覽、分析及研究機會候選。候選包含主題 A／B 篇數、共同篇數、排除規則、實際支撐 paper IDs、分類版本與 provisional 狀態；新穎性與機制不由低共現推論，維持 null。抽取器版本更新會觸發預算內舊正文再取得，無逐篇人工發布閘門。
 
 
-Pages build version 使用 source revision + workflow run + attempt 的唯一識別字串，避免相同程式版本的每日資料發布共用部署 ID。公開 manifest 分別保留真正的 Git revision、run、attempt 與生成時間。[GitHub Pages REST API](https://docs.github.com/en/rest/pages/pages#create-a-github-pages-deployment) 的 pages_build_version 定義為唯一建置字串。
+每次執行以 source revision + workflow run + attempt 記錄唯一 execution ID；Pages API 使用實際 Git commit。排程資料發布以本次新產生的 atlas-data commit 作 build version，main 更新則使用 main commit，避免每日資料發布共用部署 ID。公開 manifest 分別保留真正的 Git revision、run、attempt 與生成時間。[GitHub Pages REST API](https://docs.github.com/en/rest/pages/pages#create-a-github-pages-deployment) 的 pages_build_version 定義為唯一建置字串。

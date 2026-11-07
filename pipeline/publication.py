@@ -35,7 +35,9 @@ def deploy():
     """Use the documented Pages API, recovering only a stale completed Atlas deployment."""
     repo=os.environ['GITHUB_REPOSITORY'];run=os.environ['GITHUB_RUN_ID'];sha=os.environ['GITHUB_SHA']
     if repo!='oliver0923-hub/smj-research-atlas':raise ValueError('Unexpected publication target')
-    version=deployment_version(sha,run,os.getenv('GITHUB_RUN_ATTEMPT','1'))
+    execution=deployment_version(sha,run,os.getenv('GITHUB_RUN_ATTEMPT','1'))
+    version=os.getenv('PAGES_BUILD_VERSION',sha)
+    if not re.fullmatch(r'[a-f0-9]{40}',version):raise ValueError('Pages version must reference the source or validated data commit')
     root='https://api.github.com/repos/'+repo
     headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
     with httpx.Client(timeout=40,headers=headers) as client:
@@ -68,7 +70,7 @@ def deploy():
                 output=os.getenv('GITHUB_OUTPUT')
                 if output:
                     with open(output,'a',encoding='utf-8') as f:f.write('page_url='+url+'\n')
-                return {'status':'pages_api_success','page_url':url,'revision':sha,'build_version':version}
+                return {'status':'pages_api_success','page_url':url,'revision':sha,'build_version':version,'execution_id':execution}
             if status in {'deployment_failed','deployment_perms_error','deployment_content_failed','deployment_cancelled','deployment_lost'}:raise RuntimeError('Pages status '+status)
             time.sleep(5)
         raise RuntimeError('Pages status did not complete within budget')
