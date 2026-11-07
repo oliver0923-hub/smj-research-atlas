@@ -8,6 +8,7 @@ from .taxonomy import validate_taxonomy, suggest_assignments, emerging_topics, e
 from .classify import classify
 from .analytics import derive, coverage, research_graph, article_kind, gap_candidates
 from .evidence import OperationalVariable
+from .study import StudyClaim
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT/'data'
 def read(name):
@@ -100,6 +101,21 @@ def validate():
             if v['validation_status']=='validated_automatic':
                 receipt=receipts.get(v['paper_id'],{})
                 if not v.get('alignment_verified') or not receipt.get('accessible') or receipt.get('source_hash')!=v['source_hash']:raise ValueError('Variable lacks aligned full-text receipt')
+    claim_rows=read('study_claims.jsonl')
+    claim_ids=set()
+    for claim in claim_rows:
+        StudyClaim.model_validate(claim)
+        if claim['claim_id'] in claim_ids or claim['paper_id'] not in ids:
+            raise ValueError('Duplicate/dangling study claim')
+        claim_ids.add(claim['claim_id'])
+        if claim['validation_status']=='validated_automatic':
+            receipt=receipts.get(claim['paper_id'],{})
+            if not receipt.get('accessible') or receipt.get('source_hash')!=claim['source_hash']:
+                raise ValueError('Study claim source does not match full-text receipt')
+    for claim in claim_rows:
+        linked=claim.get('related_hypothesis_id')
+        if linked and linked not in claim_ids:
+            raise ValueError('Study finding refers to missing hypothesis')
     taxonomy_path=DATA/'ontology.yaml'
     if taxonomy_path.exists():
         taxonomy=yaml.safe_load(taxonomy_path.read_text(encoding='utf-8'))
@@ -111,16 +127,21 @@ def build():
     ontology=yaml.safe_load((DATA/'ontology.yaml').read_text(encoding='utf-8'))
     manual=read('classifications.jsonl')
     enrichment=read('enrichment.jsonl');receipts=read('content_receipts.jsonl');runs=read('extraction_runs.jsonl')
+    study_claims=read('study_claims.jsonl')
     assignments=classify(papers,ontology,enrichment,manual)
     validate_taxonomy(ontology,assignments,papers,variables)
     papers=enrich_papers(papers,ontology,assignments)
     extra={e['paper_id']:e for e in enrichment};content={r['paper_id']:r for r in receipts}
     by_variable={}
     for v in variables:by_variable.setdefault(v['paper_id'],[]).append(v)
+    by_claim={}
+    for c in study_claims:by_claim.setdefault(c['paper_id'],[]).append(c)
     for p in papers:
         p['title']=display_text(p['title'])
         p['enrichment']=extra.get(p['paper_id']);p['content_access']=content.get(p['paper_id'],{'accessible':False,'missing_reason':'not_yet_attempted'})
-        p['variables']=by_variable.get(p['paper_id'],[]);p['is_retracted']=extra.get(p['paper_id'],{}).get('is_retracted');p['article_kind']=article_kind(p)
+        p['variables']=by_variable.get(p['paper_id'],[])
+        p['study_claims']=by_claim.get(p['paper_id'],[])
+        p['is_retracted']=extra.get(p['paper_id'],{}).get('is_retracted');p['article_kind']=article_kind(p)
         p['unknown_details']={k:None for k in ['sample_period','data_source','empirical_method','reported_association']}
     emerging=emerging_topics(papers,ontology)
     for e in emerging:e.update(validation_status='provisional',inference_origin='deterministic_rule',evidence_grade='E0_metadata',kind='discovered_topic',requires_owner_action=False)
@@ -135,6 +156,14 @@ def build():
         suggested_classifications=sum(a['review_status']=='suggested' for a in assignments),emerging_topic_candidates=len(emerging))
     publisher=json.loads((DATA/'publisher_check.json').read_text(encoding='utf-8')) if (DATA/'publisher_check.json').exists() else {'status':'not_attempted','expected_articles':None,'missing_estimate':None}
     report.update(coverage(papers,variables,assignments,receipts,enrichment,publisher))
+    report['study_claim_records']=len(study_claims)
+    report['hypothesis_records']=sum(c['claim_type']=='hypothesis' for c in study_claims)
+    report['proposition_records']=sum(c['claim_type']=='proposition' for c in study_claims)
+    report['finding_records']=sum(c['claim_type']=='finding' for c in study_claims)
+    report['robustness_records']=sum(c['claim_type']=='robustness' for c in study_claims)
+    report['sensitivity_records']=sum(c['claim_type']=='sensitivity' for c in study_claims)
+    report['study_claim_papers']=len({c['paper_id'] for c in study_claims})
+    report['schema_version']='3.1.0'
     analysis=derive(papers,variables,ontology,receipts,enrichment)
     title_map={p['paper_id']:p['title'] for p in papers}
     for v in variables:v['paper_title']=title_map[v['paper_id']]
@@ -158,7 +187,7 @@ def build():
     for p in papers:
         k=f"{p['publication_year']}/{p.get('volume')}/{p.get('issue')}";issue_counts[k]=issue_counts.get(k,0)+1
     issues=[dict(year_volume_issue=k,indexed_articles=n,publisher_expected_articles=None,coverage_status='not_reconciled') for k,n in sorted(issue_counts.items())]
-    for name,obj in [('coverage_report',report),('coverage_issues',issues),('analytics',analysis),('gap_candidates',gap_candidates(papers,ontology)),('measurement_paths',paths),('research_graph',graph),('pipeline_history',read('pipeline_history.jsonl')),('ontology',[n for n in ontology['nodes'] if n['level']=='domain']),('taxonomy',ontology),('classifications',assignments),('emerging_topics',emerging),('variables',variables)]:
+    for name,obj in [('coverage_report',report),('coverage_issues',issues),('analytics',analysis),('gap_candidates',gap_candidates(papers,ontology)),('measurement_paths',paths),('research_graph',graph),('pipeline_history',read('pipeline_history.jsonl')),('ontology',[n for n in ontology['nodes'] if n['level']=='domain']),('taxonomy',ontology),('classifications',assignments),('emerging_topics',emerging),('variables',variables),('study_claims',study_claims)]:
         write(out/(name+'.json'),json.dumps(obj,ensure_ascii=False)); write(DATA/'generated'/(name+'.json'),json.dumps(obj,ensure_ascii=False,indent=2))
     classification_queue=[dict(task_id='review:'+a['assignment_id'],paper_id=a['paper_id'],term_id=a['term_id'],assignment_id=a['assignment_id'],taxonomy_version=a['taxonomy_version'],task_type='classification_review',status='open',origin=a['origin'],method=a['method'],source_url=a['source_url'],evidence_locator=a['evidence_locator']) for a in assignments if a['review_status']=='suggested']
     write(DATA/'generated'/'classification_review_queue.jsonl',lines(classification_queue))
