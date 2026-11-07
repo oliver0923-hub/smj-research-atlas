@@ -1,0 +1,48 @@
+name: SMJ metadata sync
+on:
+  schedule:
+    - cron: '23 2 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: metadata-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -e '.[test]'
+      - uses: dawidd6/action-download-artifact@v6
+        continue-on-error: true
+        with:
+          workflow: sync-metadata.yml
+          name: sync-checkpoints
+          path: data/staging
+          search_artifacts: true
+      - run: python -m pipeline.cli sync --max-pages 30
+        env:
+          CROSSREF_MAILTO: ${{ vars.CROSSREF_MAILTO }}
+      - run: python -m pytest
+      - run: python -m pipeline.cli build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sync-checkpoints
+          path: data/staging
+          if-no-files-found: ignore
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bot/metadata-update
+          title: 'data: update SMJ Crossref metadata'
+          body: 'Crossref metadata update. Inspect papers/audit/quarantine diff and coverage report. Variable review status is not automatically upgraded. Tests and offline validation run before PR creation.'
+          commit-message: 'data: sync Crossref metadata and coverage'
+          add-paths: |
+            data/
+            public/data/
+            docs/COVERAGE_REPORT.md

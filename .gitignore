@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+__pycache__/
+.pytest_cache/
+.venv/
+data/staging/
+*.log
+*.egg-info/
+pytest-cache-files-*/
+
+bootstrap-base64.txt

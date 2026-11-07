@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="論文詳情"><div class="eyebrow">Paper record / Source traceability</div><div id="detail" class="detail" role="status">載入論文資料…</div></Layout>
+<script>
+const root=document.getElementById('detail')!;const base=import.meta.env.BASE_URL;const id=new URLSearchParams(location.search).get('id');
+function add(tag:string,text:string){const e=document.createElement(tag);e.textContent=text;root.append(e);return e}
+try{if(!id)throw Error('未指定論文');const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(id)))).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16);const res=await fetch(base+'data/papers/'+hash+'.json');if(!res.ok)throw Error('找不到這篇論文');const p=await res.json();root.replaceChildren();add('h1',p.title);add('p',p.authors.join(', '));add('p',`${p.publication_year} · Strategic Management Journal · ${p.volume??'卷未提供'} (${p.issue??'期未提供'}) · ${p.pages??'頁碼未提供'}`);const a=add('a','前往 DOI / 出版社');a.setAttribute('href',p.doi_url);add('p','查核狀態：'+p.verification_status);add('div','本紀錄為書目資料。尚未據全文核查理論、方法、樣本與研究結果。').className='notice';add('h2','分類與研究脈絡');add('p','領域：'+(p.domain_codes.join(', ')||'尚未分類'));add('p','理論：'+(p.theory_tags.join(', ')||'尚未驗證'));add('p','方法：'+(p.method_tags.join(', ')||'尚未驗證'));add('h2','逐篇變數與研究結果');add('p','尚無經來源驗證的衡量或研究結果。已建立全文審閱工作，不以摘要推測公式。').className='empty';add('h2','來源與更新');for(const s of p.metadata_provenance){const a=add('a',s.source+' 原始書目 API');a.setAttribute('href',s.source_url);add('p','來源索引時間：'+(s.indexed??'未提供'))}add('p','最後書目變更／擷取：'+p.last_synced_at)}catch(e){root.textContent=e instanceof Error?e.message:'載入失敗'}
+</script>

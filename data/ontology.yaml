@@ -1,0 +1,122 @@
+[
+  {
+    "id": "IND",
+    "parent_id": null,
+    "label_zh": "產業競爭與市場結構",
+    "label_en": "Industry & Competition",
+    "description": "產業競爭與市場結構",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "RES",
+    "parent_id": null,
+    "label_zh": "資源、能力與知識",
+    "label_en": "Resources, Capabilities & Knowledge",
+    "description": "資源、能力與知識",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "BEH",
+    "parent_id": null,
+    "label_zh": "組織行為、學習與注意力",
+    "label_en": "Behavioral Strategy & Learning",
+    "description": "組織行為、學習與注意力",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "GOV",
+    "parent_id": null,
+    "label_zh": "交易成本、企業邊界與治理",
+    "label_en": "Governance & Firm Boundaries",
+    "description": "交易成本、企業邊界與治理",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "COR",
+    "parent_id": null,
+    "label_zh": "公司策略、多角化與資源配置",
+    "label_en": "Corporate Strategy",
+    "description": "公司策略、多角化與資源配置",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "MNA",
+    "parent_id": null,
+    "label_zh": "併購、撤資與重組",
+    "label_en": "M&A, Divestitures & Restructuring",
+    "description": "併購、撤資與重組",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "ALL",
+    "parent_id": null,
+    "label_zh": "策略聯盟與網絡",
+    "label_en": "Alliances & Networks",
+    "description": "策略聯盟與網絡",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "INN",
+    "parent_id": null,
+    "label_zh": "創新、技術與知識搜尋",
+    "label_en": "Innovation & Technology",
+    "description": "創新、技術與知識搜尋",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "INT",
+    "parent_id": null,
+    "label_zh": "國際化、跨國企業與地緣政治",
+    "label_en": "International & Global Strategy",
+    "description": "國際化、跨國企業與地緣政治",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "LEA",
+    "parent_id": null,
+    "label_zh": "策略領導與公司治理",
+    "label_en": "Strategic Leadership & Governance",
+    "description": "策略領導與公司治理",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "NMS",
+    "parent_id": null,
+    "label_zh": "非市場、制度、政治與社會策略",
+    "label_en": "Nonmarket & Institutional Strategy",
+    "description": "非市場、制度、政治與社會策略",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  },
+  {
+    "id": "ECO",
+    "parent_id": null,
+    "label_zh": "平台、生態系與數位策略",
+    "label_en": "Platforms, Ecosystems & Digital",
+    "description": "平台、生態系與數位策略",
+    "synonyms": [],
+    "version": "1.0",
+    "status": "curated_ontology"
+  }
+]

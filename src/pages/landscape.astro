@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';import fs from 'node:fs';
+const ontology=JSON.parse(fs.readFileSync('public/data/ontology.json','utf8'));const papers=JSON.parse(fs.readFileSync('public/data/papers.json','utf8'));const years=[...new Set(papers.map(p=>p.publication_year))].sort();const counts=years.map(y=>papers.filter(p=>p.publication_year===y).length);const max=Math.max(1,...counts);const base=import.meta.env.BASE_URL;
+---
+<Layout title="研究地圖"><div class="eyebrow">Research landscape</div><h1>策略研究的十二個入口</h1><p class="lead">領域架構為人工設計的 ontology，並非逐篇論文分類結果。同一篇論文可屬於多個領域；未經審閱的分類不作為已驗證證據。</p><div class="grid">{ontology.map(d=><a class="card" href={`${base}papers/?domain=${d.id}`}><span class="eyebrow">{d.id}</span><h3>{d.label_zh}</h3><p class="muted">{d.label_en}</p><span class="badge">{papers.filter(p=>p.domain_codes.includes(d.id)).length} 篇已分類</span></a>)}</div><h2>目前收錄書目的年度分布</h2><p class="muted">下列數量僅代表已索引 SMJ 書目，不代表期刊逐年完整產量或整個學術領域的發展趨勢。</p><div class="card">{years.map((year,i)=><div class="bar"><span>{year}</span><i style={`width:${counts[i]/max*75}%`} aria-hidden="true"></i><b>{counts[i]} 篇</b></div>)}</div></Layout>
