@@ -40,7 +40,7 @@ def deploy():
     headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
     with httpx.Client(timeout=40,headers=headers) as client:
         response=client.get(root+'/actions/runs/'+run+'/artifacts');response.raise_for_status()
-        artifacts=[a for a in response.json()['artifacts'] if a['name']=='github-pages' and not a['expired']]
+        artifacts=[a for a in response.json()['artifacts'] if a['name']==os.getenv('PAGES_ARTIFACT_NAME','github-pages') and not a['expired']]
         if len(artifacts)!=1:raise ValueError('Exactly one current-run Pages artifact required')
         deployment=None
         for attempt in range(30):
@@ -49,7 +49,9 @@ def deploy():
             if r.is_success:deployment=r.json();break
             message=r.json().get('message','')
             match=re.search(r'in progress deployment.*?cancel ([0-9a-f]{40}(?:-[0-9]+-[0-9]+)?)',message,re.I)
-            if r.status_code!=400 or not match:r.raise_for_status()
+            if r.status_code!=400 or not match:
+                site=client.get(root+'/pages')
+                raise RuntimeError('Pages deployment rejected: HTTP '+str(r.status_code)+'; '+message[:250]+'; Pages configuration HTTP '+str(site.status_code))
             stale=match[1]
             prior=client.get(root+'/actions/runs',params={'head_sha':stale[:40],'per_page':100});prior.raise_for_status()
             if can_cancel_conflict(prior.json()['workflow_runs'],run):

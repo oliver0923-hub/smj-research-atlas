@@ -43,10 +43,12 @@ jobs:
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
           path: dist
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Deploy with bounded stale-lock recovery
         id: deployment
         run: python -m pipeline.publication --deploy
         env:
+          PAGES_ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           GITHUB_TOKEN: ${{ github.token }}
       - name: Verify the actual public build
         run: python -m pipeline.publication --url https://oliver0923-hub.github.io/smj-research-atlas/
