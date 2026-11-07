@@ -1,0 +1,104 @@
+{
+  "properties": {
+    "assignment_id": {
+      "title": "Assignment Id",
+      "type": "string"
+    },
+    "paper_id": {
+      "title": "Paper Id",
+      "type": "string"
+    },
+    "term_id": {
+      "title": "Term Id",
+      "type": "string"
+    },
+    "taxonomy_version": {
+      "title": "Taxonomy Version",
+      "type": "string"
+    },
+    "origin": {
+      "enum": [
+        "official_academic_organization",
+        "custom_research",
+        "algorithmic"
+      ],
+      "title": "Origin",
+      "type": "string"
+    },
+    "method": {
+      "minLength": 1,
+      "title": "Method",
+      "type": "string"
+    },
+    "source_url": {
+      "minLength": 1,
+      "title": "Source Url",
+      "type": "string"
+    },
+    "evidence_locator": {
+      "minLength": 1,
+      "title": "Evidence Locator",
+      "type": "string"
+    },
+    "input_hash": {
+      "minLength": 1,
+      "title": "Input Hash",
+      "type": "string"
+    },
+    "review_status": {
+      "default": "suggested",
+      "enum": [
+        "suggested",
+        "approved",
+        "rejected"
+      ],
+      "title": "Review Status",
+      "type": "string"
+    },
+    "reviewer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewer"
+    },
+    "reviewed_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewed At"
+    },
+    "audit_log": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Audit Log",
+      "type": "array"
+    }
+  },
+  "required": [
+    "assignment_id",
+    "paper_id",
+    "term_id",
+    "taxonomy_version",
+    "origin",
+    "method",
+    "source_url",
+    "evidence_locator",
+    "input_hash"
+  ],
+  "title": "Assignment",
+  "type": "object"
+}

@@ -69,7 +69,7 @@ def normalize(raw):
     record = dict(paper_id='doi:'+doi, doi=doi, title=' '.join(raw.get('title', [])), authors=[' '.join(filter(None,[a.get('given'),a.get('family')])) for a in raw.get('author',[])], publication_year=int(pub[:4]), online_date=date('published-online'), print_date=date('published-print'), journal_issn=sorted(set(raw['ISSN'])), volume=raw.get('volume'), issue=raw.get('issue'), pages=raw.get('page') or raw.get('article-number'), article_type=raw.get('type'), abstract=None, doi_url='https://doi.org/'+doi, publisher_url=raw.get('URL'), oa_url=None, openalex_id=None, citation_count=None, citation_count_asof=None, domain_codes=[], theory_tags=[], method_tags=[], industry_tags=[], geography_tags=[], verification_status='metadata_only', metadata_provenance=[{'source':'Crossref','source_url':'https://api.crossref.org/works/'+doi,'indexed':raw.get('indexed',{}).get('date-time')}], last_synced_at=now(), curation_updated_at=None)
     return Paper.model_validate(record).model_dump()
 
-CURATED = {'domain_codes','theory_tags','method_tags','industry_tags','geography_tags','verification_status','curation_updated_at','summary','oa_url'}
+CURATED = {'domain_codes','theory_tags','method_tags','industry_tags','geography_tags','verification_status','curation_updated_at','summary','oa_url','legacy_domain_codes','legacy_theory_tags','taxonomy_version','taxonomy_tags','classifications'}
 def upsert(old, new):
     if not old: return new
     merged = {**new, **{k:v for k,v in old.items() if k in CURATED}}

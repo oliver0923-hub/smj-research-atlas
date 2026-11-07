@@ -4,6 +4,7 @@ from pathlib import Path
 from datetime import datetime, timedelta, timezone
 import httpx, yaml
 from .core import normalize, upsert, now, Paper, Variable
+from .taxonomy import validate_taxonomy, suggest_assignments, emerging_topics, enrich_papers, Assignment
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT/'data'
 def read(name):
@@ -86,32 +87,66 @@ def validate():
     for p in papers:
         Paper.model_validate(p); assert p['paper_id'] not in ids; ids.add(p['paper_id'])
     for v in variables: Variable.model_validate(v); assert v['paper_id'] in ids
+    taxonomy_path=DATA/'ontology.yaml'
+    if taxonomy_path.exists():
+        taxonomy=yaml.safe_load(taxonomy_path.read_text(encoding='utf-8'))
+        validate_taxonomy(taxonomy,read('classifications.jsonl'),papers,variables)
     return papers,variables
 def build():
     papers,variables=validate()
     state=json.loads((DATA/'sync_state.json').read_text()) if (DATA/'sync_state.json').exists() else {}
     ontology=yaml.safe_load((DATA/'ontology.yaml').read_text(encoding='utf-8'))
+    manual=read('classifications.jsonl')
+    assignments=manual+suggest_assignments(papers,ontology,manual)
+    validate_taxonomy(ontology,assignments,papers,variables)
+    papers=enrich_papers(papers,ontology,assignments)
+    emerging=emerging_topics(papers,ontology)
     queue=[{'task_id':hashlib.sha256(p['paper_id'].encode()).hexdigest()[:16],'paper_id':p['paper_id'],'task_type':'fulltext_review','missing_evidence':'合法全文與逐篇衡量證據','priority':'normal','status':'open','created_at':p['last_synced_at'],'assigned_to':None,'completed_at':None,'audit_log':[]} for p in papers]
     existing={r['task_id']:r for r in read('review_queue.jsonl')}
     queue=[existing.get(r['task_id'],r) for r in queue]
     write(DATA/'review_queue.jsonl',lines(queue))
     years=sorted({p['publication_year'] for p in papers})
     report={'papers':len(papers),'verified_variables':sum(v['verification_status'] in {'measurement_verified','human_reviewed'} for v in variables),'verified_papers':len({v['paper_id'] for v in variables if v['verification_status'] in {'measurement_verified','human_reviewed'}}),'years':years,'coverage_status':'coverage_not_audited','denominator':'目前收錄之去重 SMJ Crossref 書目；未與出版社逐期目錄核對','quarantine':len(read('quarantine.jsonl')),'review_tasks':sum(t['status']=='open' for t in queue),'last_successful_sync':state.get('last_successful_sync')}
+    report.update(taxonomy_version=ontology['version'],is_official_smj_taxonomy=False,
+        approved_classifications=sum(a['review_status']=='approved' for a in assignments),
+        suggested_classifications=sum(a['review_status']=='suggested' for a in assignments),emerging_topic_candidates=len(emerging))
     out=ROOT/'public'/'data'; out.mkdir(parents=True,exist_ok=True)
     # Search metadata only; full records are chunked into per-paper detail files.
     search_fields=['paper_id','doi','title','authors','publication_year','domain_codes','theory_tags','method_tags','verification_status','oa_url','metadata_provenance']
+    search_fields+=['taxonomy_version','taxonomy_tags','legacy_domain_codes','legacy_theory_tags']
     write(out/'papers.json',json.dumps([{k:p.get(k) for k in search_fields} for p in papers],ensure_ascii=False))
     for p in papers: write(out/'papers'/ (hashlib.sha256(p['paper_id'].encode()).hexdigest()[:16]+'.json'),json.dumps(p,ensure_ascii=False))
-    for name,obj in [('coverage_report',report),('ontology',ontology),('variables',variables)]:
+    for name,obj in [('coverage_report',report),('ontology',[n for n in ontology['nodes'] if n['level']=='domain']),('taxonomy',ontology),('classifications',assignments),('emerging_topics',emerging),('variables',variables)]:
         write(out/(name+'.json'),json.dumps(obj,ensure_ascii=False)); write(DATA/'generated'/(name+'.json'),json.dumps(obj,ensure_ascii=False,indent=2))
+    classification_queue=[dict(task_id='review:'+a['assignment_id'],paper_id=a['paper_id'],term_id=a['term_id'],assignment_id=a['assignment_id'],taxonomy_version=a['taxonomy_version'],task_type='classification_review',status='open',origin=a['origin'],method=a['method'],source_url=a['source_url'],evidence_locator=a['evidence_locator']) for a in assignments if a['review_status']=='suggested']
+    write(DATA/'generated'/'classification_review_queue.jsonl',lines(classification_queue))
     write(ROOT/'docs'/'COVERAGE_REPORT.md','# 涵蓋率報告\n\n'+json.dumps(report,ensure_ascii=False,indent=2))
     print(json.dumps(report,ensure_ascii=False))
+
+def review_classification(args):
+    required=[args.assignment_id,args.decision,args.reviewer,args.note,args.source_url,args.evidence_locator]
+    if not args.human_attestation or not all(required):
+        raise ValueError('Manual review requires --human-attestation, --assignment-id, --decision, --reviewer, --note, --source-url and --evidence-locator. Never run this in scheduled jobs.')
+    build()
+    proposals=json.loads((DATA/'generated'/'classifications.json').read_text(encoding='utf-8'))
+    selected=next((a for a in proposals if a['assignment_id']==args.assignment_id),None)
+    if selected is None: raise ValueError('Unknown assignment_id in current taxonomy')
+    previous=selected['review_status'];decision='approved' if args.decision=='approve' else 'rejected'
+    stamp=now()
+    selected.update(review_status=decision,reviewer=args.reviewer,reviewed_at=stamp,source_url=args.source_url,evidence_locator=args.evidence_locator)
+    selected['audit_log'].append(dict(at=stamp,reviewer=args.reviewer,previous_status=previous,decision=decision,note=args.note,source_url=args.source_url,evidence_locator=args.evidence_locator,human_attestation=True))
+    Assignment.model_validate(selected)
+    manual={a['assignment_id']:a for a in read('classifications.jsonl')};manual[selected['assignment_id']]=selected
+    write(DATA/'classifications.jsonl',lines(sorted(manual.values(),key=lambda a:a['assignment_id'])))
+    build()
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('command',choices=['sync','build','validate']); parser.add_argument('--backfill',action='store_true'); parser.add_argument('--max-pages',type=int,default=20); parser.add_argument('--rows',type=int,default=500); args=parser.parse_args()
+    parser=argparse.ArgumentParser(); parser.add_argument('command',choices=['sync','build','validate','review-classification']); parser.add_argument('--backfill',action='store_true'); parser.add_argument('--max-pages',type=int,default=20); parser.add_argument('--rows',type=int,default=500)
+    parser.add_argument('--assignment-id');parser.add_argument('--decision',choices=['approve','reject']);parser.add_argument('--reviewer');parser.add_argument('--note');parser.add_argument('--source-url');parser.add_argument('--evidence-locator');parser.add_argument('--human-attestation',action='store_true');args=parser.parse_args()
     if args.command=='sync':
         try: sync(args)
         except Exception as exc:
             write(DATA/'staging'/'last_error.json',json.dumps({'at':now(),'error':str(exc)})); raise
     elif args.command=='build': build()
+    elif args.command=='review-classification': review_classification(args)
     else: validate(); print('Data validation passed')
 if __name__=='__main__': main()

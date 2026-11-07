@@ -32,3 +32,6 @@ Actions → SMJ metadata sync → Run workflow 可手動更新；如 backfill �
 未與 Wiley 逐期目錄對帳，coverage_not_audited。零已驗證變數不表示論文沒有變數。未啟用 OpenAlex、付費 LLM 或全文下載。理論頁是 ontology 規劃；研究缺口尚無實證。搜尋目前為大小寫不敏感的子字串比對，尚無拼字容錯。瀏覽器互動測試結果需另查驗，Astro build 不等同瀏覽器驗證。
 
 GitHub 初始書目以 data/bootstrap_papers.jsonl.gz 無損壓縮快照保存；read() 在 canonical JSONL 尚不存在時讀取它，後續 sync 產生 papers.jsonl。無全文，內容為此次 Crossref 真實查詢結果。
+
+## 研究分類 v2
+現行 Domain 參照 SMS Interest Groups，非 SMJ 官方 taxonomy。四層為 Domain → Research Topic → Construct → Operational Variable；Theory 為獨立維度。參見 [完整方法與參考文獻](docs/TAXONOMY_METHODOLOGY.md)。data/classifications.jsonl 為人工判讀權威檔；建置只提出 suggested。v1 封存於 data/taxonomy_versions/，未自動改標任何論文。

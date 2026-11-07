@@ -55,5 +55,10 @@
   "denominator": "目前收錄之去重 SMJ Crossref 書目；未與出版社逐期目錄核對",
   "quarantine": 0,
   "review_tasks": 3949,
-  "last_successful_sync": "2026-11-07T13:49:46.159342+00:00"
+  "last_successful_sync": "2026-11-07T13:49:46.159342+00:00",
+  "taxonomy_version": "2.0.0",
+  "is_official_smj_taxonomy": false,
+  "approved_classifications": 0,
+  "suggested_classifications": 4195,
+  "emerging_topic_candidates": 20
 }

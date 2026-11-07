@@ -10,3 +10,8 @@ data/staging/
 pytest-cache-files-*/
 
 bootstrap-base64.txt
+
+# Reproducible build outputs; authoritative classifications remain versioned.
+public/data/
+data/generated/
+data/review_queue.jsonl

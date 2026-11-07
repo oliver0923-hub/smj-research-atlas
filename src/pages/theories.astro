@@ -1,4 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '../layouts/Layout.astro';import fs from 'node:fs';
+const taxonomy=JSON.parse(fs.readFileSync('public/data/taxonomy.json','utf8'));const base=import.meta.env.BASE_URL;
 ---
-<Layout title="理論導覽"><div class="eyebrow">Theory explorer</div><h1>從理論走向構念與衡量</h1><p class="lead">以下為規劃中的理論入口，屬於 ontology；尚未將特定論文或衡量自動歸入這些理論。</p><div class="grid">{['Behavioral Theory of the Firm (BTF)','Attention-Based View (ABV)','Resource Dependence Theory (RDT)','Resource-Based View (RBV)','Transaction Cost Economics (TCE)','Multimarket Contact (MMC)','International Business','M&A and Acquisition Learning'].map(t=><div class="card"><h3>{t}</h3><span class="badge">待逐篇審閱</span></div>)}</div></Layout>
+<Layout title="獨立理論維度"><div class="eyebrow">Theory · independent multi-label dimension</div><h1>理論是獨立維度，可與多個領域交叉</h1><p class="lead">Theory 不插入 Domain → Research Topic → Construct → Operational Variable 的四層階層。M&A、International Strategy 與 Multimarket Contact 是研究主題，不能僅因主題名稱就認定論文採用某個理論。</p><div class="notice">以下為 Atlas 自訂理論標記詞彙，待研究者審核。標題字詞匹配只產生建議；理論是否實際使用，需要逐篇證據。非 SMS、AOM 或 SMJ 官方理論分類。</div><div class="grid">{taxonomy.nodes.filter(n=>n.level==='theory').map(t=><article class="card"><h3>{t.label_zh}</h3><p>{t.label_en}</p><span class="badge">自訂研究分類 · needs_review</span><p class="muted">方法：{t.method}<br/>版本：{t.version}</p><a href={`${base}papers/?theory=${t.id}&mode=both`}>查看人工確認與待審建議</a></article>)}</div><a href={`${base}taxonomy-methodology/`}>分類來源與審核方法</a></Layout>

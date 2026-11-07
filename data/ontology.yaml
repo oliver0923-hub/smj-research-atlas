@@ -1,122 +1,1244 @@
-[
-  {
-    "id": "IND",
-    "parent_id": null,
-    "label_zh": "產業競爭與市場結構",
-    "label_en": "Industry & Competition",
-    "description": "產業競爭與市場結構",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
+{
+  "version": "2.0.0",
+  "is_official_smj_taxonomy": false,
+  "title_zh": "Atlas 研究分類：以 SMS Interest Groups 為 Level 1 參照",
+  "checked_at": "2026-11-07",
+  "levels": [
+    "domain",
+    "research_topic",
+    "construct",
+    "operational_variable"
+  ],
+  "independent_dimensions": [
+    "theory"
+  ],
+  "sources": [
+    {
+      "id": "SMS-IG-2026",
+      "organization": "Strategic Management Society",
+      "title": "Interest Groups & Communities",
+      "url": "https://www.strategicmanagement.net/connect-participate/interest-groups-communities/",
+      "accessed_at": "2026-11-07",
+      "source_type": "official_academic_organization",
+      "evidence_locator": "Interest Groups listings; exclude Research Methods and Teaching Communities",
+      "supports": "SMS IG 英文名稱；非 SMJ 論文分類、非官方中文譯名或四層架構。"
+    },
+    {
+      "id": "AOM-STR-2026",
+      "organization": "Academy of Management, Strategic Management Division",
+      "title": "Strategic Management (STR): Domain Statement",
+      "url": "https://www.aom.org/divisions-and-interest-groups/strategic-management/",
+      "accessed_at": "2026-11-07",
+      "source_type": "official_academic_organization",
+      "evidence_locator": "Domain Statement",
+      "supports": "研究範圍涵蓋檢查；不授權或驗證 Atlas 的分類對應。"
+    },
+    {
+      "id": "NAG-2007",
+      "authors": [
+        "Nag, R.",
+        "Hambrick, D. C.",
+        "Chen, M.-J."
+      ],
+      "year": 2007,
+      "title": "What is strategic management, really? Inductive derivation of a consensus definition of the field",
+      "journal": "Strategic Management Journal",
+      "volume": "28",
+      "issue": "9",
+      "pages": "935–955",
+      "doi": "10.1002/smj.615",
+      "url": "https://doi.org/10.1002/smj.615",
+      "accessed_at": "2026-11-07",
+      "source_type": "academic_publication",
+      "evidence_locator": "Publisher Abstract; bibliographic record",
+      "supports": "學者調查與跨領域學者明示定義相互對照的研究取徑；本文未提出本網站四層分類。未據摘要宣稱重現全文的具體編碼程序。"
+    },
+    {
+      "id": "ATLAS-METHOD",
+      "organization": "SMJ Research Atlas",
+      "title": "Taxonomy Methodology v2",
+      "url": "https://oliver0923-hub.github.io/smj-research-atlas/taxonomy-methodology/",
+      "accessed_at": "2026-11-07",
+      "source_type": "custom_research",
+      "evidence_locator": "Four-level design, proposal rules and human review protocol",
+      "supports": "Atlas 自訂譯名、層級、研究主題、構念詞彙、理論維度與演算法規則。"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "SMS-BEH",
+      "level": "domain",
+      "label_zh": "行為策略",
+      "label_en": "Behavioral Strategy",
+      "official_label_en": "Behavioral Strategy",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-COMP",
+      "level": "domain",
+      "label_zh": "競爭策略",
+      "label_en": "Competitive Strategy",
+      "official_label_en": "Competitive Strategy",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-COOP",
+      "level": "domain",
+      "label_zh": "合作策略",
+      "label_en": "Cooperative Strategies",
+      "official_label_en": "Cooperative Strategies",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-CORP",
+      "level": "domain",
+      "label_zh": "公司策略",
+      "label_en": "Corporate Strategy",
+      "official_label_en": "Corporate Strategy",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-ENT",
+      "level": "domain",
+      "label_zh": "創業與策略",
+      "label_en": "Entrepreneurship and Strategy",
+      "official_label_en": "Entrepreneurship and Strategy",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-GLOBAL",
+      "level": "domain",
+      "label_zh": "全球策略",
+      "label_en": "Global Strategy",
+      "official_label_en": "Global Strategy",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-KI",
+      "level": "domain",
+      "label_zh": "知識與創新",
+      "label_en": "Knowledge and Innovation",
+      "official_label_en": "Knowledge and Innovation",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-STAKE",
+      "level": "domain",
+      "label_zh": "利害關係人策略",
+      "label_en": "Stakeholder Strategy",
+      "official_label_en": "Stakeholder Strategy",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-HC",
+      "level": "domain",
+      "label_zh": "策略人力資本",
+      "label_en": "Strategic Human Capital",
+      "official_label_en": "Strategic Human Capital",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-LG",
+      "level": "domain",
+      "label_zh": "策略領導與治理",
+      "label_en": "Strategic Leadership & Governance",
+      "official_label_en": "Strategic Leadership & Governance",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-PRACTICE",
+      "level": "domain",
+      "label_zh": "策略實踐",
+      "label_en": "Strategy Practice",
+      "official_label_en": "Strategy Practice",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "SMS-PROCESS",
+      "level": "domain",
+      "label_zh": "策略程序",
+      "label_en": "Strategy Process",
+      "official_label_en": "Strategy Process",
+      "parent_ids": [],
+      "origin": "official_academic_organization",
+      "source_ids": [
+        "SMS-IG-2026"
+      ],
+      "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
+      "translation_origin": "custom_research",
+      "hierarchy_origin": "custom_research",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMS Interest Group 名稱參照；中文譯名與 Level 1 編排為 Atlas 編製。非 SMJ 官方 taxonomy。"
+    },
+    {
+      "id": "TOP-BEH",
+      "level": "research_topic",
+      "label_zh": "認知、學習與注意力",
+      "label_en": "Cognition, learning and attention",
+      "parent_ids": [
+        "SMS-BEH",
+        "SMS-PROCESS"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "managerial attention",
+        "organizational learning",
+        "performance feedback",
+        "cognition",
+        "aspiration"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-COMP",
+      "level": "research_topic",
+      "label_zh": "競爭互動與產業動態",
+      "label_en": "Competitive interaction and industry dynamics",
+      "parent_ids": [
+        "SMS-COMP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "competitive dynamics",
+        "rivalry",
+        "industry dynamics"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-MMC",
+      "level": "research_topic",
+      "label_zh": "多市場接觸",
+      "label_en": "Multimarket contact",
+      "parent_ids": [
+        "SMS-COMP",
+        "SMS-COOP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "multimarket contact",
+        "multimarket rivalry",
+        "mutual forbearance"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-ALL",
+      "level": "research_topic",
+      "label_zh": "聯盟與組織間網絡",
+      "label_en": "Alliances and interorganizational networks",
+      "parent_ids": [
+        "SMS-COOP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "alliance",
+        "alliances",
+        "interorganizational networks"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-BOUND",
+      "level": "research_topic",
+      "label_zh": "企業邊界與垂直整合",
+      "label_en": "Firm boundaries and vertical integration",
+      "parent_ids": [
+        "SMS-CORP",
+        "SMS-COMP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "vertical integration",
+        "firm boundaries",
+        "outsourcing"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-MNA",
+      "level": "research_topic",
+      "label_zh": "併購、撤資與多角化",
+      "label_en": "M&A, divestitures and diversification",
+      "parent_ids": [
+        "SMS-CORP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "acquisition",
+        "acquisitions",
+        "mergers",
+        "divestiture",
+        "divestitures",
+        "diversification"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-RESOURCE",
+      "level": "research_topic",
+      "label_zh": "資源配置與能力",
+      "label_en": "Resource allocation and capabilities",
+      "parent_ids": [
+        "SMS-CORP",
+        "SMS-KI",
+        "SMS-COMP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "resource allocation",
+        "capabilities",
+        "resource redeployment",
+        "resource slack"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-ENT",
+      "level": "research_topic",
+      "label_zh": "創業與新事業",
+      "label_en": "Entrepreneurship and new ventures",
+      "parent_ids": [
+        "SMS-ENT"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "entrepreneurship",
+        "entrepreneurial",
+        "new ventures"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-GLOBAL",
+      "level": "research_topic",
+      "label_zh": "跨國策略與地緣政治",
+      "label_en": "International strategy and geopolitics",
+      "parent_ids": [
+        "SMS-GLOBAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "multinational",
+        "internationalization",
+        "geopolitics",
+        "cross border"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-INNOV",
+      "level": "research_topic",
+      "label_zh": "知識搜尋、創新與更新",
+      "label_en": "Knowledge search, innovation and renewal",
+      "parent_ids": [
+        "SMS-KI"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "innovation",
+        "knowledge search",
+        "patents",
+        "strategic renewal"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-NONMARKET",
+      "level": "research_topic",
+      "label_zh": "非市場策略與政策",
+      "label_en": "Nonmarket strategy and policy",
+      "parent_ids": [
+        "SMS-STAKE",
+        "SMS-GLOBAL",
+        "SMS-CORP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "nonmarket",
+        "political strategy",
+        "government policy",
+        "regulation"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-STAKE",
+      "level": "research_topic",
+      "label_zh": "利害關係人與社會結果",
+      "label_en": "Stakeholders and social outcomes",
+      "parent_ids": [
+        "SMS-STAKE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "stakeholder",
+        "stakeholders",
+        "corporate social",
+        "sustainability"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-HC",
+      "level": "research_topic",
+      "label_zh": "人才流動與人力資本",
+      "label_en": "Mobility and human capital",
+      "parent_ids": [
+        "SMS-HC"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "human capital",
+        "employee mobility",
+        "inventor",
+        "inventors",
+        "turnover"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-LEAD",
+      "level": "research_topic",
+      "label_zh": "高階主管與策略領導",
+      "label_en": "Executives and strategic leadership",
+      "parent_ids": [
+        "SMS-LG"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "ceo",
+        "top management",
+        "upper echelons",
+        "executive"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-GOV",
+      "level": "research_topic",
+      "label_zh": "公司治理",
+      "label_en": "Corporate governance",
+      "parent_ids": [
+        "SMS-LG",
+        "SMS-CORP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "corporate governance",
+        "boards",
+        "board of directors"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-PRACTICE",
+      "level": "research_topic",
+      "label_zh": "策略實踐與工具",
+      "label_en": "Strategy practice and tools",
+      "parent_ids": [
+        "SMS-PRACTICE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "strategy as practice",
+        "strategy tools",
+        "strategizing"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-PROCESS",
+      "level": "research_topic",
+      "label_zh": "策略形成、執行與變革",
+      "label_en": "Formulation, implementation and change",
+      "parent_ids": [
+        "SMS-PROCESS",
+        "SMS-PRACTICE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "strategy formulation",
+        "strategy implementation",
+        "strategic planning",
+        "strategic change"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-DIGITAL",
+      "level": "research_topic",
+      "label_zh": "平台、生態系與商業模式",
+      "label_en": "Platforms, ecosystems and business models",
+      "parent_ids": [
+        "SMS-COMP",
+        "SMS-COOP",
+        "SMS-KI"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "platform",
+        "platforms",
+        "ecosystem",
+        "ecosystems",
+        "business model",
+        "business models"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-INPUT",
+      "level": "research_topic",
+      "label_zh": "關鍵投入與資源依賴",
+      "label_en": "Critical inputs and resource dependencies",
+      "parent_ids": [
+        "SMS-CORP",
+        "SMS-COOP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "supplier",
+        "suppliers",
+        "resource dependence",
+        "supply chain"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TOP-OUTCOME",
+      "level": "research_topic",
+      "label_zh": "企業績效與異質性",
+      "label_en": "Firm performance and heterogeneity",
+      "parent_ids": [
+        "SMS-COMP",
+        "SMS-CORP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "firm performance",
+        "performance heterogeneity",
+        "competitive heterogeneity"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "CON-ATTENTION",
+      "level": "construct",
+      "label_zh": "管理者注意力",
+      "label_en": "Managerial attention",
+      "parent_ids": [
+        "TOP-BEH"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "CON-SLACK",
+      "level": "construct",
+      "label_zh": "資源寬裕",
+      "label_en": "Resource slack",
+      "parent_ids": [
+        "TOP-RESOURCE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "CON-DEPENDENCE",
+      "level": "construct",
+      "label_zh": "依賴不對稱",
+      "label_en": "Dependence asymmetry",
+      "parent_ids": [
+        "TOP-INPUT"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "CON-OVERLAP",
+      "level": "construct",
+      "label_zh": "市場重疊程度",
+      "label_en": "Market overlap",
+      "parent_ids": [
+        "TOP-MMC"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "CON-ACQEXP",
+      "level": "construct",
+      "label_zh": "併購經驗",
+      "label_en": "Acquisition experience",
+      "parent_ids": [
+        "TOP-MNA"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "CON-PERFORMANCE",
+      "level": "construct",
+      "label_zh": "企業績效",
+      "label_en": "Firm performance",
+      "parent_ids": [
+        "TOP-OUTCOME"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "AOM-STR-2026"
+      ],
+      "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TH-BTF",
+      "level": "theory",
+      "label_zh": "企業行為理論",
+      "label_en": "Behavioral Theory of the Firm",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD"
+      ],
+      "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "behavioral theory of the firm"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TH-ABV",
+      "level": "theory",
+      "label_zh": "注意力基礎觀點",
+      "label_en": "Attention-Based View",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD"
+      ],
+      "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "attention based view"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TH-RDT",
+      "level": "theory",
+      "label_zh": "資源依賴理論",
+      "label_en": "Resource Dependence Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD"
+      ],
+      "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "resource dependence theory"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TH-RBV",
+      "level": "theory",
+      "label_zh": "資源基礎觀點",
+      "label_en": "Resource-Based View",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD"
+      ],
+      "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "resource based view"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TH-TCE",
+      "level": "theory",
+      "label_zh": "交易成本經濟學",
+      "label_en": "Transaction Cost Economics",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD"
+      ],
+      "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "transaction cost economics",
+        "transaction cost theory"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    },
+    {
+      "id": "TH-AGENCY",
+      "level": "theory",
+      "label_zh": "代理理論",
+      "label_en": "Agency Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD"
+      ],
+      "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
+      "version": "2.0.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "agency theory"
+      ],
+      "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
+    }
+  ],
+  "scope_check": {
+    "source_id": "AOM-STR-2026",
+    "mapping_origin": "custom_research",
+    "method": "Editorial coverage checklist, not AOM endorsement or exhaustiveness certification",
+    "review_status": "needs_review",
+    "mappings": [
+      {
+        "scope": "decision_processes",
+        "topic_ids": [
+          "TOP-BEH",
+          "TOP-PROCESS",
+          "TOP-PRACTICE"
+        ]
+      },
+      {
+        "scope": "firm_boundaries",
+        "topic_ids": [
+          "TOP-BOUND"
+        ]
+      },
+      {
+        "scope": "governance",
+        "topic_ids": [
+          "TOP-GOV"
+        ]
+      },
+      {
+        "scope": "corporate_strategy",
+        "topic_ids": [
+          "TOP-MNA",
+          "TOP-RESOURCE"
+        ]
+      },
+      {
+        "scope": "economics_and_industry_dynamics",
+        "topic_ids": [
+          "TOP-COMP"
+        ]
+      },
+      {
+        "scope": "nonmarket_and_policy",
+        "topic_ids": [
+          "TOP-NONMARKET"
+        ]
+      },
+      {
+        "scope": "innovation_and_renewal",
+        "topic_ids": [
+          "TOP-INNOV"
+        ]
+      },
+      {
+        "scope": "alliances_networks_ma",
+        "topic_ids": [
+          "TOP-ALL",
+          "TOP-MNA"
+        ]
+      },
+      {
+        "scope": "business_models",
+        "topic_ids": [
+          "TOP-DIGITAL"
+        ]
+      },
+      {
+        "scope": "competitive_cooperative_interactions",
+        "topic_ids": [
+          "TOP-COMP",
+          "TOP-ALL",
+          "TOP-MMC"
+        ]
+      },
+      {
+        "scope": "resources_capabilities_critical_inputs",
+        "topic_ids": [
+          "TOP-RESOURCE",
+          "TOP-INPUT"
+        ]
+      },
+      {
+        "scope": "leadership_upper_echelons",
+        "topic_ids": [
+          "TOP-LEAD"
+        ]
+      },
+      {
+        "scope": "performance_and_heterogeneity",
+        "topic_ids": [
+          "TOP-OUTCOME"
+        ]
+      }
+    ],
+    "cross_cutting_facets": [
+      "level_of_analysis",
+      "geography",
+      "industry",
+      "method",
+      "outcome",
+      "government_policy"
+    ],
+    "note": "組織為常見分析層次；個人、團隊、生態系、市場、地理與產業等層次保留獨立 facets，不強行當成 Domain。"
   },
-  {
-    "id": "RES",
-    "parent_id": null,
-    "label_zh": "資源、能力與知識",
-    "label_en": "Resources, Capabilities & Knowledge",
-    "description": "資源、能力與知識",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
+  "migration": {
+    "from_version": "1.0.0",
+    "automatic_paper_reclassification": false,
+    "legacy_origin": "custom_research",
+    "instruction": "保留 legacy_domain_codes。舊代碼不能視為 SMS 代碼；逐篇人工審核後才新增 v2 assignments。"
   },
-  {
-    "id": "BEH",
-    "parent_id": null,
-    "label_zh": "組織行為、學習與注意力",
-    "label_en": "Behavioral Strategy & Learning",
-    "description": "組織行為、學習與注意力",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "GOV",
-    "parent_id": null,
-    "label_zh": "交易成本、企業邊界與治理",
-    "label_en": "Governance & Firm Boundaries",
-    "description": "交易成本、企業邊界與治理",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "COR",
-    "parent_id": null,
-    "label_zh": "公司策略、多角化與資源配置",
-    "label_en": "Corporate Strategy",
-    "description": "公司策略、多角化與資源配置",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "MNA",
-    "parent_id": null,
-    "label_zh": "併購、撤資與重組",
-    "label_en": "M&A, Divestitures & Restructuring",
-    "description": "併購、撤資與重組",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "ALL",
-    "parent_id": null,
-    "label_zh": "策略聯盟與網絡",
-    "label_en": "Alliances & Networks",
-    "description": "策略聯盟與網絡",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "INN",
-    "parent_id": null,
-    "label_zh": "創新、技術與知識搜尋",
-    "label_en": "Innovation & Technology",
-    "description": "創新、技術與知識搜尋",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "INT",
-    "parent_id": null,
-    "label_zh": "國際化、跨國企業與地緣政治",
-    "label_en": "International & Global Strategy",
-    "description": "國際化、跨國企業與地緣政治",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "LEA",
-    "parent_id": null,
-    "label_zh": "策略領導與公司治理",
-    "label_en": "Strategic Leadership & Governance",
-    "description": "策略領導與公司治理",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "NMS",
-    "parent_id": null,
-    "label_zh": "非市場、制度、政治與社會策略",
-    "label_en": "Nonmarket & Institutional Strategy",
-    "description": "非市場、制度、政治與社會策略",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
-  },
-  {
-    "id": "ECO",
-    "parent_id": null,
-    "label_zh": "平台、生態系與數位策略",
-    "label_en": "Platforms, Ecosystems & Digital",
-    "description": "平台、生態系與數位策略",
-    "synonyms": [],
-    "version": "1.0",
-    "status": "curated_ontology"
+  "methodology": {
+    "approach": "deductive organizational anchors + inductive lexical proposals + human adjudication",
+    "inspiration_source_id": "NAG-2007",
+    "claim": "Atlas 自訂方法，未宣稱重現 Nag et al. 的原研究或取得 SMS/AOM/SMJ 認可。"
   }
-]
+}

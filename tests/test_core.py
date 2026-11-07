@@ -56,7 +56,7 @@ def test_export_preserves_provenance(raw, tmp_path, monkeypatch):
     monkeypatch.setattr(cli,'ROOT',tmp_path)
     monkeypatch.setattr(cli,'DATA',tmp_path/'data')
     (tmp_path/'data').mkdir()
-    (tmp_path/'data'/'ontology.yaml').write_text('[]',encoding='utf-8')
+    (tmp_path/'data'/'ontology.yaml').write_text(json.dumps({'version':'test','is_official_smj_taxonomy':False,'sources':[],'nodes':[]}),encoding='utf-8')
     monkeypatch.setattr(cli,'read',lambda name:[paper] if name=='papers.jsonl' else [])
     cli.build()
     exported=json.loads((tmp_path/'public/data/papers.json').read_text(encoding='utf-8'))[0]
