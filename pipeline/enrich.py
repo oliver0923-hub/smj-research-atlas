@@ -125,10 +125,13 @@ def parse_document(content,content_type):
 
 def acquire(max_papers=40,dry_run=False):
     from .evidence import extract_variables, EXTRACTION_VERSION
+    from .study import extract_study_claims, STUDY_VERSION
     papers={p['paper_id']:p for p in read('papers.jsonl')}
     enrich=read('enrichment.jsonl');old={r['paper_id']:r for r in read('content_receipts.jsonl')}
-    variables={v['variable_id']:v for v in read('variables.jsonl')};runs=read('extraction_runs.jsonl')
-    candidates=[e for e in enrich if e.get('oa_locations') and e['paper_id'] in papers and (not old.get(e['paper_id'],{}).get('accessible') or old[e['paper_id']].get('extraction_algorithm_version')!=EXTRACTION_VERSION)]
+    variables={v['variable_id']:v for v in read('variables.jsonl')}
+    claims={v['claim_id']:v for v in read('study_claims.jsonl')}
+    runs=read('extraction_runs.jsonl')
+    candidates=[e for e in enrich if e.get('oa_locations') and e['paper_id'] in papers and (not old.get(e['paper_id'],{}).get('accessible') or (old[e['paper_id']].get('extraction_algorithm_version')!=EXTRACTION_VERSION or old[e['paper_id']].get('study_algorithm_version')!=STUDY_VERSION))]
     candidates.sort(key=lambda e:(not any(l.get('pdf_url') and not any(h in l['pdf_url'] for h in ['wiley','ssrn','jstor']) for l in e['oa_locations']),e['paper_id'] in old))
     # Round-robin title-derived domains ensures the budget is not only the most-cited stream.
     from .taxonomy import suggest_assignments
@@ -172,7 +175,9 @@ def acquire(max_papers=40,dry_run=False):
                     receipt.update(accessible=True,source_url=str(response.url),license=loc.get('license'),version=loc.get('version'),rights_basis='OpenAlex OA accepted/published source; transient reading and short evidence only',source_hash=hashlib.sha256(response.content).hexdigest(),text_hash=hashlib.sha256(text.encode()).hexdigest(),parser_version=parser,missing_reason=None,page_count=len(pages))
                     write(CACHE/'fulltext'/(key+'.json'),json.dumps({'pages':pages,'receipt':receipt},ensure_ascii=False))
                     records=extract_variables(paper,pages,receipt)
+                    study_records=extract_study_claims(paper,pages,receipt)
                     receipt['extraction_algorithm_version']=EXTRACTION_VERSION
+                    receipt['study_algorithm_version']=STUDY_VERSION
                     # A new successful parse replaces this paper's prior
                     # automatic claims: old source hashes would otherwise
                     # disagree with the new receipt and fail publication QA.
@@ -180,17 +185,29 @@ def acquire(max_papers=40,dry_run=False):
                                if v['paper_id']!=paper['paper_id'] or v.get('human_reviewer')}
                     for v in records:
                         if v['variable_id'] not in variables:variables[v['variable_id']]=v
+                    claims={cid:c for cid,c in claims.items() if c['paper_id']!=paper['paper_id']}
+                    for c in study_records:claims[c['claim_id']]=c
                     break
                 except Exception as exc:
                     receipt['failures'].append({'url':url,'reason':type(exc).__name__+':'+str(exc)[:160]})
                 time.sleep(.4)
-            old[e['paper_id']]=receipt;processed+=1
+            # Failed reprocessing must not invalidate evidence from the last
+            # successful source, which may no longer be accessible this run.
+            if not receipt['accessible'] and old.get(e['paper_id'],{}).get('accessible'):
+                previous=old[e['paper_id']]
+                receipt['missing_reason']='refresh_failed_prior_evidence_retained'
+                receipt['prior_source_preserved']=previous['source_url']
+                old[e['paper_id']]=previous
+            else:
+                old[e['paper_id']]=receipt
+            processed+=1
             runs.append(dict(run_id='run:'+key+':'+receipt['checked_at'],paper_id=e['paper_id'],at=receipt['checked_at'],parser=receipt.get('parser_version'),status='accessible' if receipt['accessible'] else 'insufficient_evidence',provider='deterministic',paid_api_calls=0,source_url=receipt['source_url']))
             write(DATA/'content_receipts.jsonl',lines(sorted(old.values(),key=lambda p:p['paper_id'])))
             write(DATA/'variables.jsonl',lines(sorted(variables.values(),key=lambda p:p['variable_id'])))
+            write(DATA/'study_claims.jsonl',lines(sorted(claims.values(),key=lambda p:p['claim_id'])))
             write(DATA/'extraction_runs.jsonl',lines(runs))
             print(json.dumps({'processed':processed,'paper_id':e['paper_id'],'accessible':receipt['accessible'],'total_variables':len(variables)}),flush=True)
-    return {'processed':processed,'accessible':sum(r['accessible'] for r in old.values()),'variables':len(variables)}
+    return {'processed':processed,'accessible':sum(r['accessible'] for r in old.values()),'variables':len(variables),'study_claims':len(claims)}
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('command',choices=['metadata','fulltext']);parser.add_argument('--budget',type=int,default=40);parser.add_argument('--dry-run',action='store_true');args=parser.parse_args()
