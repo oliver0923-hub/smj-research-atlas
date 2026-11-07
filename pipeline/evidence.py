@@ -61,11 +61,13 @@ class OperationalVariable(EvidenceClaim):
         if self.role!='unknown' and not self.field_evidence.get('role'):raise ValueError('Model role requires explicit source evidence')
         return self
 
-EXTRACTION_VERSION='measurement-span-v1'
+EXTRACTION_VERSION='measurement-span-v2-multi'
 
 PATTERNS=[
  re.compile(r'\b(?:We|we)\s+(?:measured?|operationalized?)\s+(?:the\s+)?(?P<name>[A-Za-z][A-Za-z \-]{2,55}?)\s+(?:as|by|using|with)\s+(?P<definition>[^.!?]{12,210})'),
- re.compile(r'\b(?P<name>[A-Z][A-Za-z \-]{2,55}?)\s+(?:was|is|were|are)\s+(?:measured|operationalized|computed|calculated)\s+(?:as|by|using)\s+(?P<definition>[^.!?]{12,210})')]
+ re.compile(r'\b(?P<name>[A-Z][A-Za-z \-]{2,55}?)\s+(?:was|is|were|are)\s+(?:measured|operationalized|computed|calculated)\s+(?:as|by|using)\s+(?P<definition>[^.!?]{12,210})'),
+ re.compile(r'\b(?:We|we)\s+(?:defined?|constructed?|computed|calculated)\s+(?:the\s+)?(?P<name>[A-Za-z][A-Za-z \-]{2,55}?)\s+(?:as|by|using)\s+(?P<definition>[^.!?]{12,210})'),
+ re.compile(r'\b(?P<name>[A-Z][A-Za-z \-]{2,55}?)\s+(?:was|is|were|are)\s+(?:defined|constructed|coded)\s+(?:as|by|using)\s+(?P<definition>[^.!?]{12,210})')]
 
 def measurement_details(span):
     """Narrow text-to-field rules; no general construct definition is imputed."""
@@ -87,8 +89,13 @@ def measurement_details(span):
     return {}
 
 def extract_variables(paper,pages,receipt):
-    """One explicit named measurement per paper; no inferred formula, role, sign or sample."""
+    """Return every distinct source-aligned named measure across the paper.
+
+    This conservative extractor does not claim exhaustive variable coverage.
+    """
     if not receipt.get('accessible'):return []
+    found=[]
+    seen=set()
     for page in pages:
         text=' '.join(page['text'].split())
         for pattern in PATTERNS:
@@ -100,7 +107,8 @@ def extract_variables(paper,pages,receipt):
                 span=text[match.start():match.end()]
                 # Public evidence is bounded. Full source text stays only in ignored transient cache.
                 excerpt=' '.join(span.split()[:20])
-                key=paper['paper_id']+'|'+name.lower()
+                key=paper['paper_id']+'|'+' '.join(name.lower().split())
+                if key in seen:continue
                 record=OperationalVariable(variable_id='var:'+hashlib.sha256(key.encode()).hexdigest()[:20],paper_id=paper['paper_id'],
                     variable_label_original=name,construct_en=name,operational_definition='依原文以「'+definition[:160]+'」描述衡量；僅通過來源文字對齊，未經專家審閱。',
                     inference_origin='fulltext_extraction',evidence_grade='E3_measurement_text',validation_status='validated_automatic',
@@ -111,12 +119,24 @@ def extract_variables(paper,pages,receipt):
                 # Keep the operational definition a paraphrase with a short source locator, not a long quote.
                 result=record.model_dump();result['operational_definition']='原文將 '+name+' 與指定的衡量程序連結；完整定義請見所附原始頁碼／段落。'
                 result.update(measurement_details(span))
-                if result.get('data_source')=='ASSET4':result['field_evidence']['data_source']='ASSET4'
-                for field in list(result['missing_reason']):
-                    if result.get(field) is not None and field!='role':result['missing_reason'].pop(field)
-                verify_span(result,pages);result['alignment_verified']=True
-                return [result]
-    return []
+                # Explicit field evidence must be present in the bounded excerpt.
+                for field in ('unit','lag','sample_period','data_source','empirical_method','reported_association'):
+                    value=result.get(field)
+                    if value is None:continue
+                    token=str(value)
+                    pos=result['evidence_excerpt'].lower().find(token.lower())
+                    if pos>=0:
+                        result['field_evidence'][field]=result['evidence_excerpt'][pos:pos+len(token)]
+                        result['missing_reason'].pop(field,None)
+                    else:
+                        result[field]=None
+                        result['missing_reason'][field]='not_verifiable_in_bounded_excerpt'
+                verify_span(result,pages)
+                result['alignment_verified']=True
+                OperationalVariable.model_validate(result)
+                found.append(result)
+                seen.add(key)
+    return found
 
 def verify_span(record,pages):
     page=next((p for p in pages if p['page']==record['source_page']),None)

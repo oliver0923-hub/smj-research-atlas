@@ -5,13 +5,14 @@ import httpx
 from .cli import ROOT,DATA,read,write,lines,build,validate,sync
 from .core import Paper,now
 from .evidence import OperationalVariable
+from .study import StudyClaim
 
-TABLES=['papers.jsonl','variables.jsonl','enrichment.jsonl','content_receipts.jsonl','extraction_runs.jsonl','pipeline_history.jsonl','audit.jsonl','quarantine.jsonl']
+TABLES=['papers.jsonl','variables.jsonl','study_claims.jsonl','enrichment.jsonl','content_receipts.jsonl','extraction_runs.jsonl','pipeline_history.jsonl','audit.jsonl','quarantine.jsonl']
 
 def snapshot():
     validate()
     checkpoints={name:json.loads((DATA/'staging'/name).read_text()) for name in ['openalex_checkpoint.json'] if (DATA/'staging'/name).exists()}
-    payload={'schema_version':'3.0.0','tables':{name:read(name) for name in TABLES},'checkpoints':checkpoints,'state':json.loads((DATA/'sync_state.json').read_text()),'publisher_check':json.loads((DATA/'publisher_check.json').read_text()) if (DATA/'publisher_check.json').exists() else {}}
+    payload={'schema_version':'3.1.0','tables':{name:read(name) for name in TABLES},'checkpoints':checkpoints,'state':json.loads((DATA/'sync_state.json').read_text()),'publisher_check':json.loads((DATA/'publisher_check.json').read_text()) if (DATA/'publisher_check.json').exists() else {}}
     blob=gzip.compress(json.dumps(payload,ensure_ascii=False,sort_keys=True).encode(),mtime=0)
     target=DATA/'live_state.json.gz';tmp=target.with_suffix('.tmp');tmp.write_bytes(blob);tmp.replace(target)
     return {'bytes':len(blob),'sha256':hashlib.sha256(blob).hexdigest()}
@@ -26,13 +27,21 @@ def restore(ref=None):
         if not path.exists():return {'status':'bootstrap'}
         blob=path.read_bytes()
     payload=json.loads(gzip.decompress(blob));tables=payload['tables']
-    if payload['schema_version']!='3.0.0' or set(tables)!=set(TABLES):raise ValueError('Unrecognized data artifact')
+    if payload.get('schema_version')=='3.0.0':
+        # Restore all v3 releases safely; newly introduced research claims
+        # begin empty until actual accessible source text is processed.
+        tables.setdefault('study_claims.jsonl',[])
+    elif payload.get('schema_version')!='3.1.0':
+        raise ValueError('Unrecognized data artifact')
+    if set(tables)!=set(TABLES):raise ValueError('Unrecognized data artifact')
     papers=tables['papers.jsonl'];ids=set()
     for p in papers:Paper.model_validate(p);assert p['paper_id'] not in ids;ids.add(p['paper_id'])
     for v in tables['variables.jsonl']:
-        
         if v.get('evidence_grade'):OperationalVariable.model_validate(v)
         assert v['paper_id'] in ids
+    for claim in tables['study_claims.jsonl']:
+        StudyClaim.model_validate(claim)
+        assert claim['paper_id'] in ids
     # Current actual human edits take precedence over automatic data artifacts.
     human={v['variable_id']:v for v in read('variables.jsonl') if v.get('human_reviewer')}
     values={v['variable_id']:v for v in tables['variables.jsonl']};values.update(human);tables['variables.jsonl']=list(values.values())
