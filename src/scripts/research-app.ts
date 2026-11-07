@@ -7,7 +7,7 @@ const e=(tag:string,text?:any,cls?:string)=>{const n=document.createElement(tag)
 const add=(parent:Element,tag:string,text?:any,cls?:string)=>{const n=e(tag,text,cls);parent.append(n);return n};
 const link=(parent:Element,text:string,url:string)=>{const n=add(parent,'a',text) as HTMLAnchorElement;n.href=url;return n};
 const get=async(name:string)=>{const r=await fetch(base+'data/'+name+'.json');if(!r.ok)throw Error(name+' HTTP '+r.status);return r.json()};
-const title=(t:string,lead:string)=>{app.replaceChildren();add(app,'div','SMJ RESEARCH INTELLIGENCE · v3','eyebrow');add(app,'h1',t);add(app,'p',lead,'lead')};
+const title=(t:string,lead:string)=>{app.replaceChildren();add(app,'div','SMJ RESEARCH INTELLIGENCE · v3.1','eyebrow');add(app,'h1',t);add(app,'p',lead,'lead')};
 const box=(t:string)=>add(app,'p',t,'notice');
 const table=(headers:string[],rows:any[][],parent:Element=app)=>{const wrap=add(parent,'div',undefined,'data-table');const t=add(wrap,'table');const head=add(t,'thead');const h=add(head,'tr');headers.forEach(x=>add(h,'th',x));const body=add(t,'tbody');rows.forEach(row=>{const tr=add(body,'tr');row.forEach(cell=>{const td=add(tr,'td');if(cell instanceof Node)td.append(cell);else td.textContent=cell===null||cell===undefined?'未知':String(cell)})});return t};
 const badge=(r:any)=>[labels[r.evidence_grade]||r.evidence_grade,labels[r.validation_status]||r.validation_status].filter(Boolean).join(' · ');
