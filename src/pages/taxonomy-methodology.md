@@ -66,3 +66,11 @@ E3 紀錄保存 PDF 頁碼（非假定為期刊印刷頁碼）、正規化字元
 3. Nag, R., Hambrick, D. C., & Chen, M.-J. (2007). What is strategic management, really? Inductive derivation of a consensus definition of the field. *Strategic Management Journal, 28*(9), 935–955. [https://doi.org/10.1002/smj.615](https://doi.org/10.1002/smj.615).
 
 Nag et al. 以學者調查與跨領域學者明示定義探討領域共識；本專案只據已核查的出版社摘要作方法啟發，沒有宣稱重現全文方法，也沒有把 Atlas 四層設計歸為作者或 SMJ 的官方分類。歷史 v2 詳細說明仍保存於 repository 的 TAXONOMY_METHODOLOGY.md。
+
+
+發布後另核對公開 publication manifest 的 source revision、workflow run 與生成時間；平台回報成功卻仍供應舊版本時，工作不算驗收成功。Pages 暫時衝突最多重試兩次，並保留跨工作排他鎖。
+
+
+## 自動辨識與衍生導覽
+
+週更擷取來源後重新執行 theory／topic 規則與正文量測抽取。每次建置以同一快照生成變數字典、理論導覽、分析及研究機會候選。候選包含主題 A／B 篇數、共同篇數、排除規則、實際支撐 paper IDs、分類版本與 provisional 狀態；新穎性與機制不由低共現推論，維持 null。抽取器版本更新會觸發預算內舊正文再取得，無逐篇人工發布閘門。

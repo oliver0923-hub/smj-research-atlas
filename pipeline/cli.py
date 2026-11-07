@@ -6,7 +6,7 @@ import httpx, yaml
 from .core import display_text, normalize, upsert, now, Paper, Variable
 from .taxonomy import validate_taxonomy, suggest_assignments, emerging_topics, enrich_papers, Assignment
 from .classify import classify
-from .analytics import derive, coverage, research_graph, article_kind
+from .analytics import derive, coverage, research_graph, article_kind, gap_candidates
 from .evidence import OperationalVariable
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT/'data'
@@ -158,7 +158,7 @@ def build():
     for p in papers:
         k=f"{p['publication_year']}/{p.get('volume')}/{p.get('issue')}";issue_counts[k]=issue_counts.get(k,0)+1
     issues=[dict(year_volume_issue=k,indexed_articles=n,publisher_expected_articles=None,coverage_status='not_reconciled') for k,n in sorted(issue_counts.items())]
-    for name,obj in [('coverage_report',report),('coverage_issues',issues),('analytics',analysis),('measurement_paths',paths),('research_graph',graph),('pipeline_history',read('pipeline_history.jsonl')),('ontology',[n for n in ontology['nodes'] if n['level']=='domain']),('taxonomy',ontology),('classifications',assignments),('emerging_topics',emerging),('variables',variables)]:
+    for name,obj in [('coverage_report',report),('coverage_issues',issues),('analytics',analysis),('gap_candidates',gap_candidates(papers,ontology)),('measurement_paths',paths),('research_graph',graph),('pipeline_history',read('pipeline_history.jsonl')),('ontology',[n for n in ontology['nodes'] if n['level']=='domain']),('taxonomy',ontology),('classifications',assignments),('emerging_topics',emerging),('variables',variables)]:
         write(out/(name+'.json'),json.dumps(obj,ensure_ascii=False)); write(DATA/'generated'/(name+'.json'),json.dumps(obj,ensure_ascii=False,indent=2))
     classification_queue=[dict(task_id='review:'+a['assignment_id'],paper_id=a['paper_id'],term_id=a['term_id'],assignment_id=a['assignment_id'],taxonomy_version=a['taxonomy_version'],task_type='classification_review',status='open',origin=a['origin'],method=a['method'],source_url=a['source_url'],evidence_locator=a['evidence_locator']) for a in assignments if a['review_status']=='suggested']
     write(DATA/'generated'/'classification_review_queue.jsonl',lines(classification_queue))

@@ -116,11 +116,11 @@ def parse_document(content,content_type):
     raise ValueError('Not an inspectable full-text document')
 
 def acquire(max_papers=40,dry_run=False):
-    from .evidence import extract_variables
+    from .evidence import extract_variables, EXTRACTION_VERSION
     papers={p['paper_id']:p for p in read('papers.jsonl')}
     enrich=read('enrichment.jsonl');old={r['paper_id']:r for r in read('content_receipts.jsonl')}
     variables={v['variable_id']:v for v in read('variables.jsonl')};runs=read('extraction_runs.jsonl')
-    candidates=[e for e in enrich if e.get('oa_locations') and e['paper_id'] in papers and not old.get(e['paper_id'],{}).get('accessible')]
+    candidates=[e for e in enrich if e.get('oa_locations') and e['paper_id'] in papers and (not old.get(e['paper_id'],{}).get('accessible') or old[e['paper_id']].get('extraction_algorithm_version')!=EXTRACTION_VERSION)]
     candidates.sort(key=lambda e:(not any(l.get('pdf_url') and not any(h in l['pdf_url'] for h in ['wiley','ssrn','jstor']) for l in e['oa_locations']),e['paper_id'] in old))
     # Round-robin title-derived domains ensures the budget is not only the most-cited stream.
     from .taxonomy import suggest_assignments
@@ -159,6 +159,7 @@ def acquire(max_papers=40,dry_run=False):
                     receipt.update(accessible=True,source_url=str(response.url),license=loc.get('license'),version=loc.get('version'),rights_basis='OpenAlex OA accepted/published source; transient reading and short evidence only',source_hash=hashlib.sha256(response.content).hexdigest(),text_hash=hashlib.sha256(text.encode()).hexdigest(),parser_version=parser,missing_reason=None,page_count=len(pages))
                     write(CACHE/'fulltext'/(key+'.json'),json.dumps({'pages':pages,'receipt':receipt},ensure_ascii=False))
                     records=extract_variables(paper,pages,receipt)
+                    receipt['extraction_algorithm_version']=EXTRACTION_VERSION
                     for v in records:
                         if v['variable_id'] not in variables or not variables[v['variable_id']].get('human_reviewer'):variables[v['variable_id']]=v
                     break

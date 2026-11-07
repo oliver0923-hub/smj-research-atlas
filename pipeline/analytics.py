@@ -70,3 +70,30 @@ def research_graph(papers,variables,assignments,runs):
         theory_tag=[a for a in assignments if a['term_id'].startswith('TH-')],topic_tag=[a for a in assignments if a['term_id'].startswith('TOP-')],
         construct=list(constructs.values()),operational_variable=variables,variable_alias=aliases,measure_evidence=evidence,
         empirical_method=[],data_source=[],sample=[],finding=[],citation_provenance=[{'paper_id':p['paper_id'],'sources':p['metadata_provenance']} for p in papers],extraction_run=runs)
+
+
+def gap_candidates(papers,taxonomy,minimum=10,maximum_joint=2):
+    """Descriptive candidates with reproducible paper sets, never verified novelty."""
+    nodes={n['id']:n for n in taxonomy['nodes']}
+    scope=[p for p in papers if article_kind(p) not in {'editorial_or_notice','retracted'}]
+    topics=defaultdict(set);theories=defaultdict(set)
+    for p in scope:
+        tags=p['taxonomy_tags']['active']
+        for term in set(tags['research_topic']):topics[term].add(p['paper_id'])
+        for term in set(tags['theory']):theories[term].add(p['paper_id'])
+    eligible=sorted(t for t,ids in topics.items() if len(ids)>=minimum)
+    rows=[]
+    for a,b in combinations(eligible,2):
+        joint=topics[a]&topics[b]
+        if len(joint)>maximum_joint:continue
+        rows.append(dict(candidate_id='gap:'+hashlib.sha256((a+'|'+b).encode()).hexdigest()[:16],
+            topic_a=a,topic_b=b,label_a=nodes[a]['label_zh'],label_b=nodes[b]['label_zh'],
+            papers_a=len(topics[a]),papers_b=len(topics[b]),joint_papers=len(joint),denominator=len(scope),
+            support_paper_ids_a=sorted(topics[a])[:5],support_paper_ids_b=sorted(topics[b])[:5],joint_paper_ids=sorted(joint),
+            associated_theories=[dict(theory_id=t,label=nodes[t]['label_zh'],papers=len(ids&(topics[a]|topics[b]))) for t,ids in sorted(theories.items()) if ids&(topics[a]|topics[b])],
+            inference_origin='deterministic_rule',evidence_grade='E0_E1_classification_aggregate',validation_status='provisional',
+            taxonomy_version=taxonomy['version'],algorithm_version='descriptive-gap-1.0',
+            rule=dict(minimum_each_topic=minimum,maximum_joint=maximum_joint,exclude_notices_and_retracted=True),
+            verified_research_gap=None,novelty=None,causal_interpretation=None))
+    return dict(schema_version='3.0.0',generated_at=now(),automatic=True,scope='目前索引之自動分類；研究文章類型與全期刊母體尚未完全核實',denominator=len(scope),candidates=rows,
+        limitations=['低共現可能來自分類漏判或來源覆蓋，不構成新穎性證明。','支撐文獻顯示主題標記，不表示作者提出相同研究缺口。','未知的理論機制、可行性與因果解釋保持 null。'])

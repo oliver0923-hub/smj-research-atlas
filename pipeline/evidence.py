@@ -61,6 +61,8 @@ class OperationalVariable(EvidenceClaim):
         if self.role!='unknown' and not self.field_evidence.get('role'):raise ValueError('Model role requires explicit source evidence')
         return self
 
+EXTRACTION_VERSION='measurement-span-v1'
+
 PATTERNS=[
  re.compile(r'\b(?:We|we)\s+(?:measured?|operationalized?)\s+(?:the\s+)?(?P<name>[A-Za-z][A-Za-z \-]{2,55}?)\s+(?:as|by|using|with)\s+(?P<definition>[^.!?]{12,210})'),
  re.compile(r'\b(?P<name>[A-Z][A-Za-z \-]{2,55}?)\s+(?:was|is|were|are)\s+(?:measured|operationalized|computed|calculated)\s+(?:as|by|using)\s+(?P<definition>[^.!?]{12,210})')]
@@ -103,7 +105,7 @@ def extract_variables(paper,pages,receipt):
                     variable_label_original=name,construct_en=name,operational_definition='依原文以「'+definition[:160]+'」描述衡量；僅通過來源文字對齊，未經專家審閱。',
                     inference_origin='fulltext_extraction',evidence_grade='E3_measurement_text',validation_status='validated_automatic',
                     source_url=receipt['source_url'],evidence_locator=('PDF page '+str(page['page']) if page['page'] else 'HTML measurement paragraph')+'; normalized characters '+str(match.start())+'–'+str(match.end()),
-                    source_hash=receipt['source_hash'],algorithm_version='measurement-span-v1',retrieved_at=receipt['checked_at'],
+                    source_hash=receipt['source_hash'],algorithm_version=EXTRACTION_VERSION,retrieved_at=receipt['checked_at'],
                     source_page=page['page'],source_span_start=match.start(),source_span_end=match.end(),span_hash=hashlib.sha256(span.encode()).hexdigest(),evidence_excerpt=excerpt,
                     missing_reason={k:'not_verified_from_aligned_measurement_span' for k in ['formula','unit','lag','sample_period','data_source','empirical_method','reported_association','construct_zh','role','proxy_name']})
                 # Keep the operational definition a paraphrase with a short source locator, not a long quote.

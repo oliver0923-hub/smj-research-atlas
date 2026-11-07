@@ -29,3 +29,6 @@ Crossref + OpenAlex，完整摘要、PDF 與全文只在忽略的 .cache 暫存�
 
 ## 可還原與人工歷史
 Git 保留 v1/v2、原始bootstrap與每個資料分支快照。原有人工核准／拒絕優先；正常排程只做自動來源檢查，不執行 human-attestation。可選人工修正仍以 code review 追蹤，但不是擁有者必須處理的工作。
+
+
+理論導覽、變數字典與研究機會候選由同一 GitHub 資料快照自動生成。gap_candidates.json 保留規則、分母、支撐 paper IDs、版本與未知的新穎性判定。正文抽取器版本改變後，週更會在預算內重新取得及解析舊來源，不要求逐篇人工審核。部署另以公開 manifest 核對實際上線版本。

@@ -135,3 +135,56 @@ def test_live_manifest_rejects_stale_same_revision():
     assert not matches_manifest(expected,{**expected,"workflow_run":"old"})
     assert not matches_manifest(expected,{**expected,"generated_at":"old"})
     assert matches_manifest(expected,dict(expected))
+
+def test_gap_candidates_have_sources_and_unknown_novelty(tax,paper):
+    from pipeline.analytics import gap_candidates
+    p1=enrich_papers([paper],tax,classify([paper],tax))[0]
+    other=copy.deepcopy(paper);other.update(paper_id='fixture:2',title='Acquisitions and diversification')
+    p2=enrich_papers([other],tax,classify([other],tax))[0]
+    report=gap_candidates([p1,p2],tax,minimum=1,maximum_joint=0)
+    assert report['automatic'] and report['denominator']==2 and report['candidates']
+    for row in report['candidates']:
+        assert row['novelty'] is None and row['verified_research_gap'] is None
+        assert row['joint_paper_ids']==[] and row['support_paper_ids_a'] and row['support_paper_ids_b']
+        assert set(row['support_paper_ids_a']+row['support_paper_ids_b']) <= {'fixture:1','fixture:2'}
+
+
+def test_stale_deployment_guard_never_cancels_running_or_unowned():
+    from pipeline.publication import can_cancel_conflict
+    from datetime import datetime,timezone
+    clock=datetime(2026,11,8,tzinfo=timezone.utc)
+    row=dict(id=1,name='Autonomous data release',head_branch='main',status='completed',updated_at='2026-11-07T00:00:00Z')
+    assert can_cancel_conflict([row],2,clock)
+    assert not can_cancel_conflict([dict(row,status='in_progress')],2,clock)
+    assert not can_cancel_conflict([dict(row,name='Someone else')],2,clock)
+    assert not can_cancel_conflict([row],1,clock)
+
+
+def test_deployment_recovers_only_explicit_stale_conflict(monkeypatch,tmp_path):
+    import httpx
+    import pipeline.publication as publication
+    monkeypatch.setenv('GITHUB_REPOSITORY','oliver0923-hub/smj-research-atlas')
+    monkeypatch.setenv('GITHUB_RUN_ID','2');monkeypatch.setenv('GITHUB_SHA','b'*40)
+    monkeypatch.setenv('GITHUB_TOKEN','fixture-not-secret')
+    monkeypatch.setenv('ACTIONS_ID_TOKEN_REQUEST_URL','https://oidc.test/token')
+    monkeypatch.setenv('ACTIONS_ID_TOKEN_REQUEST_TOKEN','fixture-oidc')
+    monkeypatch.setenv('GITHUB_OUTPUT',str(tmp_path/'output'))
+    posted=[]
+    def handler(request):
+        path=request.url.path
+        if path.endswith('/artifacts'):body={'artifacts':[{'id':123,'name':'github-pages','expired':False}]}
+        elif path=='/token':body={'value':'fixture-jwt'}
+        elif path.endswith('/cancel'):posted.append('cancel');body={}
+        elif path.endswith('/pages/deployments'):
+            posted.append('deploy')
+            if posted.count('deploy')==1:return httpx.Response(400,json={'message':'Deployment due to in progress deployment. Please cancel '+'a'*40+' first'})
+            body={'id':'b'*40,'page_url':'https://oliver0923-hub.github.io/smj-research-atlas/'}
+        elif path.endswith('/actions/runs'):body={'workflow_runs':[dict(id=1,name='Autonomous data release',head_branch='main',status='completed',updated_at='2020-01-01T00:00:00Z')]}
+        else:body={'status':'succeed'}
+        return httpx.Response(200,json=body)
+    client=httpx.Client(transport=httpx.MockTransport(handler))
+    monkeypatch.setattr(publication.httpx,'Client',lambda **kwargs:client)
+    monkeypatch.setattr(publication.time,'sleep',lambda value:None)
+    assert publication.deploy()['status']=='pages_api_success'
+    assert posted==['deploy','cancel','deploy']
+    assert (tmp_path/'output').read_text().startswith('page_url=https://')
