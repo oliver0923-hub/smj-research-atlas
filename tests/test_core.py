@@ -48,3 +48,38 @@ def test_retry(monkeypatch):
     def handle(req):
         code=next(codes);return httpx.Response(code,json={'message':{'items':[]}})
     with httpx.Client(transport=httpx.MockTransport(handle)) as client:assert request(client,'https://local.test',{})=={'items':[]}
+
+def test_export_preserves_provenance(raw, tmp_path, monkeypatch):
+    import json
+    import pipeline.cli as cli
+    paper=normalize(raw)
+    monkeypatch.setattr(cli,'ROOT',tmp_path)
+    monkeypatch.setattr(cli,'DATA',tmp_path/'data')
+    (tmp_path/'data').mkdir()
+    (tmp_path/'data'/'ontology.yaml').write_text('[]',encoding='utf-8')
+    monkeypatch.setattr(cli,'read',lambda name:[paper] if name=='papers.jsonl' else [])
+    cli.build()
+    exported=json.loads((tmp_path/'public/data/papers.json').read_text(encoding='utf-8'))[0]
+    assert exported['paper_id']==paper['paper_id']
+    assert exported['metadata_provenance']==paper['metadata_provenance']
+
+def test_failed_sync_preserves_published_data(raw,tmp_path,monkeypatch):
+    from argparse import Namespace
+    import pipeline.cli as cli
+    monkeypatch.setattr(cli,'DATA',tmp_path)
+    data=cli.lines([normalize(raw)]);(tmp_path/'papers.jsonl').write_text(data,encoding='utf-8')
+    def outage(*args,**kwargs):raise RuntimeError('Fixture outage')
+    monkeypatch.setattr(cli,'request',outage)
+    with pytest.raises(RuntimeError):cli.sync(Namespace(backfill=False,max_pages=1,rows=100))
+    assert (tmp_path/'papers.jsonl').read_text(encoding='utf-8')==data
+
+def test_workflow_permissions_and_schedule():
+    from pathlib import Path
+    import yaml
+    root=Path(__file__).resolve().parents[1]
+    sync=yaml.safe_load((root/'.github/workflows/sync-metadata.yml').read_text(encoding='utf-8'))
+    trigger=sync.get('on',sync.get(True))
+    assert trigger['schedule'][0]['cron']=='23 2 * * *'
+    deploy=yaml.safe_load((root/'.github/workflows/build-deploy.yml').read_text(encoding='utf-8'))
+    assert deploy['permissions']['pages']=='write'
+    assert deploy['permissions']['id-token']=='write'

@@ -99,7 +99,7 @@ def build():
     report={'papers':len(papers),'verified_variables':sum(v['verification_status'] in {'measurement_verified','human_reviewed'} for v in variables),'verified_papers':len({v['paper_id'] for v in variables if v['verification_status'] in {'measurement_verified','human_reviewed'}}),'years':years,'coverage_status':'coverage_not_audited','denominator':'目前收錄之去重 SMJ Crossref 書目；未與出版社逐期目錄核對','quarantine':len(read('quarantine.jsonl')),'review_tasks':sum(t['status']=='open' for t in queue),'last_successful_sync':state.get('last_successful_sync')}
     out=ROOT/'public'/'data'; out.mkdir(parents=True,exist_ok=True)
     # Search metadata only; full records are chunked into per-paper detail files.
-    search_fields=['paper_id','doi','title','authors','publication_year','domain_codes','theory_tags','method_tags','verification_status','oa_url']
+    search_fields=['paper_id','doi','title','authors','publication_year','domain_codes','theory_tags','method_tags','verification_status','oa_url','metadata_provenance']
     write(out/'papers.json',json.dumps([{k:p.get(k) for k in search_fields} for p in papers],ensure_ascii=False))
     for p in papers: write(out/'papers'/ (hashlib.sha256(p['paper_id'].encode()).hexdigest()[:16]+'.json'),json.dumps(p,ensure_ascii=False))
     for name,obj in [('coverage_report',report),('ontology',ontology),('variables',variables)]:

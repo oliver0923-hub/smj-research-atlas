@@ -36,7 +36,12 @@ jobs:
           name: sync-checkpoints
           path: data/staging
           if-no-files-found: ignore
+      - name: Record validated state digest
+        id: validated
+        run: echo "digest=$(sha256sum data/sync_state.json | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
       - uses: peter-evans/create-pull-request@v7
+        id: proposal
+        continue-on-error: true
         with:
           branch: bot/metadata-update
           title: 'data: update SMJ Crossref metadata'
@@ -46,3 +51,13 @@ jobs:
             data/
             public/data/
             docs/COVERAGE_REPORT.md
+      - name: Verify retained proposal branch when PR creation is unavailable
+        if: steps.proposal.outcome == 'failure'
+        env:
+          EXPECTED_STATE_DIGEST: ${{ steps.validated.outputs.digest }}
+        run: |
+          git fetch origin bot/metadata-update
+          actual=$(git show FETCH_HEAD:data/sync_state.json | sha256sum | cut -d ' ' -f 1)
+          test "$actual" = "$EXPECTED_STATE_DIGEST"
+          echo "::warning::PR creation unavailable; validated data retained on bot/metadata-update. See job logs."
+          echo "Validated metadata is retained on [bot/metadata-update](https://github.com/${{ github.repository }}/compare/main...bot/metadata-update). PR creation was unavailable; inspect logs and review this branch before merging." >> "$GITHUB_STEP_SUMMARY"
