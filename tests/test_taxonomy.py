@@ -19,9 +19,11 @@ def paper():
 def test_sources_levels_and_sms_membership(taxonomy):
     nodes=validate_taxonomy(taxonomy)
     domains=[n for n in nodes.values() if n.level=='domain']
-    assert len(domains)==12
-    assert {n.label_en for n in domains}=={'Behavioral Strategy','Competitive Strategy','Cooperative Strategies','Corporate Strategy','Entrepreneurship and Strategy','Global Strategy','Knowledge and Innovation','Stakeholder Strategy','Strategic Human Capital','Strategic Leadership & Governance','Strategy Practice','Strategy Process'}
-    assert all(n.origin=='official_academic_organization' for n in domains)
+    assert len(domains)==13
+    assert len([n for n in domains if n.origin=='official_academic_organization'])==12
+    assert any(n.id=='OTHER-DOM' and n.origin=='custom_research' for n in domains)
+    assert {n.label_en for n in domains if n.origin=='official_academic_organization'}=={'Behavioral Strategy','Competitive Strategy','Cooperative Strategies','Corporate Strategy','Entrepreneurship and Strategy','Global Strategy','Knowledge and Innovation','Stakeholder Strategy','Strategic Human Capital','Strategic Leadership & Governance','Strategy Practice','Strategy Process'}
+    assert all(n.origin=='official_academic_organization' for n in domains if n.id!='OTHER-DOM')
     assert not taxonomy['is_official_smj_taxonomy']
 
 def test_no_fake_operational_variables_or_human_reviews(taxonomy):
