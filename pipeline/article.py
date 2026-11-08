@@ -14,7 +14,7 @@ def norm(text):
     return re.sub(r'\s+', ' ', text.replace('\u00ad', '')).strip()
 
 
-SECTIONS = re.compile(r'^(?:\d+(?:\.\d+)*[. ]+)?(abstract|introduction|theor\w*(?: background)?|hypothes\w*(?: development)?|propositions?|methods?|methodology|research (?:design|methods?)|empirical (?:setting|analysis|strategy)(?: and data)?|data(?: and (?:sample|methods?|measures?))?|sample|measures?|measurement|variables?|dependent variables?|independent variables?|control variables?|moderators?|mediators?|results?|analysis|robustness(?: checks)?|sensitivity(?: analysis)?|discussion|conclusion\w*|limitations?|appendi[xces]+.*|supporting information|supplement\w*.*|references|bibliography)\s*[:.]?$', re.I)
+SECTIONS = re.compile(r'^(?:\d+(?:\.\d+)*[. ]+)?(abstract|introduction|literature review|conceptual (?:framework|development)|theor\w*(?: background| development| and hypothes\w*(?: development)?)?|hypothes\w*(?: development| and theor\w*)?|propositions?|methods?|methodology|research (?:design|methods?)|empirical (?:setting|analysis|strategy)(?: and data)?|data(?: and (?:sample|methods?|measures?))?|sample|measures?|measurement|variables?|dependent variables?|independent variables?|control variables?|moderators?|mediators?|results?|analysis|robustness(?: checks)?|sensitivity(?: analysis)?|discussion|conclusion\w*|limitations?|appendi[xces]+.*|supporting information|supplement\w*.*|references|bibliography)\s*[:.]?$', re.I)
 
 
 @dataclass
