@@ -133,6 +133,12 @@ def test_no_oa_403_429_and_identity_failures_are_distinct():
     assert classify_failure(error=ValueError('article_identity_mismatch'))[1]=='article_identity_mismatch'
 
 
+def test_http_405_after_retry_is_not_mislabeled_as_parser_failure():
+    state,error,cooldown=classify_failure(status=405)
+    assert state=='permanent_failure_for_url' and error=='http_405_unexpected_response'
+    assert cooldown>0
+
+
 def document():
     d=ArticleDocument('doi:10.1002/test','https://example.org/oa.pdf','a'*64)
     d.identity={'verification':'matched'}

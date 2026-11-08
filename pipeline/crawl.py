@@ -124,6 +124,7 @@ def classify_failure(status=None,error=None):
     if status in {401,403}:return 'policy_blocked','http_'+str(status)+'_access_denied_not_assumed_paywall',60*86400
     if status in {404,410}:return 'permanent_failure_for_url','http_'+str(status),30*86400
     if status and status>=500:return 'transient_failure','http_'+str(status),3600
+    if status is not None:return 'permanent_failure_for_url','http_'+str(status)+'_unexpected_response',30*86400
     if 'robots_' in text:return 'policy_blocked',text.split(':')[0],14*86400
     if 'ssrf_' in text:return 'policy_blocked','ssrf_blocked',None
     if 'identity' in text:return 'permanent_failure_for_url','article_identity_mismatch',30*86400
