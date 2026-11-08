@@ -16,8 +16,10 @@ npm run dev
 Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state.json.gz 啟動，正常發布以 atlas-data 分支最近通過驗證的快照為準；原 bootstrap 與 taxonomy v2 快照完整保留。
 
 ## 更新（無人工審核門檻）
-- `python -m pipeline.release refresh --mode daily`：Crossref 增量、QA、分析及快照。
-- `python -m pipeline.release refresh --mode weekly`：另補充 OpenAlex、預算40篇 OA 正文嘗試。
+- `python -m pipeline.release refresh --mode daily`：Crossref 新論文 DOI 增量、優先補充新 DOI 的 OpenAlex 資訊，最多嘗試 4 篇 OA 正文（時間預算 150 秒），自動抽取逐篇變數、H/P 假設、結果顯著性、Robustness 與 Sensitivity，通過 QA 後更新網站。
+- `python -m pipeline.release refresh --mode weekly`：補充歷史 OpenAlex 資訊及新 DOI，最多嘗試 40 篇 OA 正文（時間預算 600 秒），包含抽取器升級時重新處理既有正文。
+- 取得來源：只嘗試 OpenAlex 指向的合法 OA accepted/published 版本；優先嘗試機構典藏 PDF，失敗後可嘗試獨立 landing URL。HTTP 403 或 robots 限制不繞過。失敗來源有 14／60 日冷卻，新 OA 連結出現可提前重試。
+- `main` 上的分析程式或同步 workflow 更新也會觸發一輪 daily 處理，並有時間與 GitHub Actions 配額上限。
 - `python -m pipeline.release refresh --mode monthly`：重算分析與QA。
 - 加 `--dry-run` 只顯示預算、不付費、不發布。
 - GitHub Actions → Autonomous data release → Run workflow 選 daily/weekly/monthly。正常排程每日臺北10:23、每週日11:47、每月一日12:17。通過測試、schema、audit、build 才寫資料分支並發布，不需要 PR 核准。
