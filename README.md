@@ -44,6 +44,10 @@ Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state
 `pipeline/wiley.py` 會針對經 OpenAlex 明確標記出版社 Open Access 的 `10.1002/smj.*` 論文，額外加入 `https://sms.onlinelibrary.wiley.com/doi/pdfdirect/<DOI>` 作為有界抓取候選。仍必須通過 robots、403、來源身份與 PDF 解析，不會以 DOI 本身認定所有原版 PDF 可公開下載。以 `10.1002/smj.3735` 為實際 OA 煙霧測試範例：`python -m pipeline.wiley_probe`，只印出下載／解析與變數／假設記錄數，不儲存或公開 PDF。詳見 [擴充與來源方法](docs/TAXONOMY_ABSTRACT_WILEY_V2_2.md)。
 
 
+## 單篇論文按需深入分析（On-demand）
+
+不必等待全庫合法 OA 正文採集：Atlas 每篇論文的詳細頁新增「啟動這篇論文的單篇深入擷取」，會預填 `Atlas analyze: <DOI>` 的 GitHub Issue。限專案擁有者送出後，`Analyze one SMJ paper on demand` Actions 工作流程就會只針對該 DOI 限量嘗試合法 OA 來源，優先重用既有的來源可驗證全文擷取結果，並把 `sample_period`、`data_source`、`empirical_method`、假設／命題、實證結果、穩健性和來源頁碼回覆至 Issue、附上 JSON artifact。Review 類論文的原創實證樣本欄位可標為**暫定不適用**，而不是與缺來源的「未知」混用。從 ChatGPT 直接指定論文時，也可經已連接的 GitHub 建立 Issue 來觸發。詳見 [單篇按需分析手冊](docs/ON_DEMAND_ONE_PAPER.md)。
+
 ## 合法全文的理論證據（v4.1）
 
 針對可依法自動取得的 Open Access 正文，解析 Introduction、Theoretical Background、Literature Review、Hypotheses Development 等段落，將作者明確陳述採用的 Theory 和單純提及的 Theory 分開。所有紀錄保留頁碼、段落 ID、來源 hash 與有上限的引文；作者明示為 E2 Fulltext Theory，自動語意候選與僅提及標籤不會冒充已採用理論。先前成功的 OA 全文會在 extractor 升級後優先重新嘗試，不規避出版商存取限制。詳見 [全文理論來源與章節證據方法](docs/FULLTEXT_THEORY_EVIDENCE_V41.md)。
