@@ -41,7 +41,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
             phrases=[text_key(x) for x in node.get('match_phrases',[]) if text_key(x)]
             title_match=any(" "+x+" " in title for x in phrases)
             abstract_match=(node['id'] in extra.get('abstract_phrase_hits',[]) and
-                            bool(extra.get('abstract_hash')) and bool(extra.get('abstract_available')))
+                            bool(extra.get('abstract_hash')))
             similarity=cosine(paper['title'],node['label_en']+' '+' '.join(node.get('match_phrases',[]))) if node['level']=='research_topic' else 0
             if abstract_match:
                 hits[node['id']]=(1.0,'validated_automatic','E1_abstract','openalex_abstract_phrase_v4')
