@@ -82,7 +82,15 @@ async function showAbstract(parent:Element,extra:any,doi:string){
   }
 }
 
-async function profile(){const id=params.get('id');if(!id)throw Error('缺少 paper_id');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(id));const hash=Array.from(new Uint8Array(bytes)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16);const [p,tax]=await Promise.all([get('papers/'+hash),get('taxonomy')]);title(p.title,p.authors.join(', '));add(app,'p',`${p.publication_year} · SMJ ${p.volume??'未知卷'} (${p.issue??'未知期'}) · ${p.pages??'未知頁碼'}`);link(app,'DOI / 出版社',p.doi_url);const receipt=p.content_access;const enriched=p.enrichment;add(app,'p',`正文：${receipt.accessible?'已解析（'+receipt.version+'）':'未知／不可取得'} · 摘要：${enriched?.abstract_available?'已取得供分類使用；不重刊全文':'未知'}`,'status-line');if(receipt.source_url)link(app,'合法正文來源',receipt.source_url);box('本頁自動驗證的是來源、文字對齊與資料一致性，不是人工專家審閱；沒有從標題推定公式、係數或因果效果。');add(app,'h2','研究分類總覽');
+async function profile(){const id=params.get('id');if(!id)throw Error('缺少 paper_id');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(id));const hash=Array.from(new Uint8Array(bytes)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16);const [p,tax]=await Promise.all([get('papers/'+hash),get('taxonomy')]);title(p.title,p.authors.join(', '));add(app,'p',`${p.publication_year} · SMJ ${p.volume??'未知卷'} (${p.issue??'未知期'}) · ${p.pages??'未知頁碼'}`);link(app,'DOI / 出版社',p.doi_url);const receipt=p.content_access;const enriched=p.enrichment;add(app,'p',`正文：${receipt.accessible?'已解析（'+receipt.version+'）':'未知／不可取得'} · 摘要：${enriched?.abstract_available?'已取得供分類使用；不重刊全文':'未知'}`,'status-line');if(receipt.source_url)link(app,'合法正文來源',receipt.source_url);
+const onDemand=add(app,'section',undefined,'record');
+add(onDemand,'h3','指定這篇論文：按需分析（限 Atlas 專案擁有人）');
+add(onDemand,'p','不必等待全庫爬蟲：送出 GitHub Issue 後會只針對這篇 DOI 嘗試合法 OA 正文，回覆假設／命題、實證結果與穩健性，及 sample_period、data_source、empirical_method。Review 文章會標明暫定不適用，不會把取不到正文解讀成研究沒有假設。','muted');
+const query='Atlas analyze: '+p.doi;
+const body='DOI: '+p.doi+'\\nTitle: '+p.title;
+const issueURL='https://github.com/oliver0923-hub/smj-research-atlas/issues/new?title='+encodeURIComponent(query)+'&body='+encodeURIComponent(body);
+link(onDemand,'啟動這篇論文的單篇深入擷取（開啟預填 GitHub Issue，送出後執行）',issueURL);
+box('本頁自動驗證的是來源、文字對齊與資料一致性，不是人工專家審閱；沒有從標題推定公式、係數或因果效果。');add(app,'h2','研究分類總覽');
 void showAbstract(app,enriched,p.doi);
 const publishedOa=(enriched?.oa_locations||[]).find((x:any)=>String(x.pdf_url||'').startsWith('https://sms.onlinelibrary.wiley.com/doi/pdfdirect/')&&x.is_oa&&x.is_published);
 if(publishedOa){const publisher=add(app,'p');link(publisher,'Wiley 已標記 OA 的原版 PDF（實際下載權限以出版社為準）',publishedOa.pdf_url)}
