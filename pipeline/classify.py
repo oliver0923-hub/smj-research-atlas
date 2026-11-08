@@ -3,6 +3,7 @@ import hashlib
 import math
 from collections import Counter
 from .taxonomy import Assignment, text_key
+from .semantic import title_hits,FEATURE_VERSION
 from .core import now
 
 def cosine(left,right):
@@ -14,7 +15,7 @@ def cosine(left,right):
 
 OTHER_BY_LEVEL={"domain":"OTHER-DOM","research_topic":"OTHER-TOP",
                 "construct":"OTHER-CON","theory":"OTHER-TH"}
-CLASSIFIER_VERSION="atlas-classifier-4.0"
+CLASSIFIER_VERSION="atlas-classifier-5.0"
 
 def classify(papers,taxonomy,enrichment=(),decisions=()):
     """Assign source-supported topic/construct/theory labels and an explicit
@@ -44,11 +45,49 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
                             bool(extra.get('abstract_hash')))
             similarity=cosine(paper['title'],node['label_en']+' '+' '.join(node.get('match_phrases',[]))) if node['level']=='research_topic' else 0
             if abstract_match:
-                hits[node['id']]=(1.0,'validated_automatic','E1_abstract','openalex_abstract_phrase_v4')
+                hits[node['id']]=(1.0,'validated_automatic','E1_abstract','openalex_abstract_phrase_v5')
             elif title_match:
-                hits[node['id']]=(.82,'validated_automatic','E0_metadata','crossref_title_exact_phrase_v4')
+                hits[node['id']]=(.82,'validated_automatic','E0_metadata','crossref_title_exact_phrase_v5')
             elif node['level']=='research_topic' and similarity>=.35:
-                hits[node['id']]=(round(similarity,4),'provisional','E0_metadata','title_similarity_cosine_v4')
+                hits[node['id']]=(round(similarity,4),'provisional','E0_metadata','title_similarity_cosine_v5')
+        # Separately retain weak contextual candidates; never present them as
+        # theory adoption, verified constructs or a guaranteed literature label.
+        # Unlike lexical labels, these do not propagate to ancestors or replace
+        # the explicit Other fallback. A candidate is always opt-in in the UI.
+        weak={}
+        for item in title_hits(paper['title'],taxonomy):
+            term_id=item['term_id']
+            if term_id in nodes and term_id not in hits and (pid,term_id) not in manual:
+                weak[term_id]=item
+        if extra.get('abstract_hash'):
+            for item in extra.get('abstract_weak_hits',[]):
+                term_id=item.get('term_id')
+                if (term_id in nodes and term_id not in hits and (pid,term_id) not in manual
+                        and item.get('dimension')==nodes[term_id]['level']):
+                    weak[term_id]=item
+        for ident,item in sorted(weak.items()):
+            abstract_evidence=item.get('source')=='abstract_context' and bool(extra.get('abstract_hash'))
+            source=extra.get('source_url') if abstract_evidence else paper['metadata_provenance'][0]['source_url']
+            source_hash=extra['abstract_hash'] if abstract_evidence else hashlib.sha256(paper['title'].encode()).hexdigest()
+            record=Assignment(
+                assignment_id='candidate:'+hashlib.sha256((pid+'|'+ident+'|v5').encode()).hexdigest()[:20],
+                paper_id=pid,term_id=ident,taxonomy_version=taxonomy['version'],
+                origin='algorithmic',method=item.get('method',FEATURE_VERSION),
+                source_url=source,evidence_locator='Abstract weak lexical co-occurrence feature'
+                    if abstract_evidence else 'Crossref title contextual phrase',
+                input_hash=source_hash,review_status='suggested').model_dump()
+            record.update(is_fallback_other=False,is_semantic_candidate=True,
+                inference_origin='deterministic_rule',
+                input_origin='openalex_abstract_feature' if abstract_evidence else 'crossref_title',
+                evidence_grade='E1_abstract' if abstract_evidence else 'E0_metadata',
+                validation_status='semantic_candidate',
+                heuristic_score=item.get('heuristic_score'),confidence_score=None,
+                source_hash=source_hash,algorithm_version=CLASSIFIER_VERSION,
+                retrieved_at=extra.get('retrieved_at') if abstract_evidence else paper.get('last_synced_at'),
+                weak_trigger=item.get('trigger'),
+                validation_scope='Candidate contextual co-occurrence only; no claim of adopted theory or measured construct')
+            output.append(record)
+
         # L3 -> L2 -> L1. A construct may be mentioned even when a topic
         # phrase is absent. Mapping to ancestors is an editorial hierarchy,
         # not a claim that the authors used all those academic terms.
@@ -76,7 +115,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
                 record=Assignment(
                     assignment_id="other:"+hashlib.sha256(key.encode()).hexdigest()[:20],
                     paper_id=pid,term_id=ident,taxonomy_version=taxonomy['version'],
-                    origin='algorithmic',method='unresolved_no_supported_label_v4',
+                    origin='algorithmic',method='unresolved_no_supported_label_v5',
                     source_url=source,
                     evidence_locator="No supported category match in available title/abstract feature index",
                     input_hash=digest,review_status='suggested').model_dump()
@@ -98,7 +137,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
                 source=paper['metadata_provenance'][0]['source_url']
                 digest=hashlib.sha256(paper['title'].encode()).hexdigest()
             record=Assignment(
-                assignment_id='auto:'+hashlib.sha256((pid+'|'+ident+'|v4').encode()).hexdigest()[:20],
+                assignment_id='auto:'+hashlib.sha256((pid+'|'+ident+'|v5').encode()).hexdigest()[:20],
                 paper_id=pid,term_id=ident,taxonomy_version=taxonomy['version'],
                 origin='algorithmic',method=method,source_url=source,
                 evidence_locator='OpenAlex abstract phrase features (not full abstract)'

@@ -79,7 +79,7 @@ def test_daily_targets_missing_dois_with_no_cursor(tmp_path,monkeypatch):
     rows=[
       {"paper_id":"doi:10.1002/smj.12","doi":"10.1002/smj.12","title":"First paper","publication_year":2026,"authors":["A. Author"]},
       {"paper_id":"doi:10.1002/smj.13","doi":"10.1002/smj.13","title":"Second paper","publication_year":2025,"authors":["A. Author"]}]
-    enriched=[{"paper_id":rows[1]["paper_id"],"abstract_feature_method":"allowed_phrase_occurrence_v5"}]
+    enriched=[{"paper_id":rows[1]["paper_id"],"abstract_feature_method":"allowed_phrase_occurrence_v6"}]
     def reader(name):
         return {"papers.jsonl":rows,"enrichment.jsonl":enriched}.get(name,[])
     class Response:
@@ -136,6 +136,7 @@ def test_real_daily_refresh_calls_metadata_and_acquisition(tmp_path,monkeypatch)
     import pipeline.enrich as enrichmod
     events=[]
     monkeypatch.setattr(release,"DATA",tmp_path)
+    monkeypatch.setattr(release,"read",lambda name:[])
     monkeypatch.setattr(release,"sync",lambda args:events.append("crossref"))
     monkeypatch.setattr(enrichmod,"harvest",
                         lambda pages,priority_new=False:events.append(("openalex",pages,priority_new)) or {"status":"complete"})
