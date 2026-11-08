@@ -13,6 +13,7 @@ import httpx
 
 from .cli import DATA, ROOT, read, write, lines
 from .core import ISSNS, doi_key, now
+from .selection import choose_papers, source_candidates
 
 USER_AGENT='SMJResearchAtlas/3.0 (scholarly metadata and lawful OA evidence)'
 FIELDS='id,doi,title,publication_year,primary_location,best_oa_location,locations,abstract_inverted_index,cited_by_count,type,open_access,topics,is_retracted'
@@ -30,26 +31,39 @@ def abstract_text(index):
     pairs=[(i,word) for word,positions in (index or {}).items() for i in positions]
     return ' '.join(w for _,w in sorted(pairs))
 
-def harvest(max_pages=50,dry_run=False):
+def harvest(max_pages=50,dry_run=False,priority_new=False):
     papers={p['doi']:p for p in read('papers.jsonl')}
     existing={p['paper_id']:p for p in read('enrichment.jsonl')}
     status={'source':'OpenAlex','started_at':now(),'budget_pages':max_pages,'status':'running','requests':0,'matched':0,'errors':[]}
     if dry_run:return dict(status,status='dry_run',potential_papers=len(papers))
     CACHE.mkdir(exist_ok=True);(CACHE/'abstracts').mkdir(exist_ok=True)
     checkpoint=DATA/'staging/openalex_checkpoint.json'
-    state=json.loads(checkpoint.read_text()) if checkpoint.exists() else {'cursor':'*'}
-    batch_ids=sorted(papers)
     api_token=os.getenv('OPENALEX_API_KEY')
-    if not api_token and 'batch' not in state:state={'batch':0}
+    if priority_new:
+        # Target Crossref additions directly rather than waiting for an OpenAlex
+        # journal cursor to eventually reach the new DOI.
+        known=set(existing)
+        batch_ids=sorted((doi for doi,p in papers.items() if p['paper_id'] not in known),
+                         key=lambda doi:(-papers[doi].get('publication_year',0),doi))
+        state={'batch':0}
+    else:
+        batch_ids=sorted(papers)
+        state=json.loads(checkpoint.read_text()) if checkpoint.exists() else {'cursor':'*'}
+        if not api_token and 'batch' not in state:state={'batch':0}
     with httpx.Client(timeout=50,follow_redirects=True,headers={'User-Agent':USER_AGENT}) as client:
         for _ in range(max_pages):
             try:
                 params={'filter':'primary_location.source.issn:1097-0266','per_page':100,'select':FIELDS}
-                if api_token:params.update(cursor=state.get('cursor','*'),api_key=api_token)
+                if api_token:params['api_key']=api_token
+                if api_token and not priority_new:
+                    params['cursor']=state.get('cursor','*')
                 else:
                     batch=batch_ids[state['batch']:state['batch']+40]
-                    if not batch:status['status']='complete';checkpoint.unlink(missing_ok=True);break
-                    params['filter']='doi:'+'|'.join(batch)
+                    if not batch:
+                        status['status']='complete'
+                        if not priority_new:checkpoint.unlink(missing_ok=True)
+                        break
+                    params['filter']='doi:'+'|'.join('https://doi.org/'+doi for doi in batch)
                 payload=get(client,'https://api.openalex.org/works',params).json()
             except Exception as exc:
                 status['errors'].append({'kind':type(exc).__name__,'http_status':getattr(getattr(exc,'response',None),'status_code',None)});status['status']='partial_failure';break
@@ -66,7 +80,13 @@ def harvest(max_pages=50,dry_run=False):
                 from .taxonomy import text_key
                 normalized=' '+text_key(abstract)+' '
                 features=[n['id'] for n in tax['nodes'] if n['level'] in {'research_topic','theory'} and any(' '+text_key(phrase)+' ' in normalized for phrase in n.get('match_phrases',[]))]
-                locations=[l for l in raw.get('locations',[]) if l.get('is_oa') and (l.get('is_accepted') or l.get('is_published'))]
+                candidates=list(raw.get('locations') or [])
+                for special in ('best_oa_location','primary_location'):
+                    if raw.get(special):candidates.append(raw[special])
+                locations=[l for l in candidates if l.get('is_oa') and
+                           (l.get('is_accepted') or l.get('is_published') or
+                            l.get('version') in {'acceptedVersion','publishedVersion'})]
+                locations=list({(l.get('pdf_url'),l.get('landing_page_url')):l for l in locations}.values())
                 entry=dict(paper_id=paper['paper_id'],openalex_id=raw['id'],citation_count=raw.get('cited_by_count'),citation_count_asof=now()[:10],
                     external_topics=raw.get('topics',[]),openalex_type=raw.get('type'),is_retracted=raw.get('is_retracted'),
                     abstract_available=bool(abstract),abstract_phrase_hits=features,abstract_feature_method='allowed_phrase_occurrence_v3',abstract_hash=hashlib.sha256(abstract.encode()).hexdigest() if abstract else None,
@@ -77,8 +97,11 @@ def harvest(max_pages=50,dry_run=False):
                 if old and {k:v for k,v in old.items() if k!='retrieved_at'}=={k:v for k,v in entry.items() if k!='retrieved_at'}:entry=old
                 existing[paper['paper_id']]=entry;status['matched']+=1
             write(DATA/'enrichment.jsonl',lines(sorted(existing.values(),key=lambda p:p['paper_id'])))
-            if not os.getenv('OPENALEX_API_KEY'):
-                state['batch']+=40;write(checkpoint,json.dumps(state));time.sleep(.4);continue
+            if not api_token or priority_new:
+                state['batch']+=40
+                if not priority_new:write(checkpoint,json.dumps(state))
+                time.sleep(.4)
+                continue
             nxt=payload.get('meta',{}).get('next_cursor')
             if not nxt or not payload.get('results'):
                 status['status']='complete';checkpoint.unlink(missing_ok=True);break
