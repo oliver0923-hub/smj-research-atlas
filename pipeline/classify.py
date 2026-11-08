@@ -15,9 +15,9 @@ def cosine(left,right):
 
 OTHER_BY_LEVEL={"domain":"OTHER-DOM","research_topic":"OTHER-TOP",
                 "construct":"OTHER-CON","theory":"OTHER-TH"}
-CLASSIFIER_VERSION="atlas-classifier-5.0"
+CLASSIFIER_VERSION="atlas-classifier-6.0-fulltext-theory"
 
-def classify(papers,taxonomy,enrichment=(),decisions=()):
+def classify(papers,taxonomy,enrichment=(),decisions=(),researches=()):
     """Assign source-supported topic/construct/theory labels and an explicit
     insufficient-evidence Other fallback for each missing dimension.
 
@@ -26,6 +26,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
     or construct, never directly from an unlabeled theory.
     """
     enrichment={r['paper_id']:r for r in enrichment}
+    research_by_paper={r['paper_id']:r for r in researches}
     manual={(a['paper_id'],a['term_id']) for a in decisions}
     rejected={(a['paper_id'],a['term_id']) for a in decisions if a['review_status']=='rejected'}
     nodes={n['id']:n for n in taxonomy['nodes']}
@@ -35,6 +36,22 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
         pid=paper['paper_id']
         title=" "+text_key(paper['title'])+" "
         extra=enrichment.get(pid,{})
+        research=research_by_paper.get(pid,{})
+        evidence_ids={e['evidence_id'] for e in research.get('evidence',[])}
+        author_declarations={}
+        section_mentions={}
+        for evidence in research.get('theory_evidence',[]):
+            term_id=evidence.get('term_id')
+            if (term_id not in nodes or nodes[term_id]['level']!='theory'
+                    or (pid,term_id) in manual or (pid,term_id) in rejected
+                    or not evidence.get('evidence_ids')
+                    or not set(evidence['evidence_ids'])<=evidence_ids
+                    or evidence.get('source_hash')!=research.get('source_hash')):
+                continue
+            if evidence.get('status')=='author_declared_use':
+                author_declarations[term_id]=evidence
+            elif evidence.get('status')=='mentioned_in_section':
+                section_mentions[term_id]=evidence
         hits={}
         for node in nodes.values():
             if node['level'] not in {'research_topic','construct','theory'} or node['id'] in OTHER_BY_LEVEL.values() or (pid,node['id']) in rejected:
@@ -50,6 +67,12 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
                 hits[node['id']]=(.82,'validated_automatic','E0_metadata','crossref_title_exact_phrase_v5')
             elif node['level']=='research_topic' and similarity>=.35:
                 hits[node['id']]=(round(similarity,4),'provisional','E0_metadata','title_similarity_cosine_v5')
+        # A source-located, author-declared theory use outranks a title or
+        # abstract phrase. A mere occurrence in a Theory section never does.
+        for term_id in author_declarations:
+            hits[term_id]=(1.0,'validated_automatic','E2_fulltext_section',
+                           'source_aligned_author_declared_use_v1')
+
         # Separately retain weak contextual candidates; never present them as
         # theory adoption, verified constructs or a guaranteed literature label.
         # Unlike lexical labels, these do not propagate to ancestors or replace
@@ -65,26 +88,41 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
                 if (term_id in nodes and term_id not in hits and (pid,term_id) not in manual
                         and item.get('dimension')==nodes[term_id]['level']):
                     weak[term_id]=item
+        for term_id,evidence in section_mentions.items():
+            if term_id not in hits and (pid,term_id) not in manual:
+                weak[term_id]=dict(term_id=term_id,dimension='theory',
+                    trigger=evidence.get('matched_phrase'),
+                    source='fulltext_mention',
+                    method='source_aligned_theory_mention_not_author_use_v1',
+                    heuristic_score=.55,evidence_ids=evidence['evidence_ids'],
+                    section=evidence.get('section'),page=evidence.get('page'))
         for ident,item in sorted(weak.items()):
+            fulltext_evidence=item.get('source')=='fulltext_mention'
             abstract_evidence=item.get('source')=='abstract_context' and bool(extra.get('abstract_hash'))
-            source=extra.get('source_url') if abstract_evidence else paper['metadata_provenance'][0]['source_url']
-            source_hash=extra['abstract_hash'] if abstract_evidence else hashlib.sha256(paper['title'].encode()).hexdigest()
+            source=(research['source_url'] if fulltext_evidence else
+                extra.get('source_url') if abstract_evidence else paper['metadata_provenance'][0]['source_url'])
+            source_hash=(research['source_hash'] if fulltext_evidence else
+                extra['abstract_hash'] if abstract_evidence else hashlib.sha256(paper['title'].encode()).hexdigest())
             record=Assignment(
                 assignment_id='candidate:'+hashlib.sha256((pid+'|'+ident+'|v5').encode()).hexdigest()[:20],
                 paper_id=pid,term_id=ident,taxonomy_version=taxonomy['version'],
                 origin='algorithmic',method=item.get('method',FEATURE_VERSION),
-                source_url=source,evidence_locator='Abstract weak lexical co-occurrence feature'
-                    if abstract_evidence else 'Crossref title contextual phrase',
+                source_url=source,evidence_locator=(
+                    'Fulltext theory mention in '+str(item.get('section'))+' page '+str(item.get('page'))
+                    if fulltext_evidence else
+                    'Abstract weak lexical co-occurrence feature' if abstract_evidence
+                    else 'Crossref title contextual phrase'),
                 input_hash=source_hash,review_status='suggested').model_dump()
             record.update(is_fallback_other=False,is_semantic_candidate=True,
                 inference_origin='deterministic_rule',
-                input_origin='openalex_abstract_feature' if abstract_evidence else 'crossref_title',
-                evidence_grade='E1_abstract' if abstract_evidence else 'E0_metadata',
+                input_origin='fulltext_source' if fulltext_evidence else 'openalex_abstract_feature' if abstract_evidence else 'crossref_title',
+                evidence_grade='E2_fulltext_section' if fulltext_evidence else 'E1_abstract' if abstract_evidence else 'E0_metadata',
                 validation_status='semantic_candidate',
                 heuristic_score=item.get('heuristic_score'),confidence_score=None,
                 source_hash=source_hash,algorithm_version=CLASSIFIER_VERSION,
                 retrieved_at=extra.get('retrieved_at') if abstract_evidence else paper.get('last_synced_at'),
                 weak_trigger=item.get('trigger'),
+                fulltext_evidence_ids=item.get('evidence_ids',[]) if fulltext_evidence else [],
                 validation_scope='Candidate contextual co-occurrence only; no claim of adopted theory or measured construct')
             output.append(record)
 
@@ -130,7 +168,10 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
 
         for ident,(score,status,grade,method) in sorted(hits.items()):
             if (pid,ident) in manual:continue
-            if grade=='E1_abstract':
+            if grade=='E2_fulltext_section':
+                source=research['source_url']
+                digest=research['source_hash']
+            elif grade=='E1_abstract':
                 source=extra['source_url']
                 digest=extra['abstract_hash']
             else:
@@ -140,17 +181,22 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
                 assignment_id='auto:'+hashlib.sha256((pid+'|'+ident+'|v5').encode()).hexdigest()[:20],
                 paper_id=pid,term_id=ident,taxonomy_version=taxonomy['version'],
                 origin='algorithmic',method=method,source_url=source,
-                evidence_locator='OpenAlex abstract phrase features (not full abstract)'
-                    if grade=='E1_abstract' else 'Crossref title and Atlas mapping',
+                evidence_locator=(
+                    'Author-declared theoretical lens in section '+str(author_declarations[ident].get('section'))+
+                    ', page '+str(author_declarations[ident].get('page')) if grade=='E2_fulltext_section'
+                    else 'OpenAlex abstract phrase features (not full abstract)'
+                    if grade=='E1_abstract' else 'Crossref title and Atlas mapping'),
                 input_hash=digest,review_status='suggested').model_dump()
             record.update(is_fallback_other=False,
                 inference_origin='deterministic_rule',
-                input_origin='openalex_metadata' if grade=='E1_abstract' else 'crossref_metadata',
+                input_origin='fulltext_source' if grade=='E2_fulltext_section' else 'openalex_metadata' if grade=='E1_abstract' else 'crossref_metadata',
                 evidence_grade=grade,validation_status=status,heuristic_score=score,
                 confidence_score=None,source_hash=digest,
                 algorithm_version=CLASSIFIER_VERSION,
                 retrieved_at=extra.get('retrieved_at') if grade=='E1_abstract' else paper.get('last_synced_at'),
                 validation_scope='Rule and text-feature consistency; not peer-reviewed accuracy',
-                input_evidence_snippet=paper['title'] if grade=='E0_metadata' else None)
+                input_evidence_snippet=paper['title'] if grade=='E0_metadata' else None,
+                fulltext_evidence_ids=author_declarations[ident]['evidence_ids'] if grade=='E2_fulltext_section' else [],
+                author_declared_use=grade=='E2_fulltext_section')
             output.append(record)
     return output
