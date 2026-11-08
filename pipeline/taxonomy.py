@@ -230,11 +230,12 @@ def enrich_papers(papers, taxonomy, assignments):
                     and a['review_status']!='rejected']
             substantive=[a for a in active if not a.get('is_fallback_other')
                          and (a['review_status']=='approved' or a.get('validation_status') in {'validated_automatic','provisional'})]
+            approved=[a for a in substantive if a['review_status']=='approved']
             abstract=[a for a in substantive if a.get('evidence_grade')=='E1_abstract']
             exact=[a for a in substantive if a.get('validation_status')=='validated_automatic']
-            best=abstract or exact or substantive
+            best=approved or abstract or exact or substantive
             quality[level]=dict(
-                state=('abstract_supported' if abstract else
+                state=('human_approved' if approved else 'abstract_supported' if abstract else
                        'title_supported' if exact else
                        'provisional' if substantive else 'unresolved_other'),
                 substantive_terms=sorted({a['term_id'] for a in substantive}),
