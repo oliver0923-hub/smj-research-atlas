@@ -140,14 +140,14 @@ def test_parser_recognizes_complex_theory_section_headers():
 
 def test_reparse_priority_for_previously_successful_oa_after_extractor_change():
     old=dict(paper_id="doi:old",first_seen_at="2026-01-01",last_checked_at=None,
-        sources=[dict(source_id="old",kind="previous_success",
+        sources=[dict(source_id="old",url="https://example.org/old.pdf",kind="previous_success",
           state="extraction_partial",cycle_attempted="cycle:x",
           parser_version="article-document-4.0",extractor_version="research-fields-4.0")])
     fresh=dict(paper_id="doi:new",first_seen_at="2026-11-08",last_checked_at=None,
-        sources=[dict(source_id="new",kind="pdf_url",
+        sources=[dict(source_id="new",url="https://example.org/new.pdf",kind="pdf_url",
           state="fetch_pending",cycle_attempted=None,
           parser_version=None,extractor_version=None)])
-    ordered=plan([fresh,old],{"cycle_id":"cycle:x"},2)
+    ordered=plan([fresh,old],{"cycle_id":"cycle:x","extractor_upgrade_pending":True},2)
     assert [p["paper_id"] for p,s in ordered]==["doi:old","doi:new"]
     assert EXTRACTOR_VERSION=="research-fields-4.1-theory-source"
 
