@@ -89,7 +89,7 @@ if(publishedOa){const publisher=add(app,'p');link(publisher,'Wiley 已標記 OA 
 const classMap=new Map(tax.nodes.map((n:any)=>[n.id,n]));
 const categoryLabels:Record<string,string>={domain:'Domain',research_topic:'Research Topic',construct:'Construct',theory:'Theory'};
 const paramKeys:Record<string,string>={domain:'domain',research_topic:'topic',construct:'construct',theory:'theory'};
-const qualityLabels:Record<string,string>={abstract_supported:'摘要詞彙支持',title_supported:'標題詞彙支持',provisional:'暫定相似分類',unresolved_other:'其他／未判定',human_approved:'歷史人工確認'};
+const qualityLabels:Record<string,string>={fulltext_author_declared:'全文作者明示（E2）',abstract_supported:'摘要詞彙支持',title_supported:'標題詞彙支持',provisional:'暫定相似分類',unresolved_other:'其他／未判定',human_approved:'歷史人工確認'};
 for(const level of ['domain','research_topic','construct','theory']){
     const c=add(app,'article',undefined,'record');
     add(c,'h3',categoryLabels[level]);
@@ -155,13 +155,13 @@ title('自動分類品質與證據','每篇論文的 Domain、Research Topic、C
 const dims:[string,string,string][]=[['domain','Domain','domain'],['research_topic','Research Topic','topic'],['construct','Construct','construct'],['theory','Theory','theory']];
 const stats=r.classification_by_dimension||{};
 add(app,'h2','四個維度的實際辨識率');
-table(['分類維度','摘要支持','標題支持','暫定','其他／未判定','弱監督候選','候選新增涵蓋','具來源分類／全部'],dims.map(([level,label,filter])=>{
+table(['分類維度','全文作者明示 E2','摘要支持 E1','標題支持 E0','暫定','其他／未判定','弱監督候選','候選新增涵蓋','具來源分類／全部'],dims.map(([level,label,filter])=>{
 const a=stats[level]||{};const other=a.unresolved_other??r.papers;
 const otherLink=e('div');const href=base+'papers/?'+filter+'=OTHER-'+({domain:'DOM',research_topic:'TOP',construct:'CON',theory:'TH'} as Record<string,string>)[level];
 link(otherLink,String(other)+' 篇（查看）',href);
-return [label,a.abstract_supported??0,a.title_supported??0,a.provisional??0,otherLink,a.weak_candidate_papers??0,a.additional_candidate_only_papers??0,`${a.substantive_papers??0} / ${a.denominator??r.papers}`];
+return [label,a.fulltext_author_declared??0,a.abstract_supported??0,a.title_supported??0,a.provisional??0,otherLink,a.weak_candidate_papers??0,a.additional_candidate_only_papers??0,`${a.substantive_papers??0} / ${a.denominator??r.papers}`];
 }));
-box('「其他」代表標題／摘要索引沒有足夠證據。弱監督候選是使用多詞組線索所發現的可能關聯，不能當作作者明確使用理論，且不列入具來源分類。候選新增涵蓋是原本沒有實質標籤但出現弱線索的論文數；各分子不可相加。');
+box('「全文作者明示 E2」指可合法取得的正文中，作者在理論相關章節以明確語句陳述採用某個理論視角；這是自動來源文字對齊，並非獨立的學者語義認證。僅提及理論會顯示在弱候選，不納入實質分類。「其他」不等於沒有理論。');
 add(app,'h2','其他／未判定：缺失來源診斷');
 table(['維度','尚無摘要','已有摘要、等待最新版詞典重索引','已用最新版摘要詞典掃描仍未命中'],dims.map(([level,label])=>{
  const a=stats[level]||{};
@@ -169,7 +169,7 @@ table(['維度','尚無摘要','已有摘要、等待最新版詞典重索引','
 }));
 add(app,'p','這些是資料處理進度與詞彙吻合狀態，不等於論文未引用理論或未定義研究構念。摘要與正文的涵蓋範圍不同。','muted');
 add(app,'h2','分類品質定義');
-table(['狀態','解讀'],[['abstract_supported','OpenAlex 摘要的對應關鍵詞命中（E1）'],['title_supported','Crossref 標題的明確詞組命中，或由 Atlas 層級往上對應（E0）'],['provisional','標題詞彙相似推測；需要保守解讀'],['semantic_candidate','弱監督多詞組候選；不證明實際採用理論或衡量構念'],['unresolved_other','沒有充分辨識證據；使用其他／未判定標籤'],['human_approved','僅歷史上確有明確紀錄的人工作業，不代表自動分類已審閱']]);
+table(['狀態','解讀'],[['fulltext_author_declared','作者在合法正文理論相關章節明確自述採用該理論（E2，仍非專家驗證）'],['abstract_supported','OpenAlex 摘要的對應關鍵詞命中（E1）'],['title_supported','Crossref 標題的明確詞組命中，或由 Atlas 層級往上對應（E0）'],['provisional','標題詞彙相似推測；需要保守解讀'],['semantic_candidate','弱監督多詞組候選；不證明實際採用理論或衡量構念'],['unresolved_other','沒有充分辨識證據；使用其他／未判定標籤'],['human_approved','僅歷史上確有明確紀錄的人工作業，不代表自動分類已審閱']]);
 add(app,'h2','自動來源一致性檢查');
 table(['來源或規則狀態','紀錄數'],Object.entries(r.validation_statuses||{}));
 add(app,'h2','新興詞彙候選');
@@ -184,7 +184,21 @@ const counts=new Map<string,number>(),pairs=new Map<string,number>();for(const p
 add(output,'h2','Theory × Topic（同篇標記）');const matrix=new Map<string,number>();for(const p of facts){const theories=[...new Set(p.selected.filter((t:any)=>t.term_id.startsWith('TH-')).map((t:any)=>t.term_id))] as string[];const topics=[...new Set(p.selected.filter((t:any)=>t.term_id.startsWith('TOP-')).map((t:any)=>t.term_id))] as string[];for(const th of theories)for(const to of topics){const k=th+'|'+to;matrix.set(k,(matrix.get(k)||0)+1)}}table(['理論','主題','共現篇數'],[...matrix].sort((a,b)=>b[1]-a[1]).slice(0,25).map(([key,n])=>{const [th,to]=key.split('|');return [tax.nodes.find((t:any)=>t.id===th).label_zh,tax.nodes.find((t:any)=>t.id===to).label_zh,n]}),output);add(output,'h2','變數角色、方法與資料來源');add(output,'p',`衡量文字範圍：${a.measure_denominator_variables} 筆變數、${a.measure_denominator_papers} 篇論文。下表依全部 E3 紀錄，不受上方分類篩選影響；未知角色不推定為 IV、DV 或控制。`,'notice');table(['模型角色','紀錄數'],Object.entries(a.roles).map(([k,v])=>[labels[k]||k,v]),output);add(output,'p',Object.keys(a.methods).length?'方法欄位僅統計具來源者。':'目前估計方法尚未由來源段落確認；無法提供可信的方法分布。','muted');add(output,'p',`已辨識資料來源：${Object.entries(a.datasets).map(([k,v])=>k+' '+v+' 筆').join('；')||'未知'}。僅限衡量段落明示者，不代表資料庫使用的全面分布。`,'muted');add(output,'h2','描述性研究機會');add(output,'p','以下固定以全部索引計算，不隨上方篩選變動。僅列各主題至少10篇、合併共現至多2篇的組合；不是已驗證研究缺口。','muted');table(['主題 A','主題 B','共同篇數 / 索引分母'],a.opportunities.map((o:any)=>[tax.nodes.find((t:any)=>t.id===o.a).label_zh,tax.nodes.find((t:any)=>t.id===o.b).label_zh,`${o.joint_papers} / ${o.denominator}`]),output)}controls.addEventListener('input',render);render()}
 
 const reasonLabels:Record<string,string>={not_reported:'充分檢查後未報告',not_found_after_search:'已搜尋，但未定位到可靠證據',not_applicable:'不適用',inaccessible_fulltext:'全文不可取得',not_parsed:'版面／表格／公式尚未成功解析',ambiguous:'無法明確判定',not_yet_processed:'尚未處理',evidence_conflict:'不同來源敘述或規格有衝突'};
-function renderV4(r:any){add(app,'h2','v4 逐欄研究證據');box('每個欄位獨立定位原文；source alignment 不代表獨立評估的語意正確率。論文層級樣本／方法不會無條件套用到所有變數或模型。');add(app,'p',`Parser ${r.parser_version} · Extractor ${r.extractor_version} · ${r.variables.length} 筆變數／衡量 · ${r.models.length} 個模型 · ${r.estimates.length} 個表格估計`,'status-line');const evidence=new Map(r.evidence.map((x:any)=>[x.evidence_id,x]));function proofs(parent:Element,ids:string[]){for(const id of ids){const v:any=evidence.get(id);if(!v)continue;const d=add(parent,'details');add(d,'summary',`${v.section} · page ${v.page??'HTML'}${v.table?' · '+v.table+' row '+v.row+' col '+v.column:''}`);link(d,'開啟原始來源',v.source_url+(v.page?'#page='+v.page:''));add(d,'p',v.quoted_excerpt||'本篇短引文配額已用盡；仍保留原始位置與 hash。');add(d,'p',`block ${v.block_id}; offset ${v.start}–${v.end}; span ${v.span_hash}`,'tiny');add(d,'p',`${v.verification_status} · ${v.extraction_method} · ${v.confidence}`,'muted')}}function fieldRows(parent:Element,fields:any){table(['欄位','值／Unknown 原因','逐欄原文證據'],Object.entries(fields).map(([name,raw])=>{const f:any=raw;const cell=e('div',f.value===null?'Unknown · '+(reasonLabels[f.reason]||f.reason):typeof f.value==='object'?JSON.stringify(f.value):String(f.value));if(f.status==='inferred_not_original_formula')add(cell,'p','由文字正規化敘述推導的比率，並非原文寫出的公式。','notice');if(f.detail)add(cell,'p',f.detail,'tiny');if(f.candidates)add(cell,'p','候選／不同規格：'+JSON.stringify(f.candidates),'tiny');const ev=e('div');proofs(ev,f.evidence_ids);return [name,cell,ev]}),parent)}const pf=add(app,'details');add(pf,'summary','論文層級：樣本、資料、方法與研究結果');fieldRows(pf,r.fields);for(const v of r.variables){const d=add(app,'details');d.id=v.variable_id;add(d,'summary',v.name+' · 各欄位與衡量規格');fieldRows(d,v.fields)}const coverage=add(app,'details');add(coverage,'summary','已搜尋範圍與解析缺口');add(coverage,'pre',JSON.stringify(r.search_coverage,null,2));for(const [label,rows] of [['假設／命題',r.hypotheses],['模型',r.models],['逐模型估計',r.estimates],['結果與假設支持',r.findings],['穩健性／敏感性程序與結果',r.checks]] as [string,any[]][]){const d=add(app,'details');add(d,'summary',label+' · '+rows.length+' 筆');for(const row of rows){const c=add(d,'article',undefined,'record');add(c,'pre',JSON.stringify(Object.fromEntries(Object.entries(row).filter(([k])=>k!=='evidence_ids')),null,2));proofs(c,row.evidence_ids)}}}
+function renderV4(r:any){add(app,'h2','v4 逐欄研究證據');box('每個欄位獨立定位原文；source alignment 不代表獨立評估的語意正確率。論文層級樣本／方法不會無條件套用到所有變數或模型。');add(app,'p',`Parser ${r.parser_version} · Extractor ${r.extractor_version} · ${r.variables.length} 筆變數／衡量 · ${r.models.length} 個模型 · ${r.estimates.length} 個表格估計`,'status-line');const evidence=new Map(r.evidence.map((x:any)=>[x.evidence_id,x]));function proofs(parent:Element,ids:string[]){for(const id of ids){const v:any=evidence.get(id);if(!v)continue;const d=add(parent,'details');add(d,'summary',`${v.section} · page ${v.page??'HTML'}${v.table?' · '+v.table+' row '+v.row+' col '+v.column:''}`);link(d,'開啟原始來源',v.source_url+(v.page?'#page='+v.page:''));add(d,'p',v.quoted_excerpt||'本篇短引文配額已用盡；仍保留原始位置與 hash。');add(d,'p',`block ${v.block_id}; offset ${v.start}–${v.end}; span ${v.span_hash}`,'tiny');add(d,'p',`${v.verification_status} · ${v.extraction_method} · ${v.confidence}`,'muted')}}function fieldRows(parent:Element,fields:any){table(['欄位','值／Unknown 原因','逐欄原文證據'],Object.entries(fields).map(([name,raw])=>{const f:any=raw;const cell=e('div',f.value===null?'Unknown · '+(reasonLabels[f.reason]||f.reason):typeof f.value==='object'?JSON.stringify(f.value):String(f.value));if(f.status==='inferred_not_original_formula')add(cell,'p','由文字正規化敘述推導的比率，並非原文寫出的公式。','notice');if(f.detail)add(cell,'p',f.detail,'tiny');if(f.candidates)add(cell,'p','候選／不同規格：'+JSON.stringify(f.candidates),'tiny');const ev=e('div');proofs(ev,f.evidence_ids);return [name,cell,ev]}),parent)}const theoryRows:Array<any>=r.theory_evidence||[];
+const theoryScope=r.theory_search_coverage;
+const theoryPanel=add(app,'details');
+add(theoryPanel,'summary','全文 Theory 證據：作者明示使用 vs 章節提及 · '+theoryRows.length+' 筆');
+add(theoryPanel,'p','只有作者在 Introduction / Theory / Hypotheses 相關章節明示使用某視角，才可形成全文來源的 Theory 分類。單純提及仍是候選。推論未經獨立學術語義驗證。','muted');
+if(theoryScope){add(theoryPanel,'p','掃描：'+theoryScope.status+' · '+theoryScope.scoped_blocks+' 個段落；'+(theoryScope.scoped_sections||[]).join('、'),'tiny');}
+if(!theoryRows.length)add(theoryPanel,'p','尚無具可對齊證據的 Theory 名稱；不代表文章未使用理論。','empty');
+for(const v of theoryRows){
+ const line=add(theoryPanel,'article',undefined,'record');
+ add(line,'h4',v.term_id+' · '+(v.status==='author_declared_use'?'作者明示理論視角':'僅章節提及／未驗證'));
+ add(line,'p','辨識詞組：'+v.matched_phrase+' · 章節：'+v.section+' · 頁碼：'+(v.page??'HTML'),'tiny');
+ if((v.hypothesis_ids||[]).length)add(line,'p','同段落假設線索：'+v.hypothesis_ids.join('、')+'（並非確認因果或理論來源）','tiny');
+ proofs(line,v.evidence_ids||[]);
+}
+const pf=add(app,'details');add(pf,'summary','論文層級：樣本、資料、方法與研究結果');fieldRows(pf,r.fields);for(const v of r.variables){const d=add(app,'details');d.id=v.variable_id;add(d,'summary',v.name+' · 各欄位與衡量規格');fieldRows(d,v.fields)}const coverage=add(app,'details');add(coverage,'summary','已搜尋範圍與解析缺口');add(coverage,'pre',JSON.stringify(r.search_coverage,null,2));for(const [label,rows] of [['假設／命題',r.hypotheses],['模型',r.models],['逐模型估計',r.estimates],['結果與假設支持',r.findings],['穩健性／敏感性程序與結果',r.checks]] as [string,any[]][]){const d=add(app,'details');add(d,'summary',label+' · '+rows.length+' 筆');for(const row of rows){const c=add(d,'article',undefined,'record');add(c,'pre',JSON.stringify(Object.fromEntries(Object.entries(row).filter(([k])=>k!=='evidence_ids')),null,2));proofs(c,row.evidence_ids)}}}
 
 const handlers:Record<string,()=>Promise<void>>={dashboard,explorer,profile,dictionary,quality,theories,gaps,automaticQuality,analytics};
 try{await handlers[app.dataset.kind!]()}catch(error){app.replaceChildren();add(app,'h1','資料暫時無法載入');add(app,'p',error instanceof Error?error.message:'未知錯誤','notice');link(app,'返回總覽',base);console.error(error)}
