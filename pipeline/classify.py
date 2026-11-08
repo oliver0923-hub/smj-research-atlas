@@ -114,7 +114,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=(),researches=()):
                     else 'Crossref title contextual phrase'),
                 input_hash=source_hash,review_status='suggested').model_dump()
             record.update(is_fallback_other=False,is_semantic_candidate=True,
-                inference_origin='deterministic_rule',
+                inference_origin='fulltext_extraction' if fulltext_evidence else 'deterministic_rule',
                 input_origin='fulltext_source' if fulltext_evidence else 'openalex_abstract_feature' if abstract_evidence else 'crossref_title',
                 evidence_grade='E2_fulltext_section' if fulltext_evidence else 'E1_abstract' if abstract_evidence else 'E0_metadata',
                 validation_status='semantic_candidate',
@@ -188,7 +188,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=(),researches=()):
                     if grade=='E1_abstract' else 'Crossref title and Atlas mapping'),
                 input_hash=digest,review_status='suggested').model_dump()
             record.update(is_fallback_other=False,
-                inference_origin='deterministic_rule',
+                inference_origin='fulltext_extraction' if grade=='E2_fulltext_section' else 'deterministic_rule',
                 input_origin='fulltext_source' if grade=='E2_fulltext_section' else 'openalex_metadata' if grade=='E1_abstract' else 'crossref_metadata',
                 evidence_grade=grade,validation_status=status,heuristic_score=score,
                 confidence_score=None,source_hash=digest,
