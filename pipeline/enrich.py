@@ -154,31 +154,28 @@ def acquire(max_papers=40,dry_run=False):
     variables={v['variable_id']:v for v in read('variables.jsonl')}
     claims={v['claim_id']:v for v in read('study_claims.jsonl')}
     runs=read('extraction_runs.jsonl')
-    candidates=[e for e in enrich if e.get('oa_locations') and e['paper_id'] in papers and (not old.get(e['paper_id'],{}).get('accessible') or (old[e['paper_id']].get('extraction_algorithm_version')!=EXTRACTION_VERSION or old[e['paper_id']].get('study_algorithm_version')!=STUDY_VERSION))]
-    candidates.sort(key=lambda e:(not any(l.get('pdf_url') and not any(h in l['pdf_url'] for h in ['wiley','ssrn','jstor']) for l in e['oa_locations']),e['paper_id'] in old))
-    # Round-robin title-derived domains ensures the budget is not only the most-cited stream.
-    from .taxonomy import suggest_assignments
-    tax=json.loads((DATA/'ontology.yaml').read_text(encoding='utf-8'))
-    bins={};unassigned=[]
-    for e in candidates:
-        tags=[a['term_id'] for a in suggest_assignments([papers[e['paper_id']]],tax) if a['term_id'].startswith('SMS-')]
-        (bins.setdefault(tags[0],[]) if tags else unassigned).append(e)
-    ordered=[]
-    while any(bins.values()):
-        for group in bins.values():
-            if group:ordered.append(group.pop(0))
-    ordered+=unassigned
-    if dry_run:return {'status':'dry_run','candidate_papers':len(ordered),'budget':max_papers,'provider':'deterministic','paid_api_calls':0}
+    # New OA items are processed first; previously denied or failed sources
+    # receive a bounded cooldown rather than monopolising every weekly run.
+    all_plans=choose_papers(papers,enrich,old,EXTRACTION_VERSION,STUDY_VERSION,max_papers=len(enrich))
+    plans=all_plans[:max_papers]
+    if dry_run:
+        from collections import Counter
+        return {'status':'dry_run','candidate_papers':len(all_plans),
+                'selected_papers':len(plans),'reasons':dict(Counter(p['reason'] for p in plans)),
+                'budget':max_papers,'provider':'deterministic','paid_api_calls':0}
     (CACHE/'fulltext').mkdir(parents=True,exist_ok=True)
     robots={};processed=0
     with httpx.Client(timeout=25,follow_redirects=True,headers={'User-Agent':USER_AGENT}) as client:
-        for e in ordered[:max_papers]:
-            paper=papers[e['paper_id']];key=hashlib.sha256(paper['paper_id'].encode()).hexdigest()[:16]
-            receipt=dict(paper_id=paper['paper_id'],accessible=False,checked_at=now(),source_url=None,license=None,source_hash=None,parser_version=None,failures=[],missing_reason='no_accessible_lawful_fulltext')
-            locs=sorted(e['oa_locations'],key=lambda l:('wiley.com' in (l.get('pdf_url') or l.get('landing_page_url') or ''),not bool(l.get('pdf_url'))))
-            for loc in locs[:4]:
-                url=loc.get('pdf_url') or loc.get('landing_page_url')
-                if not url or urlparse(url).scheme!='https':continue
+        for plan in plans:
+            e=plan['entry']
+            paper=papers[e['paper_id']]
+            key=hashlib.sha256(paper['paper_id'].encode()).hexdigest()[:16]
+            receipt=dict(paper_id=paper['paper_id'],accessible=False,checked_at=now(),
+                         source_url=None,license=None,source_hash=None,parser_version=None,
+                         failures=[],missing_reason='no_accessible_lawful_fulltext',
+                         attempt_reason=plan['reason'])
+            for loc in plan['sources']:
+                url=loc['url']
                 # OA metadata is an access lead, not a right to bypass publisher controls.
                 try:
                     if not robots_allowed(client,url,robots):raise ValueError('robots_disallowed_or_unavailable')
@@ -230,7 +227,9 @@ def acquire(max_papers=40,dry_run=False):
             write(DATA/'study_claims.jsonl',lines(sorted(claims.values(),key=lambda p:p['claim_id'])))
             write(DATA/'extraction_runs.jsonl',lines(runs))
             print(json.dumps({'processed':processed,'paper_id':e['paper_id'],'accessible':receipt['accessible'],'total_variables':len(variables)}),flush=True)
-    return {'processed':processed,'accessible':sum(r['accessible'] for r in old.values()),'variables':len(variables),'study_claims':len(claims)}
+    return {'processed':processed,'eligible':len(all_plans),
+            'accessible':sum(r['accessible'] for r in old.values()),
+            'variables':len(variables),'study_claims':len(claims)}
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('command',choices=['metadata','fulltext']);parser.add_argument('--budget',type=int,default=40);parser.add_argument('--dry-run',action='store_true');args=parser.parse_args()
