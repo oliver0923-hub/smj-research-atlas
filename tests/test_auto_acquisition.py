@@ -79,7 +79,7 @@ def test_daily_targets_missing_dois_with_no_cursor(tmp_path,monkeypatch):
     rows=[
       {"paper_id":"doi:10.1002/smj.12","doi":"10.1002/smj.12","title":"First paper","publication_year":2026,"authors":["A. Author"]},
       {"paper_id":"doi:10.1002/smj.13","doi":"10.1002/smj.13","title":"Second paper","publication_year":2025,"authors":["A. Author"]}]
-    enriched=[{"paper_id":rows[1]["paper_id"],"abstract_feature_method":"allowed_phrase_occurrence_v5"}]
+    enriched=[{"paper_id":rows[1]["paper_id"],"abstract_feature_method":"allowed_phrase_occurrence_v6"}]
     def reader(name):
         return {"papers.jsonl":rows,"enrichment.jsonl":enriched}.get(name,[])
     class Response:
