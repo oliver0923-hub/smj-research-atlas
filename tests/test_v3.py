@@ -91,7 +91,10 @@ def test_provider_dry_run_never_requires_key(monkeypatch):
 def test_taxonomy_snapshot_preserved():
     active=json.loads((ROOT/'data/ontology.yaml').read_text(encoding='utf-8'))
     snapshot=json.loads((ROOT/'data/taxonomy_versions/2.0.0.json').read_text(encoding='utf-8'))
-    assert active['version']=='2.1.0' and snapshot['version']=='2.0.0'
+    assert active['version']=='2.2.0' and snapshot['version']=='2.0.0'
+    intermediate=json.loads((ROOT/'data/taxonomy_versions/2.1.0.json').read_text(encoding='utf-8'))
+    assert intermediate['version']=='2.1.0'
+    assert {n['id'] for n in intermediate['nodes']} <= {n['id'] for n in active['nodes']}
     assert active['is_official_smj_taxonomy'] is False and snapshot['is_official_smj_taxonomy'] is False
     historical={n['id']:n for n in snapshot['nodes']}
     current={n['id']:n for n in active['nodes']}
