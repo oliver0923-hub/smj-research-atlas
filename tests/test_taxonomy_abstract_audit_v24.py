@@ -116,3 +116,39 @@ def test_site_shows_unresolved_provenance_diagnostic():
     for tag in ('unresolved_without_abstract','unresolved_pending_feature_backfill',
                 'unresolved_after_current_abstract_scan'):
         assert tag in script
+
+
+def test_bounded_abstract_feature_backfill_pages():
+    from pipeline.release import taxonomy_backfill_pages
+    assert taxonomy_backfill_pages(0)==4
+    assert taxonomy_backfill_pages(99)==4
+    assert taxonomy_backfill_pages(160)==4
+    assert taxonomy_backfill_pages(801)==21
+    assert taxonomy_backfill_pages(3098)==78
+    assert taxonomy_backfill_pages(100000)==80
+
+
+def test_refresh_uses_backfill_budget_when_old_abstracts_exist(tmp_path,monkeypatch):
+    import pipeline.release as release
+    import pipeline.enrich as enrichmod
+    import pipeline.crawl as crawl
+    events=[]
+    monkeypatch.setattr(release,'DATA',tmp_path)
+    monkeypatch.setattr(release,'read',lambda name:
+       [{'paper_id':f'old:{i}','abstract_feature_method':'allowed_phrase_occurrence_v6'}
+        for i in range(3000)] if name=='enrichment.jsonl' else [])
+    monkeypatch.setattr(release,'sync',lambda args:events.append('sync'))
+    monkeypatch.setattr(enrichmod,'harvest',
+       lambda pages,priority_new=False:events.append(('harvest',pages,priority_new))
+            or {'status':'complete'})
+    monkeypatch.setattr(crawl,'tick',
+       lambda command,max_sources,max_requests,seconds,persist:
+           events.append(('crawl',max_sources)) or {'status':'done'})
+    monkeypatch.setattr(release,'publisher_check',lambda:{'status':'unavailable'})
+    monkeypatch.setattr(release,'gate',lambda:{'status':'passed'})
+    monkeypatch.setattr(release,'build',lambda:None)
+    monkeypatch.setattr(release,'snapshot',lambda:{'bytes':1})
+    result=release.refresh('daily')
+    assert ('harvest',75,True) in events
+    assert result['taxonomy_backfill_backlog_at_start']==3000
+    assert result['taxonomy_backfill_budget_pages']==75
