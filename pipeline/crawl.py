@@ -87,10 +87,12 @@ def plan(queue,control,limit=100):
             parser_retry=(source.get('error_class') or '').startswith('parse_or_extraction_failure:') and source.get('last_parser_attempt')!=PARSER_VERSION
             retry=source['state'] in {'transient_failure','permanent_failure_for_url','policy_blocked'} and due(source.get('next_retry_at')) and source.get('next_retry_at') is not None
             if (first or upgrade or parser_retry or retry) and (first or upgrade or parser_retry or due(source.get('next_retry_at'))):
-                # Every paper's first candidate precedes its second, every unvisited candidate precedes retries/upgrades.
+                # Re-parse known accessible OA sources first when the extractor
+                # changes, then perform a fair first-pass discovery. A finite
+                # extractor upgrade is not an excuse to starve new DOI sources.
                 attempt=sum(s.get('cycle_attempted')==cycle for s in paper['sources'])
                 preferred=0 if source['kind'] in {'pdf_url','previous_success'} and not any(h in source['url'] for h in ['wiley.com','ssrn.com','jstor.org']) else 1
-                rows.append((0 if first else 1,attempt+ordinal,paper['first_seen_at'],preferred,paper.get('last_checked_at') or '',paper['paper_id'],source['source_id'],paper,source))
+                rows.append((0 if upgrade else 1 if first else 2,attempt+ordinal,paper['first_seen_at'],preferred,paper.get('last_checked_at') or '',paper['paper_id'],source['source_id'],paper,source))
     rows.sort(key=lambda r:r[:7])
     return [(r[7],r[8]) for r in rows[:limit]]
 
