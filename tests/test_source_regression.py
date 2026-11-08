@@ -28,3 +28,11 @@ def test_relationship_subset_reports_abstentions_as_misses():
         assert counts['tp']==sum(x['expected'] in x['predicted'] for x in rows)
         assert counts['fn']==sum(x['expected'] not in x['predicted'] for x in rows)
         assert counts['abstentions']==sum(not x['predicted'] for x in rows)
+
+
+def test_reviewed_page_scope_is_checked_for_each_reported_value():
+    from pipeline.evaluate import scoped_values
+    blocks={'b1':{'text':'We use OLS.'},'b2':{'text':'We use 2SLS.'}}
+    evidence={'e1':dict(page=3,block_id='b1',start=0,end=11),
+              'e2':dict(page=8,block_id='b2',start=0,end=12)}
+    assert scoped_values('empirical_method',['OLS','2SLS'],['e1','e2'],evidence,blocks,[3])==['OLS']
