@@ -67,3 +67,9 @@ test('policy treatment dates are not sample dates and discussion alternatives ar
  assert.equal(r.fields.empirical_method.value,'difference-in-differences');
  assert.equal(r.fields.empirical_method.evidence[0].label,'difference-in-differences');
 });
+
+test('reported support after the verb is retained and results outrank early summary matches',async()=>{
+ const intro='INTRODUCTION\n'+Array.from({length:14},(_,i)=>`We find an introductory association for group ${i}.`).join('\n');
+ const r=await extract(paper,[{page:1,text:intro},{page:20,text:'5 | EMPIRICAL RESULTS\nThese results broadly support Hypothesis (H2), with the stated qualifications.'}],'https://example.test/a.pdf','pdf');
+ assert.equal(r.findings[0].label,'H2');assert.equal(r.findings[0].support_status,'supported');assert.equal(r.findings[0].significance,'unknown');assert.equal(r.findings[0].page,20);
+});

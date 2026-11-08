@@ -72,8 +72,9 @@ export async function extract(paper:any,pages:Page[],source_url:string,format:'p
    if(!seen.has(label)){seen.add(label);hypotheses.push(await evidence(s,h?'proposed_hypothesis':'proposed_proposition',label));}
   }
   const result=/\b(?:we (?:further |also )?(?:find|found|demonstrate|show|report)|our (?:findings|results) (?:show|suggest|indicate)|results (?:show|suggest|indicate)|we find support)\b/i.test(text)||
-   /\b(?:hypothesis|H)\s*\d+[a-z]?\b.{0,100}\b(?:supported|confirmed|not supported)\b/i.test(text);
-  if(result&&findings.length<12){
+   /\b(?:hypothesis|H)\s*\d+[a-z]?\b.{0,100}\b(?:supported|confirmed|not supported)\b/i.test(text)||
+   /\b(?:these|our|the) (?:results|findings)\b.{0,80}\b(?:support|confirm)/i.test(text);
+  if(result){
    const labels=[...text.matchAll(/\b(?:Hypothesis\s*\(?H?\s*|H)(\d+[a-z]?)\b/gi)].map(m=>'H'+m[1]);
    const item=await evidence(s,'finding',labels.length===1?labels[0]:'作者發現句');
    item.support_status=labels.length!==1?'unknown':/not support|no support|not confirmed|fail\w* to support/i.test(text)?'not_supported':/partial\w* support/i.test(text)?'partially_supported':/support|confirm/i.test(text)?'supported':'unknown';
@@ -103,6 +104,7 @@ export async function extract(paper:any,pages:Page[],source_url:string,format:'p
    reason:conflict?'不同原文期間／樣本規格尚未可靠對應':unique.length?'原文明示詞組，未校準語義正確率':'not_found_after_scan',
    page:proofs[0]?.page||null,excerpt:proofs[0]?.excerpt||null,evidence:proofs};
  }
- return {status:'parsed',source_url,open_access:true,pages:pages.length,format,attempts:[],fields,hypotheses,findings,robustness,theories,constructs,
+ return {status:'parsed',source_url,open_access:true,pages:pages.length,format,attempts:[],fields,hypotheses,
+  findings:findings.sort((a,b)=>Number(!/results|findings/i.test(a.section||''))-Number(!/results|findings/i.test(b.section||''))).slice(0,12),robustness,theories,constructs,
   report:'已解析實際下載的原文；搜尋包含可讀的表格文字與附錄。影像公式、複雜表格結構及語義關係未全面辨識，無證據者維持未知。'};
 }
