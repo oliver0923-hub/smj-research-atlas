@@ -278,6 +278,7 @@ def tick(command='continue_oa',max_sources=180,max_requests=450,seconds=600,pers
 
 def persist_snapshot():
     """Commit verified progress before website tests/deployment; never force-push."""
+    if os.getenv('PYTEST_CURRENT_TEST'):raise RuntimeError('Publication forbidden during tests')
     import subprocess
     from .release import snapshot
     from .cli import ROOT

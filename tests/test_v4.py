@@ -310,3 +310,9 @@ def test_independent_evaluation_counts_unknowns_as_misses_and_period_as_pair():
         fn=sum(len(set(d['expected'])-set(d['predicted'])) for d in rows)
         assert {k:counts[k] for k in ['tp','fp','fn']}=={'tp':tp,'fp':fp,'fn':fn}
     assert result['other_fields_accuracy'] is None
+
+
+def test_test_process_cannot_publish_to_live_data_branch(monkeypatch):
+    from pipeline.crawl import persist_snapshot
+    monkeypatch.setenv('GITHUB_ACTIONS','true')
+    with pytest.raises(RuntimeError,match='Publication forbidden during tests'):persist_snapshot()
