@@ -17,9 +17,9 @@ def paper(title='A longitudinal archival analysis of several organizations'):
 
 def test_versioned_ontology_and_no_official_reinterpretation():
     nodes=validate_taxonomy(TAX)
-    assert TAX['version']=='2.3.0'
-    assert len([n for n in nodes.values() if n.level=='construct'])==77
-    assert len([n for n in nodes.values() if n.level=='theory'])==45
+    assert TAX['version']=='2.4.0'
+    assert len([n for n in nodes.values() if n.level=='construct'])==116
+    assert len([n for n in nodes.values() if n.level=='theory'])==50
     assert FEATURE_VERSION=='smj-context-features-v1'
     assert (ROOT/'data/taxonomy_versions/2.2.0.json').exists()
     assert len([n for n in nodes.values() if n.level=='domain'
