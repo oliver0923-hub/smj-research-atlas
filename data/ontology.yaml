@@ -1344,5 +1344,8 @@
     "approach": "deductive organizational anchors + inductive lexical proposals + human adjudication",
     "inspiration_source_id": "NAG-2007",
     "claim": "Atlas 自訂方法，未宣稱重現 Nag et al. 的原研究或取得 SMS/AOM/SMJ 認可。"
-  }
+  },
+  "legacy_versions": [
+    "2.0.0"
+  ]
 }
