@@ -55,7 +55,7 @@ class PaperRequest(BaseModel):
 def valid_doi(raw):
     raw=str(raw or "").strip().lower()
     if not DOI_PATTERN.fullmatch(raw):
-        raise HTTPException(status_code=422,detail="invalid_or_non_s mj_doi".replace(" ",""))
+        raise HTTPException(status_code=422,detail="invalid_or_non_smj_doi")
     return raw
 
 
