@@ -34,11 +34,15 @@ Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state
 - 加 `--dry-run` 只顯示預算、不付費、不發布。
 - GitHub Actions → Autonomous data release → Run workflow 選 daily/weekly/monthly。正常排程每日臺北10:23、每週日11:47、每月一日12:17。通過測試、schema、audit、build 才寫資料分支並發布，不需要 PR 核准。
 
-## 四維研究分類（Taxonomy v2.1）
+## 四維研究分類（Taxonomy v2.2）
 
 所有已索引論文都有 Domain、Research Topic、Construct、Theory 的網站標記與逐維度分類品質。來源優先使用 OpenAlex 摘要詞組特徵，並使用 Crossref 標題補充；未能辨識時顯示「其他／未判定」，**不當成有效學術分類或缺乏相關研究的證據**。新 Abstract Construct 特徵會透過既有每日 OpenAlex 刷新分批補齊。Domain 的 12 個實質名稱參照 SMS，Other 是 Atlas 自訂缺失狀態；Theory 不由 Topic 猜測。
 
 詳見 [分類編碼與資料品質 v2.1](docs/CLASSIFICATION_CODING_2_1.md)。
+### Wiley 已確認 OA 的原版 PDF
+
+`pipeline/wiley.py` 會針對經 OpenAlex 明確標記出版社 Open Access 的 `10.1002/smj.*` 論文，額外加入 `https://sms.onlinelibrary.wiley.com/doi/pdfdirect/<DOI>` 作為有界抓取候選。仍必須通過 robots、403、來源身份與 PDF 解析，不會以 DOI 本身認定所有原版 PDF 可公開下載。以 `10.1002/smj.3735` 為實際 OA 煙霧測試範例：`python -m pipeline.wiley_probe`，只印出下載／解析與變數／假設記錄數，不儲存或公開 PDF。詳見 [擴充與來源方法](docs/TAXONOMY_ABSTRACT_WILEY_V2_2.md)。
+
 
 ## 來源與資料
 Crossref + OpenAlex，完整摘要、PDF 與全文只在忽略的 .cache 暫存；不公開全文。data/variables.jsonl 保留可查核測量資料；data/study_claims.jsonl 保存有原文定位的 Hypothesis、Proposition、Finding、Robustness、Sensitivity 紀錄，公開來源與缺失原因可匯出CSV。來源推論與 evidence_grade、validation_status 分開；不冒填 human_reviewed 或校準正確率。
