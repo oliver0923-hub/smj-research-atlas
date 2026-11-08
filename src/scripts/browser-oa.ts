@@ -5,7 +5,7 @@ const MAX_BYTES=22_000_000, MAX_PAGES=65, MAX_CANDIDATES=8;
 type Page={page:number;text:string};
 type Evidence={label:string;excerpt:string;page:number;kind:string};
 export type OAExtract={
- status:string;source_url:string|null;open_access:boolean;pages:number;
+ status:string;source_url:string|null;open_access:boolean;pages:number;format:'pdf'|'html'|null;
  attempts:Array<{url:string;status:string}>;
  fields:Record<string,{value:string|null;page:number|null;excerpt:string|null;status:string}>;
  hypotheses:Evidence[];findings:Evidence[];robustness:Evidence[];
@@ -100,7 +100,7 @@ function validate(paper:any,pages:Page[]){
  if(!((doi&&fraction>=.4)||(fraction>=.7&&author)))throw Error('article_identity_mismatch');
  if(pages.reduce((sum,p)=>sum+p.text.length,0)<2200)throw Error('not_full_article');
 }
-function extract(paper:any,pages:Page[],source_url:string):OAExtract{
+function extract(paper:any,pages:Page[],source_url:string,format:'pdf'|'html'):OAExtract{
  const sentences:Array<{page:number;text:string;section:string}>=[];
  let section='unknown';
  for(const page of pages){
@@ -150,7 +150,7 @@ function extract(paper:any,pages:Page[],source_url:string):OAExtract{
    if(/\b(?:robust(?:ness)? (?:checks?|tests?|results?)|sensitivity (?:analysis|analyses|test)|results? remain(?:ed)? robust|alternative specifications)\b/i.test(p.text))
      add(robustness,p,'robustness','穩健性文字',8);
  }
- return {status:'parsed',source_url,open_access:true,pages:pages.length,attempts:[],
+ return {status:'parsed',source_url,open_access:true,pages:pages.length,format,attempts:[],
    fields:{
      sample_period:field(periodValid?period:undefined,periodValid?years![1]+'–'+years![2]:null),
      data_source:field(data,dbNames.length?dbNames.join(', '):null),
@@ -170,11 +170,11 @@ async function fetchSource(paper:any,candidate:{url:string;kind:'pdf'|'html'}):P
     htmlPages(new TextDecoder().decode(bytes)):[];
  if(!pages.length)throw Error('not_pdf_or_article_html');
  validate(paper,pages);
- return extract(paper,pages,r.url);
+ return extract(paper,pages,r.url,pdf?'pdf':'html');
 }
 export async function analyzeBrowserOA(paper:any,onStatus:(s:string)=>void):Promise<OAExtract>{
  const fail=(status:string,attempts:OAExtract['attempts'],oa:boolean,report:string):OAExtract=>({
-   status,source_url:null,open_access:oa,pages:0,attempts,report,
+   status,source_url:null,open_access:oa,pages:0,format:null,attempts,report,
    fields:Object.fromEntries(['sample_period','data_source','empirical_method'].map(k=>
      [k,{value:null,excerpt:null,page:null,status:'unknown'}])),
    hypotheses:[],findings:[],robustness:[]});
