@@ -119,3 +119,32 @@ def test_daily_release_dry_run_includes_fulltext():
     assert d["fulltext_papers"]==4
     assert d["enrichment_requests"]==4
     assert d["paid_api_calls"]==0
+
+
+def test_failed_upgrade_is_throttled_without_dropping_old_receipt():
+    now=datetime(2026,11,8,tzinfo=timezone.utc)
+    receipt={"accessible":True,"extraction_algorithm_version":"old",
+             "study_algorithm_version":"old",
+             "last_upgrade_attempt_at":(now-timedelta(days=1)).isoformat()}
+    e=entry("p:old")
+    assert retry_reason(e,receipt,"measure-new","study-new",current=now) is None
+    assert retry_reason(e,receipt,"measure-new","study-new",current=now+timedelta(days=15))=="parser_upgrade"
+
+
+def test_real_daily_refresh_calls_metadata_and_acquisition(tmp_path,monkeypatch):
+    import pipeline.release as release
+    import pipeline.enrich as enrichmod
+    events=[]
+    monkeypatch.setattr(release,"DATA",tmp_path)
+    monkeypatch.setattr(release,"sync",lambda args:events.append("crossref"))
+    monkeypatch.setattr(enrichmod,"harvest",
+                        lambda pages,priority_new=False:events.append(("openalex",pages,priority_new)) or {"status":"complete"})
+    monkeypatch.setattr(enrichmod,"acquire",
+                        lambda limit,max_runtime_seconds=None:events.append(("fulltext",limit,max_runtime_seconds)) or {"processed":limit})
+    monkeypatch.setattr(release,"publisher_check",lambda:{"status":"unavailable"})
+    monkeypatch.setattr(release,"gate",lambda:{"status":"passed"})
+    monkeypatch.setattr(release,"build",lambda:None)
+    monkeypatch.setattr(release,"snapshot",lambda:{"bytes":1})
+    result=release.refresh("daily")
+    assert result["status"]=="validated_automatic"
+    assert events==["crossref",("openalex",4,True),("fulltext",4,150)]
