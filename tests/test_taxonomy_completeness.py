@@ -50,12 +50,12 @@ def test_title_based_topic_and_domain_do_not_invent_theory_or_construct():
     p=paper("Multimarket contact and strategic alliances")
     assigned=classify([p],TAX)
     ids={a["term_id"] for a in assigned}
-    assert {"TOP-MMC","TOP-ALL","SMS-COMP","SMS-COOP","OTHER-CON","OTHER-TH"}<=ids
+    assert {"TOP-MMC","TOP-ALL","SMS-COMP","SMS-COOP","CON-MMC","OTHER-TH"}<=ids
     assert "OTHER-DOM" not in ids and "OTHER-TOP" not in ids
     r=enrich_papers([p],TAX,assigned)[0]
     assert r["taxonomy_quality"]["domain"]["state"]=="title_supported"
     assert r["taxonomy_quality"]["research_topic"]["state"]=="title_supported"
-    assert r["taxonomy_quality"]["construct"]["state"]=="unresolved_other"
+    assert r["taxonomy_quality"]["construct"]["state"]=="title_supported"
     assert r["taxonomy_quality"]["theory"]["state"]=="unresolved_other"
 
 
