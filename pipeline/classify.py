@@ -26,6 +26,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
     """
     enrichment={r['paper_id']:r for r in enrichment}
     manual={(a['paper_id'],a['term_id']) for a in decisions}
+    rejected={(a['paper_id'],a['term_id']) for a in decisions if a['review_status']=='rejected'}
     nodes={n['id']:n for n in taxonomy['nodes']}
     output=list(decisions)
     levels=("domain","research_topic","construct","theory")
@@ -35,7 +36,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
         extra=enrichment.get(pid,{})
         hits={}
         for node in nodes.values():
-            if node['level'] not in {'research_topic','construct','theory'} or node['id'] in OTHER_BY_LEVEL.values():
+            if node['level'] not in {'research_topic','construct','theory'} or node['id'] in OTHER_BY_LEVEL.values() or (pid,node['id']) in rejected:
                 continue
             phrases=[text_key(x) for x in node.get('match_phrases',[]) if text_key(x)]
             title_match=any(" "+x+" " in title for x in phrases)
@@ -55,7 +56,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
         while pending:
             ident=pending.pop()
             for parent in nodes[ident]['parent_ids']:
-                if parent not in nodes:continue
+                if parent not in nodes or (pid,parent) in rejected:continue
                 if parent not in hits or hits[parent][0]<hits[ident][0]:
                     score,status,grade,method=hits[ident]
                     hits[parent]=(score,status,grade,method+"+atlas_hierarchy")
