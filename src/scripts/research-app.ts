@@ -1,4 +1,5 @@
 import Fuse from 'fuse.js';
+import {renderInPageAnalysis} from './in-page-analysis';
 const app=document.getElementById('research-app')!;
 const base=import.meta.env.BASE_URL;
 const params=new URLSearchParams(location.search);
@@ -45,7 +46,7 @@ controls.addEventListener('input',()=>render(true));prev.onclick=()=>{page--;ren
  * stored in the repository or static published JSON. Availability differs
  * from evidence of academic topic and does not imply a reusable license.
  */
-async function showAbstract(parent:Element,extra:any,doi:string){
+async function showAbstract(parent:Element,extra:any,doi:string):Promise<string|null>{
   const area=add(parent,'div',undefined,'record');
   const h=add(area,'h3','Abstract / 論文摘要');
   const status=add(area,'p','從 OpenAlex 讀取可用的摘要…','muted');
@@ -56,7 +57,7 @@ async function showAbstract(parent:Element,extra:any,doi:string){
   a.target='_blank';a.rel='noopener noreferrer';
   if(!id || !extra?.abstract_available){
     status.textContent='目前沒有可供重建的 OpenAlex 摘要；可由 DOI 開啟出版社摘要。';
-    return;
+    return null;
   }
   try{
     const url='https://api.openalex.org/works/'+id[1]+'?select=id,abstract_inverted_index';
@@ -77,21 +78,37 @@ async function showAbstract(parent:Element,extra:any,doi:string){
     if(!positions.length||positions.length>5000)throw new Error('abstract_invalid');
     status.textContent=positions.map(p=>p[1]).join(' ');
     publisher.textContent='直接由 OpenAlex 公開 API 顯示（非 Atlas 儲存／重刊）；原文權利仍屬其權利人。';
+    return status.textContent;
   }catch{
     status.textContent='目前無法從 OpenAlex 載入摘要；可由 DOI 開啟出版社摘要。';
+    return null;
   }
 }
 
 async function profile(){const id=params.get('id');if(!id)throw Error('缺少 paper_id');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(id));const hash=Array.from(new Uint8Array(bytes)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16);const [p,tax]=await Promise.all([get('papers/'+hash),get('taxonomy')]);title(p.title,p.authors.join(', '));add(app,'p',`${p.publication_year} · SMJ ${p.volume??'未知卷'} (${p.issue??'未知期'}) · ${p.pages??'未知頁碼'}`);link(app,'DOI / 出版社',p.doi_url);const receipt=p.content_access;const enriched=p.enrichment;add(app,'p',`正文：${receipt.accessible?'已解析（'+receipt.version+'）':'未知／不可取得'} · 摘要：${enriched?.abstract_available?'已取得供分類使用；不重刊全文':'未知'}`,'status-line');if(receipt.source_url)link(app,'合法正文來源',receipt.source_url);
+let abstractPromise:Promise<string|null>|undefined;
 const onDemand=add(app,'section',undefined,'record');
-add(onDemand,'h3','指定這篇論文：按需分析（限 Atlas 專案擁有人）');
-add(onDemand,'p','不必等待全庫爬蟲：送出 GitHub Issue 後會只針對這篇 DOI 嘗試合法 OA 正文，回覆假設／命題、實證結果與穩健性，及 sample_period、data_source、empirical_method。Review 文章會標明暫定不適用，不會把取不到正文解讀成研究沒有假設。','muted');
+add(onDemand,'h3','分析這篇論文');
+add(onDemand,'p','按一下即可在本頁整理已取得的摘要／正文證據、假設、實證發現、穩健性，以及 sample_period、data_source、empirical_method；未知會清楚顯示。無須 GitHub 登入。','muted');
 const query='Atlas analyze: '+p.doi;
 const body=['DOI: '+p.doi,'Title: '+p.title].join(String.fromCharCode(10));
 const issueURL='https://github.com/oliver0923-hub/smj-research-atlas/issues/new?title='+encodeURIComponent(query)+'&body='+encodeURIComponent(body);
-link(onDemand,'啟動這篇論文的單篇深入擷取（開啟預填 GitHub Issue，送出後執行）',issueURL);
+const analyzeButton=add(onDemand,'button','分析這篇論文（直接在本頁顯示）') as HTMLButtonElement;
+analyzeButton.type='button';
+analyzeButton.setAttribute('aria-controls','on-demand-paper-results');
+const onDemandResults=add(onDemand,'section') as HTMLElement;
+onDemandResults.id='on-demand-paper-results';
+analyzeButton.addEventListener('click',()=>{
+ analyzeButton.disabled=true;
+ analyzeButton.textContent='正在整理來源證據…';
+ void renderInPageAnalysis(onDemandResults,p,abstractPromise,issueURL)
+   .finally(()=>{analyzeButton.disabled=false;analyzeButton.textContent='重新分析這篇論文';});
+});
+add(onDemand,'p','此按鈕會立即分析 Atlas 已有的資料並檢查 GitHub 先前分析結果；若要觸發新的全文下載，須由專案擁有者在 GitHub 授權提交，靜態網站不會要求或保存任何個人 GitHub Token。','tiny');
+const deepLink=add(onDemand,'p');
+link(deepLink,'需要重新擷取全文？前往 GitHub 預填分析任務（須提交）',issueURL);
 box('本頁自動驗證的是來源、文字對齊與資料一致性，不是人工專家審閱；沒有從標題推定公式、係數或因果效果。');add(app,'h2','研究分類總覽');
-void showAbstract(app,enriched,p.doi);
+abstractPromise=showAbstract(app,enriched,p.doi);
 const publishedOa=(enriched?.oa_locations||[]).find((x:any)=>String(x.pdf_url||'').startsWith('https://sms.onlinelibrary.wiley.com/doi/pdfdirect/')&&x.is_oa&&x.is_published);
 if(publishedOa){const publisher=add(app,'p');link(publisher,'Wiley 已標記 OA 的原版 PDF（實際下載權限以出版社為準）',publishedOa.pdf_url)}
 const classMap=new Map(tax.nodes.map((n:any)=>[n.id,n]));

@@ -1,5 +1,18 @@
 # 指定一篇 SMJ 論文的深入解析（On-Demand One-Paper）
 
+## 網站直接按「分析這篇論文」（新增頁內分析）
+
+在論文頁（例如 `/paper/?id=doi%3A10.1002%2Fsmj.3724`）按 **「分析這篇論文（直接在本頁顯示）」**。此動作不跳轉 Github、不要求登入，會直接：
+
+- 重用頁面已向 OpenAlex API 取得的摘要，以及 Atlas 靜態資料庫既有的來源對齊 `research_v4` 或 `study_claims`。
+- 顯示 `sample_period`、`data_source`、`empirical_method`：有 E2 正文來源則列出明確值；若只有摘要指出 NBA/Compustat 等資料，列為 **E1 摘要線索，不當成完整實證資料表**；無證據則保持「未知」。Review 類型以「暫定不適用原創實證欄位」為原則。
+- 將摘要中 **作者明確報告的發現句** 以 E1 英文原文短句呈現，絕不臆測 H1 編號、迴歸係數、顯著水準或 Robustness。若資料庫已擁有合法全文，則優先列出對齊的 Hypotheses / Findings / Checks 與頁碼證據。
+- 使用 GitHub 官方 public API（僅 GET）尋找此 DOI 過往已由 owner 送出的 `Atlas analyze:` Issue，直接在頁面呈現上一個全文任務的成功／失敗狀態與報告連結。不需 GitHub token、帳號授權或額外伺服器。
+
+**重要限制：** GitHub Pages 是靜態頁面；新的一次 PDF/HTML 全文抓取是 GitHub Actions 的工作，不能安全地在沒有身分驗證、後端密鑰與濫用控管的情況下由任意訪客的按鈕直接啟動。故「頁內分析」按一下就有**已有證據支持的結果**，但「新發起合法全文深度分析」仍須由 Repo Owner 透過**另一個清楚標示需提交**的 GitHub Issue 預填連結授權發出。它不是頁內按鈕已經啟動了 GitHub 爬蟲。
+
+針對 `10.1002/smj.3724`，完整的前一次自動分析可查 [GitHub Issue #23](https://github.com/oliver0923-hub/smj-research-atlas/issues/23)：該執行流程成功，但在當時的 OpenAlex OA 來源索引中未找到可自動取得的全文（`no_provider_oa_source`），因此全文假設、模型與 Robustness 無法證實。出版社摘要另可用以做 E1 層級初步分析。不要把「系統沒找到 OA 候選」誤寫成「學術界沒有合法作者版本」或「該文沒有穩健性」。
+
 ## 使用者工作流程
 
 你不必等 3,949 篇 SMJ 書目全部完成 OA 正文解析。現在可以只給一篇 DOI 或接近完全相符的標題，直接要求有限、有來源紀錄的單篇分析。

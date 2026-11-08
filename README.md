@@ -46,7 +46,7 @@ Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state
 
 ## 單篇論文按需深入分析（On-demand）
 
-不必等待全庫合法 OA 正文採集：Atlas 每篇論文的詳細頁新增「啟動這篇論文的單篇深入擷取」，會預填 `Atlas analyze: <DOI>` 的 GitHub Issue。限專案擁有者送出後，`Analyze one SMJ paper on demand` Actions 工作流程就會只針對該 DOI 限量嘗試合法 OA 來源，優先重用既有的來源可驗證全文擷取結果，並把 `sample_period`、`data_source`、`empirical_method`、假設／命題、實證結果、穩健性和來源頁碼回覆至 Issue、附上 JSON artifact。Review 類論文的原創實證樣本欄位可標為**暫定不適用**，而不是與缺來源的「未知」混用。從 ChatGPT 直接指定論文時，也可經已連接的 GitHub 建立 Issue 來觸發。詳見 [單篇按需分析手冊](docs/ON_DEMAND_ONE_PAPER.md)。
+不必等待全庫合法 OA 正文採集：Atlas 每篇論文詳細頁現在提供「**分析這篇論文（直接在本頁顯示）**」按鈕，按一下立即整合既有 Atlas E2 全文證據、E1 OpenAlex 摘要明示的研究發現，呈現樣本期間、資料來源、實證方法、假設與穩健性缺漏，並以 GitHub 公開讀取 API 查詢先前單篇分析 Issue 的執行結果；不用登入、沒有 Github token，也不假裝已下載全文。若要全新啟動 GitHub Actions 的合法 OA 全文擷取，仍須由 repo owner 透過另一個明確標示「**需要提交 GitHub 任務**」的連結開啟 `Atlas analyze: <DOI>` 的 GitHub Issue。限專案擁有者送出後，`Analyze one SMJ paper on demand` Actions 工作流程就會只針對該 DOI 限量嘗試合法 OA 來源，優先重用既有的來源可驗證全文擷取結果，並把 `sample_period`、`data_source`、`empirical_method`、假設／命題、實證結果、穩健性和來源頁碼回覆至 Issue、附上 JSON artifact。Review 類論文的原創實證樣本欄位可標為**暫定不適用**，而不是與缺來源的「未知」混用。從 ChatGPT 直接指定論文時，也可經已連接的 GitHub 建立 Issue 來觸發。詳見 [單篇按需分析手冊](docs/ON_DEMAND_ONE_PAPER.md)。
 
 ## 合法全文的理論證據（v4.1）
 
