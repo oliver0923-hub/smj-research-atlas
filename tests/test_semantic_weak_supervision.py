@@ -27,7 +27,7 @@ def test_versioned_ontology_and_no_official_reinterpretation():
 
 
 def test_context_weak_supervision_recognizes_focused_multiword_cues():
-    abstract=('We examine patent applications, organizational slack, and '
+    abstract=('We examine patent applications, financial slack, and '
               'performance shortfalls using a resource based perspective.')
     hits=hits_for_text(abstract,TAX)
     ids={h['term_id'] for h in hits}
