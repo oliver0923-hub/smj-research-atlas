@@ -209,15 +209,15 @@ def markdown(result):
     title=result["title"]
     lines=["## 單篇 SMJ 研究資料擷取結果",f"**{safe(title)}**",
            f"DOI: [{result['doi']}](https://doi.org/{result['doi']})",
-           f"**執行狀態：** \`{result['acquisition_status']}\`",
-           f"**論文類型：** \`{result['paper_type']['type']}\`（標題支持、暫定）","",
+           f"**執行狀態：** `{result['acquisition_status']}`",
+           f"**論文類型：** `{result['paper_type']['type']}`（標題支持、暫定）","",
            "### 研究欄位","| 欄位 | 值／狀態 |","|---|---|"]
     for key,val in result["fields"].items():
         content=safe(val["value"]) if val["value"] is not None else {
             "review_type_not_applicable_provisional":"暫定不適用（原創實證樣本／估計）；仍須檢查回顧方法",
             "unknown":"未知／無來源證據",
         }.get(val["status"],val["status"])
-        lines.append(f"| \`{key}\` | {content} |")
+        lines.append(f"| `{key}` | {content} |")
     lines += ["","### 假設／命題、實證結果與穩健性"]
     for key,title in (("hypotheses","假設／命題"),("findings","本篇檢驗結果"),
                       ("robustness","穩健性／敏感度")):
@@ -232,8 +232,12 @@ def markdown(result):
         lines+=["","**正文尚未合法取得：** 以上沒有擷取紀錄不代表原文不存在這些內容。"]
     else:
         lines+=["",f"已使用的來源：{result['source_url']}"]
-    lines+=["",f"合法 OA 候選：{result['candidates_considered']}；本次嘗試：{len(result['attempts'])}。",
-           "擷取記錄與頁碼會保留於本次 GitHub Actions 的 JSON artifact；沒有公開儲存 PDF。",
+    lines+=["",f"合法 OA 候選：{result['candidates_considered']}；本次嘗試：{len(result['attempts'])}。"]
+    if result["attempts"]:
+        lines+=["","### 本次來源存取嘗試（便於檢查 403／robots／解析限制）"]
+        for attempt in result["attempts"][:MAX_SOURCES]:
+            lines.append(f"- `{safe(attempt['status'])}`：{safe(attempt['url'])}")
+    lines+=["","擷取記錄與頁碼會保留於本次 GitHub Actions 的 JSON artifact；沒有公開儲存 PDF。",
            "來源文字對齊不等於學術語義正確率或人工驗證。"]
     return "\n".join(lines)+"\n"
 
