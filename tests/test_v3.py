@@ -22,7 +22,8 @@ def test_automatic_publication_does_not_need_approval(tax,paper):
     enriched=enrich_papers([paper],tax,assignments)[0]
     assert {'SMS-COMP','SMS-COOP'}<=set(enriched['domain_codes'])
     assert all(a['review_status']=='suggested' and a['reviewer'] is None for a in assignments)
-    assert all(a['validation_status'] in {'validated_automatic','provisional'} for a in assignments)
+    assert all(a['validation_status'] in {'validated_automatic','provisional','insufficient_evidence'} for a in assignments)
+    assert all(not a.get('is_fallback_other') for a in assignments if a['validation_status']=='validated_automatic')
 
 def test_abstract_evidence_and_human_precedence(tax,paper):
     a=classify([paper],tax,[{'paper_id':paper['paper_id'],'abstract_phrase_hits':['TOP-MMC'],'abstract_hash':'abc','source_url':'https://local.test/openalex','retrieved_at':'date'}])
@@ -31,9 +32,14 @@ def test_abstract_evidence_and_human_precedence(tax,paper):
     out=classify([paper],tax,decisions=[decision]);assert sum(x['term_id']=='TOP-MMC' for x in out)==1
     assert 'TOP-MMC' not in enrich_papers([paper],tax,out)[0]['taxonomy_tags']['active']['research_topic']
 
-def test_unknown_labels_remain_unclassified(tax,paper):
+def test_unknown_labels_remain_explicitly_unresolved(tax,paper):
     paper['title']='Xylophone zephyr quasar'
-    assert classify([paper],tax)==[]
+    assignments=classify([paper],tax)
+    assert {a['term_id'] for a in assignments}=={'OTHER-DOM','OTHER-TOP','OTHER-CON','OTHER-TH'}
+    assert all(a['validation_status']=='insufficient_evidence' for a in assignments)
+    result=enrich_papers([paper],tax,assignments)[0]
+    assert all(result['taxonomy_quality'][level]['is_unresolved']
+               for level in ('domain','research_topic','construct','theory'))
 
 @pytest.fixture
 def source(paper):
@@ -85,7 +91,15 @@ def test_provider_dry_run_never_requires_key(monkeypatch):
 def test_taxonomy_snapshot_preserved():
     active=json.loads((ROOT/'data/ontology.yaml').read_text(encoding='utf-8'))
     snapshot=json.loads((ROOT/'data/taxonomy_versions/2.0.0.json').read_text(encoding='utf-8'))
-    assert active==snapshot and active['is_official_smj_taxonomy'] is False
+    assert active['version']=='2.1.0' and snapshot['version']=='2.0.0'
+    assert active['is_official_smj_taxonomy'] is False and snapshot['is_official_smj_taxonomy'] is False
+    historical={n['id']:n for n in snapshot['nodes']}
+    current={n['id']:n for n in active['nodes']}
+    assert set(historical)<=set(current)
+    assert {n['id'] for n in active['nodes'] if n['id'].startswith('OTHER-')}=={
+        'OTHER-DOM','OTHER-TOP','OTHER-CON','OTHER-TH'}
+    assert all(current[k]['official_label_en']==v['official_label_en']
+        for k,v in historical.items() if v.get('origin')=='official_academic_organization')
 
 def test_release_dry_run_has_no_mutations(monkeypatch):
     from pipeline.release import refresh
