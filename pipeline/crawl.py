@@ -187,6 +187,7 @@ def tick(command='continue_oa',max_sources=180,max_requests=450,seconds=600,pers
     from .cli import DATA,ROOT,read,write,lines
     queue,control=seed(read('papers.jsonl'),read('enrichment.jsonl'),read('content_receipts.jsonl'),read('crawl_queue.jsonl'),next(iter(read('crawl_control.jsonl')),None))
     records={r['record_id']:r for r in read('research_records.jsonl')}
+    taxonomy=json.loads((DATA/'ontology.yaml').read_text(encoding='utf-8'))
     events=read('crawl_events.jsonl');quarantine=read('research_quarantine.jsonl')
     if command=='pause_oa':control['state']='paused'
     elif command in {'exhaust_oa','resume_oa'}:control['state']='running'
@@ -243,7 +244,7 @@ def tick(command='continue_oa',max_sources=180,max_requests=450,seconds=600,pers
                         rawpath.parent.mkdir(parents=True,exist_ok=True);rawpath.write_bytes(response.content)
                     source['last_parser_attempt']=PARSER_VERSION
                     doc=parse_article(papers[paper['paper_id']],response.content,response.headers.get('content-type',''),receipt)
-                    source['state']='parsed';record=extraction(doc);validate_record(record)
+                    source['state']='parsed';record=extraction(doc,taxonomy=taxonomy);validate_record(record)
                     record.update(record_id=paper['paper_id']+'@'+doc.source_hash[:16],extracted_at=stamp,run_id=control['last_run_id'])
                     records[record['record_id']]=record
                     cache=ROOT/'.cache/articles'/ (digest(paper['paper_id'])[:16]+'-'+doc.source_hash[:12]+'.json')
