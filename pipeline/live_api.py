@@ -163,8 +163,7 @@ def analyze_oa(doi,paper_loader=_paper_for_doi,openalex_loader=_live_openalex,
                         continue
                     receipt=dict(source_url=str(response.url),source_hash=digest(response.content))
                     doc=parse_article(paper,response.content,ct,receipt)
-                    parsed=extraction(doc, __import__(
-                        "pipeline.live_api",fromlist=["_ontology"])._ontology())
+                    parsed=extraction(doc, _ontology())
                     validate_record(parsed)
                     record=parsed
                     attempts.append(dict(source_url=url,status="parsed",
