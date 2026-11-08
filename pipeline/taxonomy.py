@@ -234,11 +234,14 @@ def enrich_papers(papers, taxonomy, assignments):
                          and (a['review_status']=='approved' or a.get('validation_status') in {'validated_automatic','provisional'})]
             candidates=[a for a in active if a.get('is_semantic_candidate')]
             approved=[a for a in substantive if a['review_status']=='approved']
+            fulltext=[a for a in substantive if a.get('evidence_grade')=='E2_fulltext_section' and a.get('author_declared_use')]
             abstract=[a for a in substantive if a.get('evidence_grade')=='E1_abstract']
             exact=[a for a in substantive if a.get('validation_status')=='validated_automatic']
-            best=approved or abstract or exact or substantive
+            best=approved or fulltext or abstract or exact or substantive
             quality[level]=dict(
-                state=('human_approved' if approved else 'abstract_supported' if abstract else
+                state=('human_approved' if approved else
+                       'fulltext_author_declared' if fulltext else
+                       'abstract_supported' if abstract else
                        'title_supported' if exact else
                        'provisional' if substantive else 'unresolved_other'),
                 substantive_terms=sorted({a['term_id'] for a in substantive}),
@@ -248,7 +251,7 @@ def enrich_papers(papers, taxonomy, assignments):
                 weak_candidate_count=len({a['term_id'] for a in candidates}),
                 has_weak_candidates=bool(candidates),
                 potential_terms=sorted({a['term_id'] for a in substantive+candidates}),
-                best_evidence_grade='E1_abstract' if abstract else 'E0_metadata' if substantive else None,
+                best_evidence_grade='E2_fulltext_section' if fulltext else 'E1_abstract' if abstract else 'E0_metadata' if substantive else None,
                 matching_rules=[a.get('method') for a in best],
                 score=max((a.get('heuristic_score') or 0 for a in substantive),default=None),
                 disclaimer='Explicit and provisional source matches are not peer-reviewed. Weak contextual candidates are not evidence of an adopted theory or measured construct.'

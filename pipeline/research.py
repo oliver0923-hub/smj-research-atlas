@@ -9,7 +9,7 @@ from collections import Counter, defaultdict
 from .article import ArticleDocument, digest, norm
 from .study import finding_status, robustness_status, LABEL, INTRO, tag, sentences
 
-EXTRACTOR_VERSION='research-fields-4.0'
+EXTRACTOR_VERSION='research-fields-4.1-theory-source'
 MISSING={'not_reported','not_found_after_search','not_applicable','inaccessible_fulltext',
          'not_parsed','ambiguous','not_yet_processed','evidence_conflict'}
 VARIABLE_FIELDS=['construct','proxy','role','operational_definition','formula','inferred_ratio',
@@ -103,7 +103,7 @@ def usable(block):
     return not re.search(r'^(references|bibliography)',block['section'],re.I)
 
 
-def extraction(doc):
+def extraction(doc,taxonomy=None):
     registry=EvidenceRegistry(doc)
     fields={k:unknown() for k in PAPER_FIELDS};variables=[];seen=set()
     blocks=[b for b in doc.blocks if usable(b)]
@@ -272,11 +272,14 @@ def extraction(doc):
         if rows:fields[k]=dict(value=len(rows),status='source_grounded',reason=None,evidence_ids=list(dict.fromkeys(e for r in rows for e in r['evidence_ids'])),scope='paper_extracted_records')
     sigrows=[r for r in findings if r['significance']!='unknown']
     if sigrows:fields['significance']=dict(value=len(sigrows),status='source_grounded',reason=None,evidence_ids=[e for r in sigrows for e in r['evidence_ids']],scope='explicit_finding_sentences_only')
+    from .theory_evidence import extract_theories
+    theory_evidence,theory_search_coverage=extract_theories(doc,taxonomy or {'nodes':[]},registry,hypotheses)
     registry.validate()
     record=dict(schema_version='4.0.0',paper_id=doc.paper_id,source_url=doc.source_url,source_hash=doc.source_hash,
         parser_version=doc.parser_version,extractor_version=EXTRACTOR_VERSION,identity=doc.identity,
         fields=fields,variables=variables,hypotheses=hypotheses,models=models,estimates=estimates,findings=findings,checks=checks,
         evidence=list(registry.rows.values()),search_coverage=doc.coverage(),
+        theory_evidence=theory_evidence,theory_search_coverage=theory_search_coverage,
         extraction_state='extraction_partial' if doc.gaps else 'extraction_complete_for_available_evidence',
         article_type='empirical_or_unresolved' if variables or models else 'article_type_unresolved',
         validation_status='source_alignment_passed_not_semantic_certification')
@@ -309,7 +312,7 @@ def validate_record(record):
         if f['model_id'] and f['model_id'] not in models:raise ValueError('Dangling model link')
     for e in record['estimates']:
         if e['model_id'] not in models or (e['variable_id'] and e['variable_id'] not in variables):raise ValueError('Dangling estimate link')
-    for rows in [record['hypotheses'],record['models'],record['estimates'],record['findings'],record['checks']]:
+    for rows in [record['hypotheses'],record['models'],record['estimates'],record['findings'],record['checks'],record.get('theory_evidence',[])]:
         for row in rows:
             if any(i not in evidence for i in row['evidence_ids']):raise ValueError('Dangling relational evidence')
     return True
@@ -322,6 +325,10 @@ def report(records,total_papers):
             coverage=sum(g[k]['value'] is not None for g in groups)/len(groups) if groups else None,
             missing_reasons=dict(Counter(g[k].get('reason') for g in groups if g[k]['value'] is None))) for k in names}
     return dict(schema_version='4.0.0',parsed_papers=n,indexed_denominator=total_papers,variable_records=len(vs),
+        theory_section_scanned_papers=sum(r.get('theory_search_coverage',{}).get('status')=='scanned' for r in records),
+        theory_author_declared_use_papers=sum(any(t['status']=='author_declared_use' for t in r.get('theory_evidence',[])) for r in records),
+        theory_mention_only_papers=sum(bool(r.get('theory_evidence')) and not any(t['status']=='author_declared_use' for t in r.get('theory_evidence',[])) for r in records),
+        theory_evidence_rows=sum(len(r.get('theory_evidence',[])) for r in records),
         paper_fields=coverage([r['fields'] for r in records],PAPER_FIELDS),variable_fields=coverage([v['fields'] for v in vs],VARIABLE_FIELDS),
         hypotheses=sum(len(r['hypotheses']) for r in records),models=sum(len(r['models']) for r in records),
         estimates=sum(len(r['estimates']) for r in records),findings=sum(len(r['findings']) for r in records),

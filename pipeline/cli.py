@@ -141,7 +141,7 @@ def build():
     from .research import report as field_report
     researches=active_records(read('research_records.jsonl'),read('crawl_queue.jsonl'))
     by_research={r['paper_id']:r for r in researches}
-    assignments=classify(papers,ontology,enrichment,manual)
+    assignments=classify(papers,ontology,enrichment,manual,researches=researches)
     validate_taxonomy(ontology,assignments,papers,variables)
     papers=enrich_papers(papers,ontology,assignments)
     extra={e['paper_id']:e for e in enrichment};content={r['paper_id']:r for r in receipts}

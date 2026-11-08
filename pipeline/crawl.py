@@ -45,8 +45,9 @@ def seed(papers,enrichment,receipts,old=(),control=None):
     queue={r['paper_id']:r for r in old};stamp=now()
     corpus=digest('|'.join(sorted(p['paper_id'] for p in papers)))
     control=dict(control or dict(state='paused',cycle_id='cycle:'+stamp,first_seen_at=stamp))
+    extractor_upgrade=control.get('extractor_version') not in (None,EXTRACTOR_VERSION)
     changed=control.get('corpus_fingerprint')!=corpus or control.get('parser_version')!=PARSER_VERSION or control.get('extractor_version')!=EXTRACTOR_VERSION
-    control.update(schema_version='4.0.0',corpus_fingerprint=corpus,updated_at=stamp,
+    control.update(extractor_upgrade_pending=control.get('extractor_upgrade_pending',False) or extractor_upgrade,schema_version='4.0.0',corpus_fingerprint=corpus,updated_at=stamp,
                    parser_version=PARSER_VERSION,extractor_version=EXTRACTOR_VERSION,continuation_interval_hours=3)
     for p in sorted(papers,key=lambda p:p['paper_id']):
         pid=p['paper_id'];e=entries.get(pid);r=queue.get(pid)
@@ -87,10 +88,12 @@ def plan(queue,control,limit=100):
             parser_retry=(source.get('error_class') or '').startswith('parse_or_extraction_failure:') and source.get('last_parser_attempt')!=PARSER_VERSION
             retry=source['state'] in {'transient_failure','permanent_failure_for_url','policy_blocked'} and due(source.get('next_retry_at')) and source.get('next_retry_at') is not None
             if (first or upgrade or parser_retry or retry) and (first or upgrade or parser_retry or due(source.get('next_retry_at'))):
-                # Every paper's first candidate precedes its second, every unvisited candidate precedes retries/upgrades.
+                # Re-parse known accessible OA sources first when the extractor
+                # changes, then perform a fair first-pass discovery. A finite
+                # extractor upgrade is not an excuse to starve new DOI sources.
                 attempt=sum(s.get('cycle_attempted')==cycle for s in paper['sources'])
                 preferred=0 if source['kind'] in {'pdf_url','previous_success'} and not any(h in source['url'] for h in ['wiley.com','ssrn.com','jstor.org']) else 1
-                rows.append((0 if first else 1,attempt+ordinal,paper['first_seen_at'],preferred,paper.get('last_checked_at') or '',paper['paper_id'],source['source_id'],paper,source))
+                rows.append((0 if upgrade and control.get('extractor_upgrade_pending') else 1 if first else 2,attempt+ordinal,paper['first_seen_at'],preferred,paper.get('last_checked_at') or '',paper['paper_id'],source['source_id'],paper,source))
     rows.sort(key=lambda r:r[:7])
     return [(r[7],r[8]) for r in rows[:limit]]
 
@@ -187,6 +190,10 @@ def tick(command='continue_oa',max_sources=180,max_requests=450,seconds=600,pers
     from .cli import DATA,ROOT,read,write,lines
     queue,control=seed(read('papers.jsonl'),read('enrichment.jsonl'),read('content_receipts.jsonl'),read('crawl_queue.jsonl'),next(iter(read('crawl_control.jsonl')),None))
     records={r['record_id']:r for r in read('research_records.jsonl')}
+    ontology_path=DATA/'ontology.yaml'
+    # Small synthetic queue tests can omit an ontology; production still
+    # obtains the checked-in taxonomy via DATA.
+    taxonomy=json.loads(ontology_path.read_text(encoding='utf-8')) if ontology_path.exists() else {'nodes':[]}
     events=read('crawl_events.jsonl');quarantine=read('research_quarantine.jsonl')
     if command=='pause_oa':control['state']='paused'
     elif command in {'exhaust_oa','resume_oa'}:control['state']='running'
@@ -243,7 +250,7 @@ def tick(command='continue_oa',max_sources=180,max_requests=450,seconds=600,pers
                         rawpath.parent.mkdir(parents=True,exist_ok=True);rawpath.write_bytes(response.content)
                     source['last_parser_attempt']=PARSER_VERSION
                     doc=parse_article(papers[paper['paper_id']],response.content,response.headers.get('content-type',''),receipt)
-                    source['state']='parsed';record=extraction(doc);validate_record(record)
+                    source['state']='parsed';record=extraction(doc,taxonomy=taxonomy);validate_record(record)
                     record.update(record_id=paper['paper_id']+'@'+doc.source_hash[:16],extracted_at=stamp,run_id=control['last_run_id'])
                     records[record['record_id']]=record
                     cache=ROOT/'.cache/articles'/ (digest(paper['paper_id'])[:16]+'-'+doc.source_hash[:12]+'.json')
