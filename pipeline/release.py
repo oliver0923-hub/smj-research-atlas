@@ -98,21 +98,25 @@ def refresh(mode='daily',dry_run=False):
     from argparse import Namespace
     from .enrich import harvest,acquire
     if dry_run:return {'status':'dry_run','mode':mode,'metadata_pages':20,
-        'enrichment_requests':12 if mode=='weekly' else 4 if mode=='daily' else 0,
-        'fulltext_papers':40 if mode=='weekly' else 4 if mode=='daily' else 0,
+        'enrichment_requests':12 if mode in {'weekly','batch'} else 4 if mode=='daily' else 0,
+        'fulltext_papers':60 if mode=='batch' else 40 if mode=='weekly' else 4 if mode=='daily' else 0,
         'paid_api_calls':0,'publication_gate':'schema+tests+build'}
     start=time.perf_counter();run={'started_at':now(),'mode':mode,'status':'running'}
     try:
-        if mode in {'daily','weekly'}:
+        if mode in {'daily','weekly','batch'}:
             sync(Namespace(backfill=False,max_pages=20,rows=500))
             if (DATA/'staging/incremental/checkpoint.json').exists():raise ValueError('Incremental sync incomplete; old deployment retained')
         if mode=='daily':
             run['enrichment']=harvest(4,priority_new=True)
             run['acquisition']=acquire(4,max_runtime_seconds=150)
-        if mode=='weekly':
+        if mode in {'weekly','batch'}:
             run['enrichment']=harvest(12)
             run['new_papers_enrichment']=harvest(4,priority_new=True)
-            run['acquisition']=acquire(40,max_runtime_seconds=600)
+            # Manual batch jobs share the same strict budget and validation
+            # gate as scheduled jobs; 720 seconds leaves time for build/deploy.
+            count=60 if mode=='batch' else 40
+            seconds=720 if mode=='batch' else 600
+            run['acquisition']=acquire(count,max_runtime_seconds=seconds)
         run['publisher']=publisher_check();run['quality']=gate();run['status']='validated_automatic'
     except Exception as exc:
         run.update(status='failed',error_type=type(exc).__name__);raise
@@ -122,7 +126,7 @@ def refresh(mode='daily',dry_run=False):
     build();snapshot();return run
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('command',choices=['snapshot','restore','refresh','gate','publisher','restore-checkpoints']);p.add_argument('--from-ref');p.add_argument('--mode',choices=['daily','weekly','monthly'],default='daily');p.add_argument('--dry-run',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('command',choices=['snapshot','restore','refresh','gate','publisher','restore-checkpoints']);p.add_argument('--from-ref');p.add_argument('--mode',choices=['daily','weekly','batch','monthly'],default='daily');p.add_argument('--dry-run',action='store_true');a=p.parse_args()
     action={'snapshot':snapshot,'restore':lambda:restore(a.from_ref),'restore-checkpoints':restore_checkpoints,'refresh':lambda:refresh(a.mode,a.dry_run),'gate':gate,'publisher':publisher_check}[a.command]
     print(json.dumps(action(),ensure_ascii=False))
 if __name__=='__main__':main()
