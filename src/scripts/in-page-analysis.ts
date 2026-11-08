@@ -2,11 +2,9 @@ import {analyzeBrowserOA,type OAExtract} from './browser-oa';
 /**
  * Single-click, source-constrained analysis on the public static paper page.
  *
- * No GitHub token, no write API, no fake server-side PDF parsing. The button
- * immediately analyses existing source-aligned Atlas data and the OpenAlex
- * abstract already retrieved in the browser. Existing GitHub issue results
- * are read-only and optional. New deep crawling still needs authenticated
- * GitHub issue submission because GitHub Pages has no trusted backend.
+ * Original PDF/HTML bytes are fetched through the bounded DOI-only gateway
+ * or a CORS-enabled OA source. Parsing and evidence display stay in this page.
+ * The gateway has no GitHub token; existing E2 or E1 data are fallback only.
  */
 const FIELDS=['sample_period','data_source','empirical_method'] as const;
 const FIELD_LABELS:Record<string,string>={
@@ -134,8 +132,18 @@ function abstractFindings(parent:Element,abstract:string|null,sourceUrl:string){
 
 function renderParsedOA(parent:Element,oa:OAExtract,review:boolean){
   const summary=node(parent,'p',oa.report,'notice');
+  node(parent,'p','OA 來源：已找到 · 全文下載：'+(oa.downloaded?'成功（'+oa.parsed_bytes?.toLocaleString()+' bytes）':'未知')+' · 論文身分：'+(oa.identity_verified?'已驗證':'未驗證')+' · 原文解析：成功','status-line');
   node(parent,'p',oa.format==='pdf'?'已在本頁直接解析 '+oa.pages+' 頁 PDF':'已在本頁直接解析 '+oa.pages+' 個 HTML 文字段落；不儲存或重新發布全文','status-line');
+  if(oa.partial)node(parent,'p','本次僅掃描前 '+oa.pages+'／'+oa.total_pages+' 頁；後續頁面尚未解析，不是全文完整覆蓋。','notice');
+  node(parent,'p','Provider 授權標記：'+(oa.license||'未知')+' · Provider 版本：'+(oa.source_version||'未知')+' · SHA256：'+(oa.source_hash||'未知'),'tiny');
   if(oa.source_url)evidenceLink(parent,oa.source_url);
+  function proof(target:Element,x:any){
+    const d=node(target,'details');node(d,'summary',x.label+' · '+(oa.format==='pdf'?'PDF 第 '+x.page+' 頁':'HTML 第 '+x.page+' 段')+' · '+(x.section||'章節未辨識'));
+    node(d,'p',x.excerpt||'本篇短引文額度已用盡，仍保留原文位置與來源 hash。','evidence');
+    node(d,'p','E2 · 詞組／位置核對，可信程度尚未校準；非人工複核。','tiny');
+    if(x.span_hash)node(d,'p','原文片段 SHA256：'+x.span_hash+' · offset '+x.offset_start+'–'+x.offset_end,'tiny');
+    if(oa.source_url)evidenceLink(d,oa.source_url,oa.format==='pdf'?x.page:null);
+  }
   node(parent,'h4','研究設計與方法（全文詞組對齊）');
   const table=node(parent,'table'),header=node(table,'thead'),tr=node(header,'tr');
   node(tr,'th','欄位');node(tr,'th','擷取結果／原文來源');
@@ -145,27 +153,32 @@ function renderParsedOA(parent:Element,oa:OAExtract,review:boolean){
     const cell=node(cellRow,'td');const f=oa.fields[k];
     if(f?.value){
       node(cell,'strong',f.value);
-      if(f.excerpt)node(cell,'p',f.excerpt,'evidence');
+      if(!f.evidence?.length&&f.excerpt)node(cell,'p',f.excerpt,'evidence');
       node(cell,'p','E2 · 合法全文自動詞組比對 · '+(oa.format==='pdf'?'PDF 第 '+f.page+' 頁':'HTML 第 '+f.page+' 段')+' · 非人工驗證','tiny');
-      if(oa.source_url)evidenceLink(cell,oa.source_url,oa.format==='pdf'?f.page:null);
+      if(f.evidence?.length)f.evidence.forEach(x=>proof(cell,x));
+      else if(oa.source_url)evidenceLink(cell,oa.source_url,oa.format==='pdf'?f.page:null);
     }else if(review){
       node(cell,'strong','暫定不適用於原創實證估計');
       node(cell,'p','此篇依標題判斷為回顧文章；文獻檢索方法仍需另行辨識。','tiny');
     }else{
       node(cell,'strong','未從本次可解析文字確認');
-      node(cell,'p','沒有可靠文字命中，不代表作者沒有報告此資訊。','tiny');
+      node(cell,'p',f?.reason||'沒有可靠文字命中，不代表作者沒有報告此資訊。','tiny');
+      f?.evidence?.forEach(x=>proof(cell,x));
     }
   }
-  for(const [key,label] of [['hypotheses','假設／命題'],['findings','實證發現'],['robustness','穩健性／敏感性檢驗']] as const){
-    node(parent,'h4',label+' · '+oa[key].length+' 筆原文線索');
-    if(!oa[key].length){
+  for(const [key,label] of [['hypotheses','假設／命題'],['findings','實證發現'],['robustness','穩健性／敏感性檢驗'],['theories','Theory：作者自述使用／僅提及'],['constructs','Construct：原文明示的操作化構念']] as const){
+    const entries=oa[key]||[];
+    node(parent,'h4',label+' · '+entries.length+' 筆原文線索');
+    if(!entries.length){
       node(parent,'p','本次文字擷取未能可靠定位；不代表原文沒有。','muted');
       continue;
     }
-    for(const x of oa[key]){
+    for(const x of entries){
       const row=node(parent,'article',undefined,'record');
       node(row,'strong',x.label);
-      node(row,'p',x.excerpt,'evidence');
+      node(row,'p','類型：'+x.kind,'tiny');
+      if(x.support_status)node(row,'p','假設支持：'+x.support_status+' · 統計顯著：'+(x.significance||'unknown')+'（兩者獨立，不推定模型對應）','tiny');
+      proof(row,x);
       node(row,'p','E2 · '+(oa.format==='pdf'?'PDF 第 '+x.page+' 頁':'HTML 第 '+x.page+' 段')+' · 機器搜尋所得，不保證與統計模型對應','tiny');
       if(oa.source_url)evidenceLink(row,oa.source_url,oa.format==='pdf'?x.page:null);
     }
@@ -181,7 +194,6 @@ export async function renderInPageAnalysis(
   const progress=node(parent,'p','開始查詢 Open Access 全文來源…','status-line');
   const oaPromise=analyzeBrowserOA(paper,(status)=>{progress.textContent=status;});
   let abstract:string|null=null;
-  try{abstract=await abstractPromise||null;}catch{abstract=null;}
   let oa:OAExtract;
   try{oa=await oaPromise;}catch(e){
     oa={status:'browser_error',source_url:null,open_access:false,pages:0,format:null,
@@ -197,7 +209,9 @@ export async function renderInPageAnalysis(
     renderParsedOA(parent,oa,review);
     return;
   }
+  try{abstract=await abstractPromise||null;}catch{abstract=null;}
   node(parent,'p','OA 全文直接讀取狀態：'+oa.status,'status-line');
+  node(parent,'p','OA 來源：'+(oa.open_access?'已找到來源／OA 標記':'尚未確認')+' · 全文下載：'+(oa.downloaded?'收到位元組，但未通過解析驗證':'尚未成功')+' · 全文解析：尚未成功','status-line');
   node(parent,'p',oa.report,'notice');
   if(oa.attempts.length){
     const details=node(parent,'details');

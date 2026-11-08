@@ -46,9 +46,9 @@ Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state
 
 ## 單篇論文直接擷取合法 OA 全文
 
-Atlas 每篇 `/paper/?id=...` 詳細頁提供 **「抓取 OA 全文並分析這篇論文」** 按鈕。按一下就會在**同一頁**向 OpenAlex 查詢最新的 OA 來源，嘗試由瀏覽器以 CORS 合規方式直接下載出版社／機構儲存庫的 PDF 或 HTML，並以 PDF.js（v4.10.38）擷取文本、核對標題/DOI/作者後，顯示 `sample_period`、`data_source`、`empirical_method`、假設／理論命題、研究結果及穩健性檢驗，附來源頁碼。無須 GitHub Issue、登入或另一個網頁。若現有 Atlas 研究資料已證實某欄位，原文證據仍可沿用。
+Atlas 每篇 `/paper/?id=...` 詳細頁提供 **「抓取 OA 全文並分析這篇論文」** 按鈕。按一下即查詢 OpenAlex，經已部署的 DOI 限定 OA 取件服務下載 PDF／HTML，在瀏覽器 PDF.js 4.10.38 驗證書目及解析原文，直接顯示研究欄位、假設、發現、穩健性、Theory／Construct 與逐項原文頁碼、短摘錄、hash 及未校準可信程度。無須 GitHub Issue、登入或跳轉；Atlas 快照與當次分析分開。
 
-**執行環境限制：** Open Access 授權不一定等於網頁允許 JavaScript 跨網域 `fetch`。遇到出版社 403、CORS 阻擋或頁面身份驗證失敗時，按鈕會說明實際嘗試結果，退回 OpenAlex 摘要支持的有限分析，而不是虛構已解析全文、估計結果或 H1。瀏覽器擷取的文章內容不寫入 Atlas 或重新發布。若需克服 CORS，已預備 `pipeline/live_api.py` 具來源審核與速率限制的 API，但現有 Railway 帳戶需升級方案方可部署；這不影響瀏覽器端的直接按鈕。詳見 [單篇 OA 分析規則](docs/ON_DEMAND_ONE_PAPER.md)。
+**實際邊界：** 取件服務克服一般 CORS，遵守授權、robots、403、429 與防機器人回應，有 D1 持久配額與 Retry-After。`smj.3340` 已實際下載 8.34MB／35 頁並在原頁解析；指定 `smj.3657` 目前因來源 403／bot challenge／429 尚未成功。無全文或無可靠語義對應時保留 Unknown，不虛構結果。全文不持久儲存，解析結果僅在本次頁面記憶體。詳見 [單篇 OA 分析與驗證](docs/ON_DEMAND_ONE_PAPER.md) 及 [服務原始碼](services/oa-gateway/)。
 
 ## 合法全文的理論證據（v4.1）
 

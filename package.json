@@ -1,1 +1,20 @@
-{"name":"smj-research-atlas","private":true,"type":"module","scripts":{"dev":"astro dev --host 127.0.0.1","build":"astro build","preview":"astro preview --host 127.0.0.1"},"dependencies":{"astro":"^7.4.7","fuse.js":"^7.5.0"}}
+{
+  "name": "smj-research-atlas",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1",
+    "test:oa": "node --experimental-strip-types --test tests-js/*.test.mjs services/oa-gateway/tests/*.test.mjs",
+    "check:oa": "tsc --project tsconfig.oa.json"
+  },
+  "dependencies": {
+    "astro": "^7.4.7",
+    "fuse.js": "^7.5.0"
+  },
+  "devDependencies": {
+    "linkedom": "^0.18.15",
+    "typescript": "^7.0.2"
+  }
+}
