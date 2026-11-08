@@ -50,7 +50,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=(),researches=()):
                 continue
             if evidence.get('status')=='author_declared_use':
                 author_declarations[term_id]=evidence
-            elif evidence.get('status')=='mentioned_in_section':
+            elif evidence.get('status') in {'mentioned_in_section','context_candidate'}:
                 section_mentions[term_id]=evidence
         hits={}
         for node in nodes.values():
