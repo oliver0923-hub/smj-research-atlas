@@ -77,7 +77,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
                     if abstract_evidence else 'Crossref title contextual phrase',
                 input_hash=source_hash,review_status='suggested').model_dump()
             record.update(is_fallback_other=False,is_semantic_candidate=True,
-                inference_origin='weak_supervision_not_verified_theory_use',
+                inference_origin='deterministic_rule',
                 input_origin='openalex_abstract_feature' if abstract_evidence else 'crossref_title',
                 evidence_grade='E1_abstract' if abstract_evidence else 'E0_metadata',
                 validation_status='semantic_candidate',
