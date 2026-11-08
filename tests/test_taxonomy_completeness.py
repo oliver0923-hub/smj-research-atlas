@@ -10,7 +10,7 @@ TAX=json.loads((ROOT/"data/ontology.yaml").read_text(encoding="utf-8"))
 
 
 def paper(title,pid="doi:10.1002/test"):
-    return {"paper_id":pid,"title":title,"publication_year":2026,
+    return {"paper_id":pid,"doi":"10.1002/test","title":title,"publication_year":2026,
             "metadata_provenance":[{"source_url":"https://api.crossref.org/works/10.1002/test"}],
             "last_synced_at":"2026-11-08"}
 
