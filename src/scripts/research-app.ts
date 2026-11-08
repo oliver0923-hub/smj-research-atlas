@@ -89,24 +89,19 @@ async function profile(){const id=params.get('id');if(!id)throw Error('缺少 pa
 let abstractPromise:Promise<string|null>|undefined;
 const onDemand=add(app,'section',undefined,'record');
 add(onDemand,'h3','分析這篇論文');
-add(onDemand,'p','按一下即可在本頁整理已取得的摘要／正文證據、假設、實證發現、穩健性，以及 sample_period、data_source、empirical_method；未知會清楚顯示。無須 GitHub 登入。','muted');
-const query='Atlas analyze: '+p.doi;
-const body=['DOI: '+p.doi,'Title: '+p.title].join(String.fromCharCode(10));
-const issueURL='https://github.com/oliver0923-hub/smj-research-atlas/issues/new?title='+encodeURIComponent(query)+'&body='+encodeURIComponent(body);
-const analyzeButton=add(onDemand,'button','分析這篇論文（直接在本頁顯示）') as HTMLButtonElement;
+add(onDemand,'p','直接按下按鈕：系統即查詢這篇 DOI 的 Open Access 全文位置，嘗試在瀏覽器下載合法 PDF／HTML，解析假設／命題、實證發現、穩健性，以及 sample_period、data_source、empirical_method。結果就在本頁顯示，無須建立 GitHub Issue。','muted');
+const analyzeButton=add(onDemand,'button','抓取 OA 全文並分析這篇論文') as HTMLButtonElement;
 analyzeButton.type='button';
 analyzeButton.setAttribute('aria-controls','on-demand-paper-results');
 const onDemandResults=add(onDemand,'section') as HTMLElement;
 onDemandResults.id='on-demand-paper-results';
 analyzeButton.addEventListener('click',()=>{
  analyzeButton.disabled=true;
- analyzeButton.textContent='正在整理來源證據…';
- void renderInPageAnalysis(onDemandResults,p,abstractPromise,issueURL)
-   .finally(()=>{analyzeButton.disabled=false;analyzeButton.textContent='重新分析這篇論文';});
+ analyzeButton.textContent='正在查詢並解析 OA 全文…';
+ void renderInPageAnalysis(onDemandResults,p,abstractPromise)
+   .finally(()=>{analyzeButton.disabled=false;analyzeButton.textContent='重新擷取 OA 全文並分析';});
 });
-add(onDemand,'p','此按鈕會立即分析 Atlas 已有的資料並檢查 GitHub 先前分析結果；若要觸發新的全文下載，須由專案擁有者在 GitHub 授權提交，靜態網站不會要求或保存任何個人 GitHub Token。','tiny');
-const deepLink=add(onDemand,'p');
-link(deepLink,'需要重新擷取全文？前往 GitHub 預填分析任務（須提交）',issueURL);
+add(onDemand,'p','僅對來源授權 OA 且網站允許瀏覽器跨網域存取的全文可直接讀取；若遭 403／CORS 阻擋，會顯示真正原因並退回已有摘要證據。全文僅在瀏覽器暫時解析，不會被 Atlas 上傳或儲存。','tiny');
 box('本頁自動驗證的是來源、文字對齊與資料一致性，不是人工專家審閱；沒有從標題推定公式、係數或因果效果。');add(app,'h2','研究分類總覽');
 abstractPromise=showAbstract(app,enriched,p.doi);
 const publishedOa=(enriched?.oa_locations||[]).find((x:any)=>String(x.pdf_url||'').startsWith('https://sms.onlinelibrary.wiley.com/doi/pdfdirect/')&&x.is_oa&&x.is_published);
