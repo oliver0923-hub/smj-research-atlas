@@ -19,7 +19,7 @@ def paper(title="Corporate development executives and M&A performance"):
 
 def test_expanded_constructs_theories_valid_and_historical_taxonomy_preserved():
     nodes=validate_taxonomy(TAX)
-    assert TAX["version"]=="2.3.0"
+    assert TAX["version"]=="2.4.0"
     assert len([x for x in nodes.values() if x.level=="construct"])>=77
     assert len([x for x in nodes.values() if x.level=="theory"])>=45
     assert len([x for x in nodes.values() if x.level=="domain" and
