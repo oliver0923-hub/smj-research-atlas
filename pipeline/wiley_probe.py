@@ -33,7 +33,21 @@ def probe(fetcher=None):
                 result["doi_matches"]=DOI in first
                 result["open_access_notice"]="open access" in first
                 result["can_parse"]=result["doi_matches"] and len(doc)>2
-        result["status"]="verified_public_pdf" if result["can_parse"] else "not_verified"
+            if result["can_parse"]:
+                from .article import digest,parse_article
+                from .research import extraction,validate_record
+                study={"paper_id":"doi:"+DOI,"doi":DOI,"title":"Corporate development executives and M&A performance"}
+                receipt={"source_url":URL,"source_hash":digest(response.content),"accessible":True}
+                doc=parse_article(study,response.content,"application/pdf",receipt)
+                record=extraction(doc)
+                validate_record(record)
+                result["analysis"]=dict(
+                    text_blocks=len(doc.blocks),pages=result["pdf_pages"],
+                    hypotheses=len(record["hypotheses"]),variables=len(record["variables"]),
+                    models=len(record["models"]),estimates=len(record["estimates"]),
+                    findings=len(record["findings"]),checks=len(record["checks"]),
+                    evidence_records=len(record["evidence"]),parser_gaps=len(doc.gaps))
+        result["status"]="verified_and_analyzed" if result.get("analysis") else "verified_public_pdf" if result["can_parse"] else "not_verified"
     except PolicyError as exc:
         result["status"]="policy_blocked"
         result["reason"]=str(exc)
