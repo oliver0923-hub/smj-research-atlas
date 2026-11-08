@@ -1,7 +1,7 @@
 {
-  "version": "2.2.0",
+  "version": "2.3.0",
   "is_official_smj_taxonomy": false,
-  "title_zh": "Atlas 四維研究分類 v2.2：擴充 Construct／Theory 詞彙及摘要證據",
+  "title_zh": "Atlas 四維分類 v2.3：擴充詞典與弱監督候選（不等於驗證採用理論）",
   "checked_at": "2026-11-08",
   "levels": [
     "domain",
@@ -89,7 +89,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -110,7 +110,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -131,7 +131,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -152,7 +152,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -173,7 +173,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -194,7 +194,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -215,7 +215,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -236,7 +236,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -257,7 +257,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -278,7 +278,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -299,7 +299,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -320,7 +320,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -342,7 +342,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -370,7 +370,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -397,7 +397,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -423,7 +423,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -450,7 +450,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -476,7 +476,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -507,7 +507,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -534,7 +534,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -560,7 +560,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -587,7 +587,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -616,7 +616,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -643,7 +643,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -670,7 +670,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -698,7 +698,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -726,7 +726,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -752,7 +752,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -779,7 +779,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -808,7 +808,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -838,7 +838,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -866,7 +866,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -892,7 +892,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -918,7 +918,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -944,7 +944,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -970,7 +970,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -996,7 +996,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1022,7 +1022,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1045,7 +1045,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1066,7 +1066,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1087,7 +1087,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1108,7 +1108,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1129,7 +1129,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1151,7 +1151,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1167,7 +1167,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Explicit unclassified fallback when no source-supported label exists in this dimension; not evidence that the paper belongs to a substantive other category",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1186,7 +1186,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Explicit unclassified fallback when no source-supported label exists in this dimension; not evidence that the paper belongs to a substantive other category",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1207,7 +1207,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Explicit unclassified fallback when no source-supported label exists in this dimension; not evidence that the paper belongs to a substantive other category",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1228,7 +1228,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Explicit unclassified fallback when no source-supported label exists in this dimension; not evidence that the paper belongs to a substantive other category",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1248,7 +1248,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1274,7 +1274,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1299,7 +1299,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1324,7 +1324,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1349,7 +1349,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1374,7 +1374,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1399,7 +1399,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1425,7 +1425,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1451,7 +1451,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1476,7 +1476,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1502,7 +1502,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1528,7 +1528,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1553,7 +1553,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1578,7 +1578,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1603,7 +1603,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1628,7 +1628,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1652,7 +1652,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1677,7 +1677,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1702,7 +1702,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1727,7 +1727,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1752,7 +1752,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1778,7 +1778,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1803,7 +1803,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1828,7 +1828,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1853,7 +1853,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1879,7 +1879,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1905,7 +1905,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1930,7 +1930,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1955,7 +1955,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1981,7 +1981,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2006,7 +2006,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2031,7 +2031,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2056,7 +2056,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2081,7 +2081,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2107,7 +2107,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2132,7 +2132,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2157,7 +2157,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2182,7 +2182,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2207,7 +2207,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2232,7 +2232,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2257,7 +2257,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2282,7 +2282,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2307,7 +2307,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2334,7 +2334,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2361,7 +2361,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2387,7 +2387,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2413,7 +2413,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2438,7 +2438,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2463,7 +2463,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2488,7 +2488,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2513,7 +2513,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2538,7 +2538,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2562,7 +2562,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2586,7 +2586,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2611,7 +2611,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2636,7 +2636,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2661,7 +2661,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2686,7 +2686,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2711,7 +2711,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2734,7 +2734,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2757,7 +2757,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2780,7 +2780,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2803,7 +2803,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2826,7 +2826,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2849,7 +2849,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2871,7 +2871,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2894,7 +2894,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2917,7 +2917,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2940,7 +2940,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2962,7 +2962,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -2984,7 +2984,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3006,7 +3006,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3029,7 +3029,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3052,7 +3052,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3075,7 +3075,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3097,7 +3097,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3119,7 +3119,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3142,7 +3142,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3165,7 +3165,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3188,7 +3188,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3211,7 +3211,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3234,7 +3234,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3257,7 +3257,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3280,7 +3280,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3302,7 +3302,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3324,7 +3324,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3347,7 +3347,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3370,7 +3370,7 @@
         "SMJ-SCOPE-2026"
       ],
       "method": "Atlas editorial research vocabulary; exact title/abstract evidence required, not official SMJ coding",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -3385,6 +3385,494 @@
         "information asymmetry theory",
         "information asymmetry perspective"
       ]
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-INNOVPERF",
+      "label_zh": "創新績效",
+      "label_en": "Innovation performance",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-INNOV"
+      ],
+      "match_phrases": [
+        "innovation performance",
+        "innovative performance",
+        "innovation output"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-AMBIDEX",
+      "label_zh": "組織雙元能力",
+      "label_en": "Organizational ambidexterity",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-RESOURCE",
+        "TOP-INNOV"
+      ],
+      "match_phrases": [
+        "organizational ambidexterity",
+        "contextual ambidexterity"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-DIGTRANS",
+      "label_zh": "數位轉型",
+      "label_en": "Digital transformation",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-DIGITAL"
+      ],
+      "match_phrases": [
+        "digital transformation",
+        "digital technology adoption"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-CEOPOWER",
+      "label_zh": "執行長權力",
+      "label_en": "CEO power",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-LEAD"
+      ],
+      "match_phrases": [
+        "ceo power",
+        "chief executive power"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-BOARDDIV",
+      "label_zh": "董事會多樣性",
+      "label_en": "Board diversity",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-GOV"
+      ],
+      "match_phrases": [
+        "board diversity",
+        "board gender diversity"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-INSTDIST",
+      "label_zh": "制度距離",
+      "label_en": "Institutional distance",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-GLOBAL"
+      ],
+      "match_phrases": [
+        "institutional distance",
+        "regulatory distance"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-CULTDIST",
+      "label_zh": "文化距離",
+      "label_en": "Cultural distance",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-GLOBAL"
+      ],
+      "match_phrases": [
+        "cultural distance",
+        "cross national cultural distance"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-RESREDEP",
+      "label_zh": "資源重新部署",
+      "label_en": "Resource redeployment",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-RESOURCE"
+      ],
+      "match_phrases": [
+        "resource redeployment",
+        "asset redeployment"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-STRATSIM",
+      "label_zh": "策略相似度",
+      "label_en": "Strategic similarity",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-COMP"
+      ],
+      "match_phrases": [
+        "strategic similarity",
+        "strategic relatedness"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-INNOVNOV",
+      "label_zh": "創新新穎性",
+      "label_en": "Innovation novelty",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-INNOV"
+      ],
+      "match_phrases": [
+        "innovation novelty",
+        "technological novelty"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-FIRMRISK",
+      "label_zh": "企業風險承擔",
+      "label_en": "Corporate risk-taking",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-BEH",
+        "TOP-GOV"
+      ],
+      "match_phrases": [
+        "corporate risk taking",
+        "firm risk taking",
+        "risk taking behavior"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "CON-CAPCOMB",
+      "label_zh": "能力與知識重組",
+      "label_en": "Capability recombination",
+      "level": "construct",
+      "parent_ids": [
+        "TOP-INNOV",
+        "TOP-RESOURCE"
+      ],
+      "match_phrases": [
+        "knowledge recombination",
+        "capability recombination",
+        "resource recombination"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "TH-RO",
+      "label_zh": "資源編排理論",
+      "label_en": "Resource Orchestration Theory",
+      "level": "theory",
+      "parent_ids": [],
+      "match_phrases": [
+        "resource orchestration theory",
+        "resource orchestration view"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "TH-OIP",
+      "label_zh": "組織資訊處理理論",
+      "label_en": "Organizational Information Processing Theory",
+      "level": "theory",
+      "parent_ids": [],
+      "match_phrases": [
+        "organizational information processing theory",
+        "information processing theory"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "TH-BA",
+      "label_zh": "行為代理理論",
+      "label_en": "Behavioral Agency Theory",
+      "level": "theory",
+      "parent_ids": [],
+      "match_phrases": [
+        "behavioral agency theory"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "TH-INSTLOG",
+      "label_zh": "制度邏輯觀點",
+      "label_en": "Institutional Logics Perspective",
+      "level": "theory",
+      "parent_ids": [],
+      "match_phrases": [
+        "institutional logics perspective",
+        "institutional logics theory"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "TH-SOC-COMP",
+      "label_zh": "社會比較理論",
+      "label_en": "Social Comparison Theory",
+      "level": "theory",
+      "parent_ids": [],
+      "match_phrases": [
+        "social comparison theory"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "TH-COEV",
+      "label_zh": "共同演化理論",
+      "label_en": "Coevolutionary Perspective",
+      "level": "theory",
+      "parent_ids": [],
+      "match_phrases": [
+        "coevolutionary theory",
+        "coevolutionary perspective"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "TH-RELVIEW",
+      "label_zh": "關係觀點",
+      "label_en": "Relational View",
+      "level": "theory",
+      "parent_ids": [],
+      "match_phrases": [
+        "relational view of the firm",
+        "relational view of competitive advantage"
+      ],
+      "version": "2.3.0"
+    },
+    {
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026"
+      ],
+      "method": "Atlas editorial taxonomy, source-backed title/abstract phrase mentions only",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "description": "SMJ strategic-management research vocabulary; contextual mentions are candidates, not verified adopted frameworks.",
+      "id": "TH-ORG-INERTIA",
+      "label_zh": "組織慣性理論",
+      "label_en": "Organizational Inertia",
+      "level": "theory",
+      "parent_ids": [],
+      "match_phrases": [
+        "organizational inertia theory",
+        "structural inertia theory"
+      ],
+      "version": "2.3.0"
     }
   ],
   "scope_check": {
@@ -3502,6 +3990,7 @@
   },
   "legacy_versions": [
     "2.0.0",
-    "2.1.0"
+    "2.1.0",
+    "2.2.0"
   ]
 }
