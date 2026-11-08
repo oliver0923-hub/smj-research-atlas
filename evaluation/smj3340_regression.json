@@ -1,0 +1,14 @@
+{
+  "doi": "10.1002/smj.3340",
+  "source_url": "https://lbsresearch.london.edu/id/eprint/1970/1/smj.3340.pdf",
+  "source_hash": "321701b7bddc6f693e1218aa6c28060a0f1dc13340bc5dd2f2758d13784b1e7f",
+  "pdf_page": 12,
+  "source_excerpt": "patent applications filed by new assignees in a given state-year normalized by the number of new entrants",
+  "construct": "startup quality",
+  "expected": {
+    "inferred_ratio_status": "inferred_not_original_formula",
+    "formula": null,
+    "level_of_analysis": "state-year"
+  },
+  "scope": "Real-source development regression; excluded from the independent 15-paper evaluation."
+}

@@ -19,8 +19,10 @@ jobs:
           node-version: '22'
           cache: npm
       - run: pip install -e '.[test]'
-      - run: python -m pytest -q
+      - run: git fetch origin atlas-data || true
       - run: python -m pipeline.release restore
+      - run: python -m pipeline.release restore --from-ref origin/atlas-data
+      - run: python -m pytest -q
       - run: python -m pipeline.release gate
       - run: python -m pipeline.cli build
       - run: npm ci
