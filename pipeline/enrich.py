@@ -43,8 +43,15 @@ def harvest(max_pages=50,dry_run=False,priority_new=False):
         # Target Crossref additions directly rather than waiting for an OpenAlex
         # journal cursor to eventually reach the new DOI.
         known=set(existing)
-        batch_ids=sorted((doi for doi,p in papers.items() if p['paper_id'] not in known),
-                         key=lambda doi:(-papers[doi].get('publication_year',0),doi))
+        new_dois=sorted((doi for doi,p in papers.items() if p['paper_id'] not in known),
+                        key=lambda doi:(-papers[doi].get('publication_year',0),doi))
+        # Backfill construct-level abstract features from legacy metadata.
+        # Newly indexed DOI always go first; old features are upgraded in
+        # bounded daily batches without retaining or redistributing abstracts.
+        stale_dois=sorted((doi for doi,p in papers.items() if p['paper_id'] in known and
+                           existing[p['paper_id']].get('abstract_feature_method')!='allowed_phrase_occurrence_v4'),
+                          key=lambda doi:(-papers[doi].get('publication_year',0),doi))
+        batch_ids=new_dois+stale_dois
         state={'batch':0}
     else:
         batch_ids=sorted(papers)
@@ -79,7 +86,7 @@ def harvest(max_pages=50,dry_run=False,priority_new=False):
                 tax=json.loads((DATA/'ontology.yaml').read_text(encoding='utf-8'))
                 from .taxonomy import text_key
                 normalized=' '+text_key(abstract)+' '
-                features=[n['id'] for n in tax['nodes'] if n['level'] in {'research_topic','theory'} and any(' '+text_key(phrase)+' ' in normalized for phrase in n.get('match_phrases',[]))]
+                features=[n['id'] for n in tax['nodes'] if n['level'] in {'research_topic','construct','theory'} and any(' '+text_key(phrase)+' ' in normalized for phrase in n.get('match_phrases',[]))]
                 candidates=list(raw.get('locations') or [])
                 for special in ('best_oa_location','primary_location'):
                     if raw.get(special):candidates.append(raw[special])
@@ -89,7 +96,7 @@ def harvest(max_pages=50,dry_run=False,priority_new=False):
                 locations=list({(l.get('pdf_url'),l.get('landing_page_url')):l for l in locations}.values())
                 entry=dict(paper_id=paper['paper_id'],openalex_id=raw['id'],citation_count=raw.get('cited_by_count'),citation_count_asof=now()[:10],
                     external_topics=raw.get('topics',[]),openalex_type=raw.get('type'),is_retracted=raw.get('is_retracted'),
-                    abstract_available=bool(abstract),abstract_phrase_hits=features,abstract_feature_method='allowed_phrase_occurrence_v3',abstract_hash=hashlib.sha256(abstract.encode()).hexdigest() if abstract else None,
+                    abstract_available=bool(abstract),abstract_phrase_hits=features,abstract_feature_method='allowed_phrase_occurrence_v4',abstract_hash=hashlib.sha256(abstract.encode()).hexdigest() if abstract else None,
                     abstract_license='OpenAlex metadata CC0; full abstract is not redistributed by Atlas',
                     oa_locations=locations,oa_url=(raw.get('best_oa_location') or {}).get('landing_page_url'),source_url=raw['id'],retrieved_at=now(),
                     inference_origin='openalex_metadata',evidence_grade='E1_abstract' if abstract else 'E0_metadata')
