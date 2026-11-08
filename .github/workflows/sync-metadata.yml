@@ -1,5 +1,10 @@
 name: Autonomous data release
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'pipeline/**'
+      - '.github/workflows/sync-metadata.yml'
   schedule:
     - cron: '23 2 * * *'
     - cron: '47 3 * * 0'
