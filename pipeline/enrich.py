@@ -217,9 +217,11 @@ def acquire(max_papers=40,dry_run=False,max_runtime_seconds=None):
             # Failed reprocessing must not invalidate evidence from the last
             # successful source, which may no longer be accessible this run.
             if not receipt['accessible'] and old.get(e['paper_id'],{}).get('accessible'):
-                previous=old[e['paper_id']]
-                receipt['missing_reason']='refresh_failed_prior_evidence_retained'
-                receipt['prior_source_preserved']=previous['source_url']
+                previous=dict(old[e['paper_id']])
+                # Keep source hash and extracted claims consistent with the
+                # previously accepted PDF while throttling future retries.
+                previous['last_upgrade_attempt_at']=receipt['checked_at']
+                previous['refresh_failures']=receipt['failures']
                 old[e['paper_id']]=previous
             else:
                 old[e['paper_id']]=receipt
