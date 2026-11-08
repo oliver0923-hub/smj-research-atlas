@@ -112,7 +112,14 @@ def refresh(mode='daily',dry_run=False):
             sync(Namespace(backfill=False,max_pages=20,rows=500))
             if (DATA/'staging/incremental/checkpoint.json').exists():raise ValueError('Incremental sync incomplete; old deployment retained')
         if mode=='daily':
-            run['enrichment']=harvest(4,priority_new=True)
+            # Upgrade all previously indexed abstract features in bounded
+            # blocks instead of letting a six-thousand-tag ontology refresh
+            # trickle in at four API calls each day. No extra fulltext requests.
+            backlog=sum(e.get('abstract_feature_method')!='allowed_phrase_occurrence_v6'
+                        for e in read('enrichment.jsonl'))
+            pages=20 if backlog>=160 else 4
+            run['taxonomy_backfill_backlog_at_start']=backlog
+            run['enrichment']=harvest(pages,priority_new=True)
             run['acquisition']=tick('continue_oa',max_sources=4,max_requests=20,seconds=150,persist=os.getenv('GITHUB_ACTIONS')=='true')
         if mode in {'weekly','batch'}:
             run['enrichment']=harvest(12)
