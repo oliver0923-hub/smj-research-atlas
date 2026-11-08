@@ -1,0 +1,15 @@
+{
+  "previous_micro": {
+    "tp": 14,
+    "fp": 3,
+    "fn": 34,
+    "precision": 0.8235294117647058,
+    "recall": 0.2916666666666667,
+    "f1": 0.4307692307692308
+  },
+  "reason": "Correct evaluation bookkeeping: each predicted value must have its own evidence span on an independently reviewed page. A field-wide evidence union previously attributed Factiva, CRSP and 2SLS from unreviewed pages to the reviewed-page scope. Neither gold labels nor frozen extraction rules changed.",
+  "previous_extractor_hashes": {
+    "pipeline/research.py": "5e12e8b2a5c48d47b812934dbedaa22198a21b386921fdcd736b3af11f4e6254",
+    "pipeline/article.py": "eb521db47a1804bc31fa311b3be4691fe6dc87b992c2c767651fb944ef0b720e"
+  }
+}

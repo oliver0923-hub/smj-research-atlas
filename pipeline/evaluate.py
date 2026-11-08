@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 from .article import parse_article
-from .research import extraction
+from .research import extraction,key
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -31,6 +31,14 @@ def metrics(tp,fp,fn):
                 f1=2*tp/(2*tp+fp+fn) if 2*tp+fp+fn else None)
 
 
+def scoped_values(field,values,ids,evidence,blocks,pages):
+    spans=[blocks[evidence[i]['block_id']]['text'][evidence[i]['start']:evidence[i]['end']]
+           for i in ids if evidence[i]['page'] in pages]
+    if field=='sample_period':
+        return [v for v in values if any(all(y in span for y in re.findall(r'(?:19|20)\d{2}',str(v))) for span in spans)]
+    return [v for v in values if any(key(str(v)) in key(span) for span in spans)]
+
+
 def evaluate(manifest):
     gold=json.loads((ROOT/'evaluation/gold.json').read_text(encoding='utf-8'))
     frozen=json.loads((ROOT/'evaluation/frozen_extractor.json').read_text())
@@ -51,14 +59,15 @@ def evaluate(manifest):
             if doc.source_hash!=p['source_hash']:raise ValueError('Cached source mismatch')
         else:doc=parse_article(metadata[p['paper_id']],content,p['content_type'],dict(source_url=p['source_url'],source_hash=p['source_hash']))
         result=extraction(doc);ev={e['evidence_id']:e for e in result['evidence']}
+        blocks={b['block_id']:b for b in doc.blocks}
         for field,expected in p['queries'].items():
             f=result['fields'][field]
             # Restrict predictions to independently reviewed pages, including negative cases.
-            in_scope=any(ev[e]['page'] in p['reviewed_pages'] for e in f['evidence_ids'])
             values=f['value'] if isinstance(f['value'],list) else [f['value']] if f['value'] is not None else []
             if field=='sample_period' and len(values)==2 and all(isinstance(v,int) for v in values):
                 values=[str(values[0])+'–'+str(values[1])]
-            predicted={canonical(v,field) for v in values} if in_scope else set()
+            values=scoped_values(field,values,f['evidence_ids'],ev,blocks,p['reviewed_pages'])
+            predicted={canonical(v,field) for v in values}
             wanted={canonical(v,field) for v in expected}
             tp=len(predicted&wanted);fp=len(predicted-wanted);fn=len(wanted-predicted)
             t=totals.setdefault(field,dict(tp=0,fp=0,fn=0,queries=0,exact_matches=0,abstentions=0))

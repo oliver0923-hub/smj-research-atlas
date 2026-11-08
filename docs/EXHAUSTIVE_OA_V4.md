@@ -49,3 +49,5 @@ evaluation/gold.json 為 15 篇不同真實 SMJ PDF 的獨立原文標註，排�
 `python -m pipeline.evaluate_relationships` 在相同 15 篇來源中的 3 篇，另以原始 PDF 指定頁標註 26 個關係 query；此補充標註在初始三欄評估之後建立，抽取器維持凍結、未依答案調參。假設支持：TP=4、FN=2、precision=100%、recall=66.7%；指定的顯著性（3）、角色（4）、假設—變數—模型連結（6）、模型估計（3）、p-value（3）、穩健性結果（1）均全部棄答／漏抓，不能宣稱關係辨識已可靠。precision 分母為零時為 Unknown，不能報成 100%。網站公開兩組評估，未評估的欄位仍 Unknown。
 
 smj.3340 的來源 URL、SHA256、PDF 第 12 頁與短摘錄保存於 evaluation/smj3340_regression.json，CI 從已驗證 atlas-data 恢復實際抽取紀錄，核對 numerator/denominator、state-year、inferred_ratio 與未知原文 formula。這是開發來源迴歸，沒有混入獨立評估樣本。PR CI 也恢復真實快照後執行此檢查。
+
+評估範圍修正：多值欄位不能只因任一證據位於審查頁，就將全部值算入該頁評估。evaluate.py 現逐值檢查 private source span 與指定 PDF 頁。gold 與凍結抽取規則未變；修正紀錄在 evaluation/scope_amendment.json。修正後初始三欄共 TP=13、FP=0、FN=35，precision=13/13=100%、recall=13/48=27.1%、F1=42.6%。這是指定頁與指定欄位的小樣本結果，不能延伸為全篇或全庫準確率。
