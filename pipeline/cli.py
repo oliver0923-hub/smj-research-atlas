@@ -179,6 +179,8 @@ def build():
     report['robustness_records']=sum(c['claim_type']=='robustness' for c in study_claims)
     report['sensitivity_records']=sum(c['claim_type']=='sensitivity' for c in study_claims)
     report['study_claim_papers']=len({c['paper_id'] for c in study_claims})
+    from .metrics import claim_counts
+    report.update(claim_counts(study_claims,researches))
     report['schema_version']='4.0.0'
     report['legacy_variable_records']=len(variables)
     report['research_v4_papers']=len(researches)
