@@ -13,8 +13,8 @@ on:
     inputs:
       mode:
         type: choice
-        options: [daily, weekly, monthly]
-        default: daily
+        options: [daily, weekly, batch, monthly]
+        default: batch
 permissions:
   actions: read
   contents: write
@@ -57,6 +57,7 @@ jobs:
           mode="${REQUESTED_MODE:-daily}"
           if [ "$SCHEDULE" = '47 3 * * 0' ]; then mode=weekly; fi
           if [ "$SCHEDULE" = '17 4 1 * *' ]; then mode=monthly; fi
+          case "$mode" in daily|weekly|batch|monthly) ;; *) echo "Unsupported mode"; exit 2 ;; esac
           python -m pipeline.release refresh --mode "$mode"
       - run: python -m pytest
       - run: python -m pipeline.release gate
