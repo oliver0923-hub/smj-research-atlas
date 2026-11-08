@@ -1,7 +1,7 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "is_official_smj_taxonomy": false,
-  "title_zh": "Atlas 研究分類 v2.1：以 SMS Interest Groups 為 Level 1 參照，另設未判定分類",
+  "title_zh": "Atlas 研究分類 v2.2：SMJ 策略研究擴充構念與理論，保留其他／未判定",
   "checked_at": "2026-11-08",
   "levels": [
     "domain",
@@ -56,12 +56,62 @@
     {
       "id": "ATLAS-METHOD",
       "organization": "SMJ Research Atlas",
-      "title": "Taxonomy Methodology v2",
+      "title": "SMJ Research Atlas: Classification Methodology v2.2",
       "url": "https://oliver0923-hub.github.io/smj-research-atlas/taxonomy-methodology/",
       "accessed_at": "2026-11-07",
       "source_type": "custom_research",
       "evidence_locator": "Four-level design, proposal rules and human review protocol",
       "supports": "Atlas 自訂譯名、層級、研究主題、構念詞彙、理論維度與演算法規則。"
+    },
+    {
+      "id": "SMJ-SCOPE-2026",
+      "organization": "Strategic Management Society / Wiley",
+      "title": "Strategic Management Journal: Aims and Scope",
+      "url": "https://www.strategicmanagement.net/publications-resources/sms-journals/strategic-management-journal/",
+      "accessed_at": "2026-11-08",
+      "source_type": "official_academic_organization",
+      "evidence_locator": "Aims and scope; methods and theory breadth",
+      "supports": "期刊領域範圍的參照；不代表 SMJ 提供本文自訂的 Construct 或 Theory 分類表，也不代表單篇自動標籤由期刊核可。"
+    },
+    {
+      "id": "FURRER-2008",
+      "authors": [
+        "Furrer, O.",
+        "Thomas, H.",
+        "Goussevskaia, A."
+      ],
+      "year": 2008,
+      "title": "The structure and evolution of the strategic management field: A content analysis of 26 years of strategic management research",
+      "journal": "International Journal of Management Reviews",
+      "volume": "10",
+      "issue": "1",
+      "pages": "1–23",
+      "doi": "10.1111/j.1468-2370.2007.00217.x",
+      "url": "https://doi.org/10.1111/j.1468-2370.2007.00217.x",
+      "accessed_at": "2026-11-08",
+      "source_type": "academic_publication",
+      "evidence_locator": "Abstract and field-level analysis",
+      "supports": "策略研究多子領域與其隨時間演變的研究背景；Atlas 詞彙為編製規則，並非原文提出之官方受控詞彙。"
+    },
+    {
+      "id": "TEECE-1997",
+      "authors": [
+        "Teece, D. J.",
+        "Pisano, G.",
+        "Shuen, A."
+      ],
+      "year": 1997,
+      "title": "Dynamic capabilities and strategic management",
+      "journal": "Strategic Management Journal",
+      "volume": "18",
+      "issue": "7",
+      "pages": "509–533",
+      "doi": "10.1002/(SICI)1097-0266(199708)18:7<509::AID-SMJ882>3.0.CO;2-Z",
+      "url": "https://doi.org/10.1002/(SICI)1097-0266(199708)18:7%3C509::AID-SMJ882%3E3.0.CO;2-Z",
+      "accessed_at": "2026-11-08",
+      "source_type": "academic_publication",
+      "evidence_locator": "Article abstract and bibliographic record",
+      "supports": "Dynamic capabilities 作為策略研究重要觀點的代表文獻；不為單篇 SMJ 論文的理論使用狀態背書。"
     }
   ],
   "nodes": [
@@ -79,7 +129,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -100,7 +150,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -121,7 +171,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -142,7 +192,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -163,7 +213,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -184,7 +234,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -205,7 +255,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -226,7 +276,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -247,7 +297,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -268,7 +318,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -289,7 +339,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -310,7 +360,7 @@
       "method": "SMS IG label transcription; placement as Atlas Level 1 is an editorial adaptation",
       "translation_origin": "custom_research",
       "hierarchy_origin": "custom_research",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -332,7 +382,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -360,7 +410,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -387,7 +437,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -413,7 +463,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -440,7 +490,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -466,7 +516,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -497,7 +547,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -524,7 +574,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -550,7 +600,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -577,7 +627,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -606,7 +656,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -633,7 +683,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -660,7 +710,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -688,7 +738,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -716,7 +766,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -742,7 +792,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -769,7 +819,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -798,7 +848,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -828,7 +878,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -856,7 +906,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -882,7 +932,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -908,7 +958,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -934,7 +984,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -960,7 +1010,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -986,7 +1036,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1012,7 +1062,7 @@
         "AOM-STR-2026"
       ],
       "method": "Atlas editorial working vocabulary and nonexclusive scope mapping; not an official organization subdivision",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1035,13 +1085,14 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
       "synonyms": [],
       "match_phrases": [
-        "behavioral theory of the firm"
+        "behavioral theory of the firm",
+        "behavioral theory of firms"
       ],
       "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
     },
@@ -1056,13 +1107,14 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
       "synonyms": [],
       "match_phrases": [
-        "attention based view"
+        "attention based view",
+        "attention based perspective"
       ],
       "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
     },
@@ -1077,13 +1129,15 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
       "synonyms": [],
       "match_phrases": [
-        "resource dependence theory"
+        "resource dependence theory",
+        "resource dependency theory",
+        "resource dependence perspective"
       ],
       "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
     },
@@ -1098,13 +1152,15 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
       "synonyms": [],
       "match_phrases": [
-        "resource based view"
+        "resource based view",
+        "resource based theory",
+        "resource based perspective"
       ],
       "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
     },
@@ -1119,14 +1175,16 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
       "synonyms": [],
       "match_phrases": [
         "transaction cost economics",
-        "transaction cost theory"
+        "transaction cost theory",
+        "transaction cost perspective",
+        "transaction cost approach"
       ],
       "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
     },
@@ -1141,13 +1199,15 @@
         "ATLAS-METHOD"
       ],
       "method": "Independent Atlas theory tagging vocabulary; not SMS IGs or a hierarchy level",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
       "synonyms": [],
       "match_phrases": [
-        "agency theory"
+        "agency theory",
+        "principal agent theory",
+        "principal agent framework"
       ],
       "description": "自訂工作詞彙與編排，待研究者審核；不表示任何論文已採用此構念或衡量。"
     },
@@ -1157,7 +1217,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Explicit unclassified fallback when no source-supported label exists in this dimension; not evidence that the paper belongs to a substantive other category",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1176,7 +1236,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Explicit unclassified fallback when no source-supported label exists in this dimension; not evidence that the paper belongs to a substantive other category",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1197,7 +1257,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Explicit unclassified fallback when no source-supported label exists in this dimension; not evidence that the paper belongs to a substantive other category",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1218,7 +1278,7 @@
         "ATLAS-METHOD"
       ],
       "method": "Explicit unclassified fallback when no source-supported label exists in this dimension; not evidence that the paper belongs to a substantive other category",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "review_status": "needs_review",
       "reviewer": null,
       "reviewed_at": null,
@@ -1230,6 +1290,2484 @@
       "label_zh": "其他／理論未明示",
       "label_en": "Other / Theory not evidenced",
       "parent_ids": []
+    },
+    {
+      "id": "CON-ASPIRATION",
+      "level": "construct",
+      "label_zh": "績效抱負水準",
+      "label_en": "Aspiration level",
+      "parent_ids": [
+        "TOP-BEH"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "aspiration level",
+        "organizational aspiration",
+        "performance aspiration",
+        "aspiration levels"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-FEEDBACK",
+      "level": "construct",
+      "label_zh": "績效回饋",
+      "label_en": "Performance feedback",
+      "parent_ids": [
+        "TOP-BEH"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "performance feedback",
+        "negative performance feedback",
+        "positive performance feedback"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-PROBLEMSEARCH",
+      "level": "construct",
+      "label_zh": "問題導向搜尋",
+      "label_en": "Problemistic search",
+      "parent_ids": [
+        "TOP-BEH"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "problemistic search",
+        "problem driven search"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-RISK",
+      "level": "construct",
+      "label_zh": "管理者風險承擔",
+      "label_en": "Managerial risk taking",
+      "parent_ids": [
+        "TOP-BEH"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "managerial risk taking",
+        "risk propensity",
+        "executive risk taking"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-MANAGERCOG",
+      "level": "construct",
+      "label_zh": "管理者認知框架",
+      "label_en": "Managerial cognition",
+      "parent_ids": [
+        "TOP-BEH"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "managerial cognition",
+        "cognitive framing",
+        "managerial mental models"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-ORGLEARN",
+      "level": "construct",
+      "label_zh": "組織學習",
+      "label_en": "Organizational learning",
+      "parent_ids": [
+        "TOP-BEH"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "organizational learning",
+        "experiential learning"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-COMPINT",
+      "level": "construct",
+      "label_zh": "競爭強度",
+      "label_en": "Competitive intensity",
+      "parent_ids": [
+        "TOP-COMP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "competitive intensity",
+        "intensity of competition",
+        "rivalry intensity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-COMPACTION",
+      "level": "construct",
+      "label_zh": "競爭行動強度",
+      "label_en": "Competitive aggressiveness",
+      "parent_ids": [
+        "TOP-COMP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "competitive aggressiveness",
+        "competitive actions",
+        "competitive action repertoire"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-MKTCONC",
+      "level": "construct",
+      "label_zh": "市場集中度",
+      "label_en": "Market concentration",
+      "parent_ids": [
+        "TOP-COMP"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "market concentration",
+        "industry concentration",
+        "market concentration index"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-ALLIANCEEXP",
+      "level": "construct",
+      "label_zh": "聯盟經驗",
+      "label_en": "Alliance experience",
+      "parent_ids": [
+        "TOP-ALL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "alliance experience",
+        "prior alliance experience",
+        "alliance formation experience"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-NETCENT",
+      "level": "construct",
+      "label_zh": "網絡中心性",
+      "label_en": "Network centrality",
+      "parent_ids": [
+        "TOP-ALL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "network centrality",
+        "betweenness centrality",
+        "degree centrality"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-STRUCTHOLES",
+      "level": "construct",
+      "label_zh": "結構洞與網絡中介",
+      "label_en": "Structural holes and brokerage",
+      "parent_ids": [
+        "TOP-ALL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "structural holes",
+        "network brokerage",
+        "brokerage positions"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-RELCAP",
+      "level": "construct",
+      "label_zh": "關係與聯盟能力",
+      "label_en": "Relational capabilities",
+      "parent_ids": [
+        "TOP-ALL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "relational capability",
+        "relational capabilities",
+        "alliance capability"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-NETEMB",
+      "level": "construct",
+      "label_zh": "網絡嵌入性",
+      "label_en": "Network embeddedness",
+      "parent_ids": [
+        "TOP-ALL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "network embeddedness",
+        "relational embeddedness"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-ASSETSPEC",
+      "level": "construct",
+      "label_zh": "資產專屬性",
+      "label_en": "Asset specificity",
+      "parent_ids": [
+        "TOP-BOUND"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "asset specificity",
+        "transaction specific investments",
+        "relationship specific assets"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-VERTICAL",
+      "level": "construct",
+      "label_zh": "垂直整合程度",
+      "label_en": "Vertical integration",
+      "parent_ids": [
+        "TOP-BOUND"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "vertical integration",
+        "degree of vertical integration"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-OUTSOURCE",
+      "level": "construct",
+      "label_zh": "外包強度",
+      "label_en": "Outsourcing intensity",
+      "parent_ids": [
+        "TOP-BOUND"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "outsourcing intensity",
+        "extent of outsourcing"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-DIVERSIFICATION",
+      "level": "construct",
+      "label_zh": "企業多角化程度",
+      "label_en": "Corporate diversification",
+      "parent_ids": [
+        "TOP-MNA"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "corporate diversification",
+        "product diversification",
+        "diversification degree"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-RELATEDNESS",
+      "level": "construct",
+      "label_zh": "事業資源相關性",
+      "label_en": "Resource relatedness",
+      "parent_ids": [
+        "TOP-MNA"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "resource relatedness",
+        "business relatedness",
+        "related diversification"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-ACQPREMIUM",
+      "level": "construct",
+      "label_zh": "併購溢價",
+      "label_en": "Acquisition premium",
+      "parent_ids": [
+        "TOP-MNA"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "acquisition premium",
+        "takeover premium"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-RESOURCEDEPLOY",
+      "level": "construct",
+      "label_zh": "資源再配置",
+      "label_en": "Resource redeployment",
+      "parent_ids": [
+        "TOP-RESOURCE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "resource redeployment",
+        "redeployability of resources",
+        "resource reallocation"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-DYNCAP",
+      "level": "construct",
+      "label_zh": "動態能力",
+      "label_en": "Dynamic capabilities",
+      "parent_ids": [
+        "TOP-RESOURCE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008",
+        "TEECE-1997"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "dynamic capabilities",
+        "dynamic capability"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-ABSORB",
+      "level": "construct",
+      "label_zh": "吸收能力",
+      "label_en": "Absorptive capacity",
+      "parent_ids": [
+        "TOP-INNOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "absorptive capacity",
+        "potential absorptive capacity",
+        "realized absorptive capacity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-AMBIDEX",
+      "level": "construct",
+      "label_zh": "組織雙元性",
+      "label_en": "Organizational ambidexterity",
+      "parent_ids": [
+        "TOP-PROCESS"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "organizational ambidexterity",
+        "exploration exploitation balance",
+        "exploration and exploitation"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-EO",
+      "level": "construct",
+      "label_zh": "創業導向",
+      "label_en": "Entrepreneurial orientation",
+      "parent_ids": [
+        "TOP-ENT"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "entrepreneurial orientation",
+        "entrepreneurial innovativeness"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-NEWVENTPERF",
+      "level": "construct",
+      "label_zh": "新創事業績效",
+      "label_en": "New venture performance",
+      "parent_ids": [
+        "TOP-ENT"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "new venture performance",
+        "startup performance",
+        "start up performance"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-ENTRYTIME",
+      "level": "construct",
+      "label_zh": "市場進入時機",
+      "label_en": "Market entry timing",
+      "parent_ids": [
+        "TOP-ENT"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "market entry timing",
+        "timing of entry",
+        "entry timing"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-INTLDIV",
+      "level": "construct",
+      "label_zh": "國際化多角化程度",
+      "label_en": "International diversification",
+      "parent_ids": [
+        "TOP-GLOBAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "international diversification",
+        "geographic diversification",
+        "foreign sales intensity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-INSTDIST",
+      "level": "construct",
+      "label_zh": "制度距離",
+      "label_en": "Institutional distance",
+      "parent_ids": [
+        "TOP-GLOBAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "institutional distance",
+        "regulatory distance"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-CULTDIST",
+      "level": "construct",
+      "label_zh": "文化距離",
+      "label_en": "Cultural distance",
+      "parent_ids": [
+        "TOP-GLOBAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "cultural distance",
+        "psychic distance"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-GEORISK",
+      "level": "construct",
+      "label_zh": "地緣政治風險",
+      "label_en": "Geopolitical risk",
+      "parent_ids": [
+        "TOP-GLOBAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "geopolitical risk",
+        "geopolitical uncertainty"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-SUBAUTON",
+      "level": "construct",
+      "label_zh": "海外子公司自主性",
+      "label_en": "Subsidiary autonomy",
+      "parent_ids": [
+        "TOP-GLOBAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "subsidiary autonomy",
+        "subsidiary mandate"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-RDINT",
+      "level": "construct",
+      "label_zh": "研發密集度",
+      "label_en": "R&D intensity",
+      "parent_ids": [
+        "TOP-INNOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "r d intensity",
+        "research and development intensity",
+        "rd intensity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-PATENT",
+      "level": "construct",
+      "label_zh": "專利品質與引用品質",
+      "label_en": "Patent quality and citations",
+      "parent_ids": [
+        "TOP-INNOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "patent quality",
+        "patent citations",
+        "citation weighted patents"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-KNOWSEARCH",
+      "level": "construct",
+      "label_zh": "知識搜尋廣度深度",
+      "label_en": "Knowledge search breadth and depth",
+      "parent_ids": [
+        "TOP-INNOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "knowledge search breadth",
+        "knowledge search depth",
+        "search breadth",
+        "search depth"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-RECOMBIN",
+      "level": "construct",
+      "label_zh": "知識重組",
+      "label_en": "Knowledge recombination",
+      "parent_ids": [
+        "TOP-INNOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "knowledge recombination",
+        "recombinant innovation"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-TECHDIST",
+      "level": "construct",
+      "label_zh": "技術距離",
+      "label_en": "Technological distance",
+      "parent_ids": [
+        "TOP-INNOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "technological distance",
+        "technology distance"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-CSR",
+      "level": "construct",
+      "label_zh": "企業社會責任",
+      "label_en": "Corporate social responsibility",
+      "parent_ids": [
+        "TOP-STAKE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "corporate social responsibility",
+        "csr performance"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-ESG",
+      "level": "construct",
+      "label_zh": "ESG 績效",
+      "label_en": "ESG performance",
+      "parent_ids": [
+        "TOP-STAKE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "esg performance",
+        "environmental social governance performance"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-STAKEPRESS",
+      "level": "construct",
+      "label_zh": "利害關係人壓力",
+      "label_en": "Stakeholder pressure",
+      "parent_ids": [
+        "TOP-STAKE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "stakeholder pressure",
+        "stakeholder salience"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-POLCONN",
+      "level": "construct",
+      "label_zh": "政治連結",
+      "label_en": "Political connections",
+      "parent_ids": [
+        "TOP-NONMARKET"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "political connections",
+        "political ties",
+        "political connectedness"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-REGUNC",
+      "level": "construct",
+      "label_zh": "政策監管不確定性",
+      "label_en": "Regulatory uncertainty",
+      "parent_ids": [
+        "TOP-NONMARKET"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "regulatory uncertainty",
+        "policy uncertainty",
+        "trade policy uncertainty"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-EMPLOYMOB",
+      "level": "construct",
+      "label_zh": "員工流動性",
+      "label_en": "Employee mobility",
+      "parent_ids": [
+        "TOP-HC"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "employee mobility",
+        "labor mobility",
+        "worker mobility"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-INVMOB",
+      "level": "construct",
+      "label_zh": "發明人流動性",
+      "label_en": "Inventor mobility",
+      "parent_ids": [
+        "TOP-HC"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "inventor mobility",
+        "inventor movement"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-HCSPEC",
+      "level": "construct",
+      "label_zh": "企業專屬人力資本",
+      "label_en": "Firm-specific human capital",
+      "parent_ids": [
+        "TOP-HC"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "firm specific human capital",
+        "human capital specificity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-TURNOVER",
+      "level": "construct",
+      "label_zh": "員工離職率",
+      "label_en": "Employee turnover",
+      "parent_ids": [
+        "TOP-HC"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "employee turnover",
+        "voluntary turnover"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-CEOTENURE",
+      "level": "construct",
+      "label_zh": "執行長任期",
+      "label_en": "CEO tenure",
+      "parent_ids": [
+        "TOP-LEAD"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "ceo tenure",
+        "chief executive tenure"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-CEODUAL",
+      "level": "construct",
+      "label_zh": "執行長兼任董事長",
+      "label_en": "CEO duality",
+      "parent_ids": [
+        "TOP-GOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "ceo duality",
+        "chief executive duality"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-TMTDIVERS",
+      "level": "construct",
+      "label_zh": "高階管理團隊多樣性",
+      "label_en": "Top management team diversity",
+      "parent_ids": [
+        "TOP-LEAD"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "top management team diversity",
+        "tmt diversity",
+        "executive team diversity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-BOARDIND",
+      "level": "construct",
+      "label_zh": "董事會獨立性",
+      "label_en": "Board independence",
+      "parent_ids": [
+        "TOP-GOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "board independence",
+        "independent directors"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-BOARDDIV",
+      "level": "construct",
+      "label_zh": "董事會多樣性",
+      "label_en": "Board diversity",
+      "parent_ids": [
+        "TOP-GOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "board diversity",
+        "board gender diversity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-EXECCOMP",
+      "level": "construct",
+      "label_zh": "高階經理人薪酬",
+      "label_en": "Executive compensation",
+      "parent_ids": [
+        "TOP-GOV"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "executive compensation",
+        "ceo pay",
+        "incentive compensation"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-STRATCHANGE",
+      "level": "construct",
+      "label_zh": "策略變革",
+      "label_en": "Strategic change",
+      "parent_ids": [
+        "TOP-PROCESS"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "strategic change",
+        "strategic reorientation"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-FLEX",
+      "level": "construct",
+      "label_zh": "策略彈性",
+      "label_en": "Strategic flexibility",
+      "parent_ids": [
+        "TOP-PROCESS"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "strategic flexibility",
+        "strategic adaptability"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-STRATPLAN",
+      "level": "construct",
+      "label_zh": "策略規劃",
+      "label_en": "Strategic planning",
+      "parent_ids": [
+        "TOP-PROCESS"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "strategic planning",
+        "planning intensity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-STRATTOOLS",
+      "level": "construct",
+      "label_zh": "策略工具使用",
+      "label_en": "Strategy tools use",
+      "parent_ids": [
+        "TOP-PRACTICE"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "strategy tools",
+        "strategic management tools"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-PLATGOV",
+      "level": "construct",
+      "label_zh": "平台治理",
+      "label_en": "Platform governance",
+      "parent_ids": [
+        "TOP-DIGITAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "platform governance",
+        "platform rules"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-NETWORKFX",
+      "level": "construct",
+      "label_zh": "網絡效應",
+      "label_en": "Network effects",
+      "parent_ids": [
+        "TOP-DIGITAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "network effects",
+        "network externalities"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-ECOORCH",
+      "level": "construct",
+      "label_zh": "生態系協調",
+      "label_en": "Ecosystem orchestration",
+      "parent_ids": [
+        "TOP-DIGITAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "ecosystem orchestration",
+        "ecosystem governance"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-DIGTRANS",
+      "level": "construct",
+      "label_zh": "數位轉型",
+      "label_en": "Digital transformation",
+      "parent_ids": [
+        "TOP-DIGITAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "digital transformation",
+        "digitalization strategy",
+        "digital transformation capabilities"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-BMINNOV",
+      "level": "construct",
+      "label_zh": "商業模式創新",
+      "label_en": "Business model innovation",
+      "parent_ids": [
+        "TOP-DIGITAL"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "business model innovation",
+        "business model change"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-SUPDEP",
+      "level": "construct",
+      "label_zh": "供應商依賴",
+      "label_en": "Supplier dependence",
+      "parent_ids": [
+        "TOP-INPUT"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "supplier dependence",
+        "supply dependence",
+        "dependence on suppliers"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-MKTSHARE",
+      "level": "construct",
+      "label_zh": "市場占有率",
+      "label_en": "Market share",
+      "parent_ids": [
+        "TOP-OUTCOME"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "market share",
+        "market share growth"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-PRODUCTIVITY",
+      "level": "construct",
+      "label_zh": "企業生產力",
+      "label_en": "Firm productivity",
+      "parent_ids": [
+        "TOP-OUTCOME"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "firm productivity",
+        "total factor productivity",
+        "labor productivity"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-FIRMSURV",
+      "level": "construct",
+      "label_zh": "企業存續",
+      "label_en": "Firm survival",
+      "parent_ids": [
+        "TOP-OUTCOME"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "firm survival",
+        "business survival",
+        "survival of firms"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "CON-COMPADV",
+      "level": "construct",
+      "label_zh": "競爭優勢",
+      "label_en": "Competitive advantage",
+      "parent_ids": [
+        "TOP-OUTCOME"
+      ],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial strategic-management vocabulary; narrow title/OpenAlex-abstract phrase occurrence only; not confirmed measurement use",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "competitive advantage",
+        "sustained competitive advantage"
+      ],
+      "description": "策略研究工作構念，依明確詞組才進行自動建議；不等於已驗證的操作化衡量或論文模型角色。"
+    },
+    {
+      "id": "TH-DCV",
+      "level": "theory",
+      "label_zh": "動態能力觀點",
+      "label_en": "Dynamic Capabilities Perspective",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008",
+        "TEECE-1997"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "dynamic capabilities view",
+        "dynamic capabilities framework",
+        "dynamic capabilities theory",
+        "dynamic capability perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-KBV",
+      "level": "theory",
+      "label_zh": "知識基礎觀點",
+      "label_en": "Knowledge-Based View",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "knowledge based view",
+        "knowledge based theory of the firm",
+        "knowledge based perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-RELVIEW",
+      "level": "theory",
+      "label_zh": "關係觀點",
+      "label_en": "Relational View",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "relational view of the firm",
+        "relational view",
+        "relational perspective of strategy"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-INSTITUTIONAL",
+      "level": "theory",
+      "label_zh": "制度理論",
+      "label_en": "Institutional Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "institutional theory",
+        "neo institutional theory",
+        "neoinstitutional theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-INSTLOGIC",
+      "level": "theory",
+      "label_zh": "制度邏輯觀點",
+      "label_en": "Institutional Logics",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "institutional logics perspective",
+        "institutional logics"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-UPPER",
+      "level": "theory",
+      "label_zh": "高階梯隊理論",
+      "label_en": "Upper Echelons Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "upper echelons theory",
+        "upper echelons perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-SOCNET",
+      "level": "theory",
+      "label_zh": "社會網絡理論",
+      "label_en": "Social Network Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "social network theory",
+        "network theory of organizations"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-SOCCAP",
+      "level": "theory",
+      "label_zh": "社會資本理論",
+      "label_en": "Social Capital Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "social capital theory",
+        "social capital perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-STAKEH",
+      "level": "theory",
+      "label_zh": "利害關係人理論",
+      "label_en": "Stakeholder Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "stakeholder theory",
+        "stakeholder perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-SIGNAL",
+      "level": "theory",
+      "label_zh": "訊號理論",
+      "label_en": "Signaling Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "signaling theory",
+        "signalling theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-ORGLEARN",
+      "level": "theory",
+      "label_zh": "組織學習理論",
+      "label_en": "Organizational Learning Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "organizational learning theory",
+        "organizational learning perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-ORGECO",
+      "level": "theory",
+      "label_zh": "組織生態學",
+      "label_en": "Organizational Ecology",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "organizational ecology theory",
+        "organizational ecology",
+        "population ecology theory",
+        "population ecology"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-OPTIONS",
+      "level": "theory",
+      "label_zh": "實質選擇權理論",
+      "label_en": "Real Options Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "real options theory",
+        "real options reasoning",
+        "real options perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-PROSPECT",
+      "level": "theory",
+      "label_zh": "展望理論",
+      "label_en": "Prospect Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "prospect theory",
+        "cumulative prospect theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-CONTINGENCY",
+      "level": "theory",
+      "label_zh": "權變理論",
+      "label_en": "Contingency Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "contingency theory",
+        "structural contingency theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-STEWARD",
+      "level": "theory",
+      "label_zh": "管家理論",
+      "label_en": "Stewardship Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "stewardship theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-SOCEXCH",
+      "level": "theory",
+      "label_zh": "社會交換理論",
+      "label_en": "Social Exchange Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "social exchange theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-PROPERTY",
+      "level": "theory",
+      "label_zh": "財產權理論",
+      "label_en": "Property Rights Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "property rights theory",
+        "property rights approach"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-INFO",
+      "level": "theory",
+      "label_zh": "組織資訊處理理論",
+      "label_en": "Organizational Information Processing Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "organizational information processing theory",
+        "information processing theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-BEHAGENCY",
+      "level": "theory",
+      "label_zh": "行為代理理論",
+      "label_en": "Behavioral Agency Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "behavioral agency theory",
+        "behavioral agency model"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-LEGIT",
+      "level": "theory",
+      "label_zh": "合法性理論",
+      "label_en": "Legitimacy Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "legitimacy theory",
+        "organizational legitimacy theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-ORGIDENT",
+      "level": "theory",
+      "label_zh": "組織認同理論",
+      "label_en": "Organizational Identity Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "organizational identity theory",
+        "organizational identity perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-SOCIDENT",
+      "level": "theory",
+      "label_zh": "社會認同理論",
+      "label_en": "Social Identity Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "social identity theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-RESORCH",
+      "level": "theory",
+      "label_zh": "資源編排觀點",
+      "label_en": "Resource Orchestration Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "resource orchestration theory",
+        "resource orchestration perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-EVOLUTION",
+      "level": "theory",
+      "label_zh": "組織演化觀點",
+      "label_en": "Evolutionary Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "evolutionary theory of the firm",
+        "evolutionary economics",
+        "evolutionary theory of organizations"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-INSTENT",
+      "level": "theory",
+      "label_zh": "制度創業觀點",
+      "label_en": "Institutional Entrepreneurship",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "institutional entrepreneurship theory",
+        "institutional entrepreneurship perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-GAMETHEORY",
+      "level": "theory",
+      "label_zh": "賽局理論",
+      "label_en": "Game Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "game theory",
+        "game theoretic models"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-COMPLEX",
+      "level": "theory",
+      "label_zh": "複雜適應系統觀點",
+      "label_en": "Complexity Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "complexity theory",
+        "complex adaptive systems perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-DIFFUSION",
+      "level": "theory",
+      "label_zh": "創新擴散理論",
+      "label_en": "Diffusion of Innovations Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "diffusion of innovations theory",
+        "innovation diffusion theory"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
+    },
+    {
+      "id": "TH-PARADOX",
+      "level": "theory",
+      "label_zh": "悖論理論",
+      "label_en": "Paradox Theory",
+      "parent_ids": [],
+      "origin": "custom_research",
+      "source_ids": [
+        "ATLAS-METHOD",
+        "SMJ-SCOPE-2026",
+        "FURRER-2008"
+      ],
+      "method": "Atlas editorial theory-index vocabulary; explicit source-text phrase occurrence only, no inference from related topics",
+      "version": "2.2.0",
+      "review_status": "needs_review",
+      "reviewer": null,
+      "reviewed_at": null,
+      "synonyms": [],
+      "match_phrases": [
+        "paradox theory",
+        "paradox perspective"
+      ],
+      "description": "僅在摘要或標題明確提及此理論時標記；不證明作者將其作為理論基礎，亦不由主題推論使用。"
     }
   ],
   "scope_check": {
@@ -1346,6 +3884,7 @@
     "claim": "Atlas 自訂方法，未宣稱重現 Nag et al. 的原研究或取得 SMS/AOM/SMJ 認可。"
   },
   "legacy_versions": [
-    "2.0.0"
+    "2.0.0",
+    "2.1.0"
   ]
 }
