@@ -15,6 +15,12 @@ npm run dev
 ```
 Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state.json.gz 啟動，正常發布以 atlas-data 分支最近通過驗證的快照為準；原 bootstrap 與 taxonomy v2 快照完整保留。
 
+## 網站手動啟動全文抓取
+
+網站側邊導覽的「啟動論文分析」開啟 `/run/`。按鈕會導向 GitHub 的 [Autonomous data release](https://github.com/oliver0923-hub/smj-research-atlas/actions/workflows/sync-metadata.yml) 執行頁。用具備 Actions 執行權限的 GitHub 帳號登入，點選 **Run workflow → batch → Run workflow**。確認後後端自動同步 SMJ 書目、尋找合法 OA 全文、解析變數／假設／實證結果／穩健性檢驗、驗證並部署。**GitHub Pages 是靜態網站，不能直接安全地發出具有寫入權限的 workflow_dispatch；因此 GitHub 的登入與確認不可省略。**網站不保存任何 Personal Access Token。
+
+`batch` 模式每次最多嘗試 60 篇 OA 正文，全文階段預算最多 720 秒。此模式不代表一次抓完所有 SMJ 論文，也無法保證取得付費牆內的正文；沒有證據的欄位仍為 Unknown。網站 `/run/` 會讀取 GitHub 公開工作流程紀錄與最近通過驗證的資料覆蓋率，兩者可能具有時間差。排程更新仍會持續，不需手動操作。
+
 ## 更新（無人工審核門檻）
 - `python -m pipeline.release refresh --mode daily`：Crossref 新論文 DOI 增量、優先補充新 DOI 的 OpenAlex 資訊，最多嘗試 4 篇 OA 正文（時間預算 150 秒），自動抽取逐篇變數、H/P 假設、結果顯著性、Robustness 與 Sensitivity，通過 QA 後更新網站。
 - `python -m pipeline.release refresh --mode weekly`：補充歷史 OpenAlex 資訊及新 DOI，最多嘗試 40 篇 OA 正文（時間預算 600 秒），包含抽取器升級時重新處理既有正文。
