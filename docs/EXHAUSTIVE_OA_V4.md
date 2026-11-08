@@ -43,3 +43,9 @@ evaluation/gold.json 為 15 篇不同真實 SMJ PDF 的獨立原文標註，排�
 正式網站與 raw atlas-data 的進度可能有部署時間差；執行頁優先讀取 durable progress JSON，並保留網站 fallback。
 
 所有 daily/weekly/batch 相容入口也使用同一 v4 佇列並尊重 pause；不會由舊取得器繞過暫停。完成狀態仍會在任何到期失敗重試或 parser/extractor 升級時重開，不必等待 provider 重查。
+
+## 補充關係評估與真實來源迴歸
+
+`python -m pipeline.evaluate_relationships` 在相同 15 篇來源中的 3 篇，另以原始 PDF 指定頁標註 26 個關係 query；此補充標註在初始三欄評估之後建立，抽取器維持凍結、未依答案調參。假設支持：TP=4、FN=2、precision=100%、recall=66.7%；指定的顯著性（3）、角色（4）、假設—變數—模型連結（6）、模型估計（3）、p-value（3）、穩健性結果（1）均全部棄答／漏抓，不能宣稱關係辨識已可靠。precision 分母為零時為 Unknown，不能報成 100%。網站公開兩組評估，未評估的欄位仍 Unknown。
+
+smj.3340 的來源 URL、SHA256、PDF 第 12 頁與短摘錄保存於 evaluation/smj3340_regression.json，CI 從已驗證 atlas-data 恢復實際抽取紀錄，核對 numerator/denominator、state-year、inferred_ratio 與未知原文 formula。這是開發來源迴歸，沒有混入獨立評估樣本。PR CI 也恢復真實快照後執行此檢查。

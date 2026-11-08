@@ -1,0 +1,306 @@
+{
+  "method": "Supplemental independent raw-PDF inspection after initial 3-field evaluation; frozen extractor unchanged. Labels are not copied from predictions. Three papers from the same 15-paper source cohort; no second blind reviewer. Exact model/table links required; unknowns count as misses.",
+  "sources": [
+    {
+      "doi": "10.1002/smj.831",
+      "paper_id": "doi:10.1002/smj.831",
+      "source_url": "https://openaccess.city.ac.uk/id/eprint/7162/5/SMJ%20final%204th%20submission%20with%20corrected%20table%202.pdf",
+      "source_hash": "181bc9ddadf32c6f445ee78f46755fb6985492fc199f17eb1ba20f9971975631"
+    },
+    {
+      "doi": "10.1002/smj.3051",
+      "paper_id": "doi:10.1002/smj.3051",
+      "source_url": "https://openaccess.city.ac.uk/id/eprint/22148/8/Huang%20Souitaris%20Barsade_2019_SMJ_prepublication%20version.pdf",
+      "source_hash": "15989646ea7496dec5f12375a7c75ee716bd82cefce7d5adf1df7053aa02da68"
+    },
+    {
+      "doi": "10.1002/smj.3580",
+      "paper_id": "doi:10.1002/smj.3580",
+      "source_url": "https://openaccess.city.ac.uk/id/eprint/32437/8/Strategic%20Management%20Journal%20-%202024%20-%20Camuffo%20-%20A%20scientific%20approach%20to%20entrepreneurial%20decision%E2%80%90making%20Large%E2%80%90scale.pdf",
+      "source_hash": "bb2441a8f0079f5a7371f0610d1beae95f23b7727e4ef7670b1e8de9b4cec6d0"
+    }
+  ],
+  "queries": [
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_support",
+      "expected": "supported",
+      "pages": [
+        28
+      ],
+      "label": "H1"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_significance",
+      "expected": "significant",
+      "pages": [
+        28
+      ],
+      "label": "H1"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_support",
+      "expected": "supported",
+      "pages": [
+        28
+      ],
+      "label": "H2"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_significance",
+      "expected": "significant",
+      "pages": [
+        28
+      ],
+      "label": "H2"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_support",
+      "expected": "supported",
+      "pages": [
+        28
+      ],
+      "label": "H3"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_significance",
+      "expected": "significant",
+      "pages": [
+        28
+      ],
+      "label": "H3"
+    },
+    {
+      "doi": "10.1002/smj.3051",
+      "kind": "hypothesis_support",
+      "expected": "supported",
+      "pages": [
+        24,
+        25,
+        26
+      ],
+      "label": "H1b"
+    },
+    {
+      "doi": "10.1002/smj.3051",
+      "kind": "hypothesis_support",
+      "expected": "supported",
+      "pages": [
+        24,
+        25,
+        26
+      ],
+      "label": "H2a"
+    },
+    {
+      "doi": "10.1002/smj.3051",
+      "kind": "hypothesis_support",
+      "expected": "supported",
+      "pages": [
+        24,
+        25,
+        26
+      ],
+      "label": "H2b"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "variable_role",
+      "expected": "independent",
+      "pages": [
+        28
+      ],
+      "variable": "polychronicity"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "variable_role",
+      "expected": "mediator",
+      "pages": [
+        28
+      ],
+      "variable": "speed"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "variable_role",
+      "expected": "mediator",
+      "pages": [
+        28
+      ],
+      "variable": "comprehensiveness"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "variable_role",
+      "expected": "dependent",
+      "pages": [
+        28
+      ],
+      "variable": "financial performance"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_variable_model_link",
+      "expected": true,
+      "pages": [
+        27,
+        28
+      ],
+      "label": "H2",
+      "iv": "polychronicity",
+      "dv": "speed",
+      "table": "Table 3",
+      "model": "1"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_variable_model_link",
+      "expected": true,
+      "pages": [
+        27,
+        28
+      ],
+      "label": "H2",
+      "iv": "polychronicity",
+      "dv": "speed",
+      "table": "Table 3",
+      "model": "2"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_variable_model_link",
+      "expected": true,
+      "pages": [
+        27,
+        28
+      ],
+      "label": "H3",
+      "iv": "polychronicity",
+      "dv": "comprehensiveness",
+      "table": "Table 3",
+      "model": "3"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_variable_model_link",
+      "expected": true,
+      "pages": [
+        27,
+        28
+      ],
+      "label": "H3",
+      "iv": "polychronicity",
+      "dv": "comprehensiveness",
+      "table": "Table 3",
+      "model": "4"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_variable_model_link",
+      "expected": true,
+      "pages": [
+        27,
+        28
+      ],
+      "label": "H1",
+      "iv": "polychronicity",
+      "dv": "financial performance",
+      "table": "Table 4",
+      "model": "5"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "hypothesis_variable_model_link",
+      "expected": true,
+      "pages": [
+        27,
+        28
+      ],
+      "label": "H1",
+      "iv": "polychronicity",
+      "dv": "financial performance",
+      "table": "Table 4",
+      "model": "6"
+    },
+    {
+      "doi": "10.1002/smj.3580",
+      "kind": "model_estimate",
+      "expected": 0.098,
+      "pages": [
+        16
+      ],
+      "table": "Table 2",
+      "model": "1",
+      "variable": "Intervention"
+    },
+    {
+      "doi": "10.1002/smj.3580",
+      "kind": "model_p_value",
+      "expected": 0.001,
+      "pages": [
+        16
+      ],
+      "table": "Table 2",
+      "model": "1",
+      "variable": "Intervention"
+    },
+    {
+      "doi": "10.1002/smj.3580",
+      "kind": "model_estimate",
+      "expected": 0.365,
+      "pages": [
+        16
+      ],
+      "table": "Table 3",
+      "model": "1",
+      "variable": "Intervention"
+    },
+    {
+      "doi": "10.1002/smj.3580",
+      "kind": "model_p_value",
+      "expected": 0.0,
+      "pages": [
+        16
+      ],
+      "table": "Table 3",
+      "model": "1",
+      "variable": "Intervention"
+    },
+    {
+      "doi": "10.1002/smj.3580",
+      "kind": "model_estimate",
+      "expected": -2.699,
+      "pages": [
+        16
+      ],
+      "table": "Table 3",
+      "model": "2",
+      "variable": "Intervention"
+    },
+    {
+      "doi": "10.1002/smj.3580",
+      "kind": "model_p_value",
+      "expected": 0.009,
+      "pages": [
+        16
+      ],
+      "table": "Table 3",
+      "model": "2",
+      "variable": "Intervention"
+    },
+    {
+      "doi": "10.1002/smj.831",
+      "kind": "robustness_result",
+      "expected": "holds",
+      "pages": [
+        29
+      ]
+    }
+  ]
+}

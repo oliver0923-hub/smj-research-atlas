@@ -8,6 +8,8 @@ v4 全庫 OA 來源循環、跨工作 checkpoint、逐欄證據、37 個獨立�
 ```
 python -m pip install -e ".[test]"
 python -m pipeline.release restore
+git fetch origin atlas-data
+python -m pipeline.release restore --from-ref origin/atlas-data
 python -m pipeline.release gate
 python -m pipeline.cli build
 python -m pytest
