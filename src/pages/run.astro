@@ -1,0 +1,53 @@
+---
+import Layout from "../layouts/Layout.astro";
+const workflow="https://github.com/oliver0923-hub/smj-research-atlas/actions/workflows/sync-metadata.yml";
+---
+<Layout title="啟動論文抓取與分析">
+  <div class="eyebrow">RESEARCH INGESTION CONTROL</div>
+  <h1>啟動 SMJ 全文抓取與研究分析</h1>
+  <p class="lead">從 Crossref 找出 Strategic Management Journal 論文，使用 OpenAlex 探索合法開放全文，解析可取得的 PDF／HTML，抽取假設、變數及衡量、實證結果與 Robustness／Sensitivity，通過來源驗證後自動更新網站。無須逐篇人工審核。</p>
+  <section class="card manual-control" aria-labelledby="launch-title">
+    <h2 id="launch-title">手動啟動</h2>
+    <p class="muted">這個網站部署於靜態 GitHub Pages，沒有安全的伺服器端操作憑證。按下按鈕會開啟 GitHub 授權的工作流程頁面；請登入擁有執行權限的帳號，點選 <strong>Run workflow</strong>，選擇 <strong>batch</strong>，再確認執行。確認後其餘步驟由 GitHub Actions 自動完成。</p>
+    <a class="launch-button" href={workflow} target="_blank" rel="noopener noreferrer" aria-label="開啟 GitHub Actions 的啟動頁面">前往 GitHub 啟動抓取與分析 ↗</a>
+    <p class="status-line">預設 batch：每次最多嘗試 60 篇符合合法開放條件的全文，全文階段最多 12 分鐘；整體執行仍受工作流程上限與來源限制。此按鈕不會在未經 GitHub 授權時啟動任何工作。</p>
+  </section>
+
+  <h2>選擇執行範圍</h2>
+  <div class="grid">
+    <article class="card"><h3>batch · 大批處理</h3><p class="muted">手動推薦。更新書目、擴充 OA 來源、最多嘗試 60 篇，解析全部可驗證欄位。</p></article>
+    <article class="card"><h3>weekly · 歷史補抓</h3><p class="muted">最多嘗試 40 篇，兼顧已取得文獻的重新解析與歷史候選。</p></article>
+    <article class="card"><h3>daily · 快速更新</h3><p class="muted">優先新論文，最多嘗試 4 篇；適合測試或新 DOI 的快速補抓。</p></article>
+    <article class="card"><h3>monthly · 重新產生分析</h3><p class="muted">更新資料品質與網站分析，不新增全文下載。</p></article>
+  </div>
+
+  <section aria-labelledby="data-title">
+    <h2 id="data-title">目前公開資料進度</h2>
+    <p class="muted" id="analysis-summary" role="status">正在讀取最新一次成功發布的資料…</p>
+    <div class="grid" id="run-metrics"></div>
+    <p class="status-line">數字來自最近一次通過資料閘門的網站版本，與正在進行中的 GitHub 工作不同步。只有成功解析並通過原文定位的項目才計入。</p>
+  </section>
+
+  <section aria-labelledby="runs-title">
+    <h2 id="runs-title">GitHub Actions 最近執行狀態</h2>
+    <p class="muted" id="run-status" role="status">正在查詢最近的工作流程紀錄…</p>
+    <div id="run-history" class="run-history"></div>
+    <p class="muted">完成後重新整理本頁即可查看新結果。你也可以從 <a href={workflow}>GitHub Actions 執行紀錄</a> 直接確認成功或失敗原因。</p>
+  </section>
+
+  <section class="notice" aria-labelledby="limits-title">
+    <h2 id="limits-title">自動分析的邊界</h2>
+    <p>只有已取得合法全文的研究，才能建立具原文定位的變數和檢驗紀錄。付費牆、403、robots 規則與無法解析的表格或公式不會被繞過。假設是否獲支持與統計顯著不同；未取得證據時保留「未知」，不以自動推測填入。</p>
+  </section>
+</Layout>
+<script>import "../scripts/run-control";</script>
+<style>
+.manual-control{margin:24px 0}
+.launch-button{display:inline-block;background:#1d5546;color:#fff;border-radius:6px;padding:16px 22px;font-weight:650;text-decoration:none;margin:14px 0 6px}
+.launch-button:hover{background:#276d59}
+.launch-button:focus-visible{outline:3px solid #bd883c;outline-offset:3px}
+.run-history{display:grid;gap:12px}
+.run-history a{overflow-wrap:anywhere}
+.run-history article{background:white;border:1px solid #dce3d8;border-radius:6px;padding:14px 18px}
+.run-history p{margin:8px 0}
+</style>
