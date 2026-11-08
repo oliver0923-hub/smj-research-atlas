@@ -54,6 +54,11 @@ function fieldDetails(parent:Element,k:string,raw:any,review:boolean,abstract:st
     node(parent,'p','E2 · 已有可對齊的原文擷取欄位（非專家人工複核）','tiny');
     return;
   }
+  if(review){
+    node(parent,'strong','暫定不適用於原創實證估計');
+    node(parent,'p','依標題判定為 Review／Synthesis；仍須全文核查文獻檢索範圍與回顧方法。','tiny');
+    return;
+  }
   if(k==='data_source' && abstract){
     const cue=abstractSentences(abstract).find(s=>
        /\b(?:using|based on|drawn from|obtained from|collected from|data from|using the)\b.{0,95}\b(?:data|dataset|transactions|records|sample)\b/i.test(s)
@@ -66,13 +71,8 @@ function fieldDetails(parent:Element,k:string,raw:any,review:boolean,abstract:st
       return;
     }
   }
-  if(review){
-    node(parent,'strong','暫定不適用於原創實證估計');
-    node(parent,'p','依標題判定為 Review／Synthesis；仍須全文核查文獻檢索範圍與回顧方法。','tiny');
-  }else{
-    node(parent,'strong','未知／尚無來源證據');
-    node(parent,'p','沒有足夠原文可確認；不是零值，也不表示研究沒有使用。','tiny');
-  }
+  node(parent,'strong','未知／尚無來源證據');
+  node(parent,'p','沒有足夠原文可確認；不是零值，也不表示研究沒有使用。','tiny');
 }
 
 function localResearchRows(parent:Element,records:any[],evidenceById:Map<string,any>,name:string){
@@ -162,7 +162,13 @@ function reportGitHubStatus(parent:Element,doi:string,issueURL:string){
     try{
       const record=await loadGitHubAnalysis(doi);
       if(record){
-        status.textContent='已找到 Issue #'+record.number+' · 最近的全文擷取狀態：'+record.status;
+        const descriptions:Record<string,string>={
+          no_provider_oa_source:'目前來源索引沒有可自動擷取的 OA 候選（不代表不存在其他合法版本）',
+          fulltext_not_acquired:'已嘗試取得全文，但尚未成功，請查看各來源回應狀態',
+          source_extracted:'已成功解析本次合法來源',
+          existing_validated_fulltext:'已使用先前擷取、可來源對齊的全文',
+        };
+        status.textContent='已找到 Issue #'+record.number+' · '+(descriptions[record.status]||('GitHub 狀態：'+record.status));
         const a=node(region,'a','查看完整 GitHub 分析報告與來源紀錄') as HTMLAnchorElement;
         a.href=record.comment_url;a.target='_blank';a.rel='noopener noreferrer';
       }else{
