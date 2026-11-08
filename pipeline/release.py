@@ -7,12 +7,12 @@ from .core import Paper,now
 from .evidence import OperationalVariable
 from .study import StudyClaim
 
-TABLES=['papers.jsonl','variables.jsonl','study_claims.jsonl','enrichment.jsonl','content_receipts.jsonl','extraction_runs.jsonl','pipeline_history.jsonl','audit.jsonl','quarantine.jsonl']
+TABLES=['papers.jsonl','variables.jsonl','study_claims.jsonl','enrichment.jsonl','content_receipts.jsonl','extraction_runs.jsonl','pipeline_history.jsonl','audit.jsonl','quarantine.jsonl','crawl_queue.jsonl','crawl_control.jsonl','research_records.jsonl','research_quarantine.jsonl','crawl_events.jsonl']
 
 def snapshot():
     validate()
     checkpoints={name:json.loads((DATA/'staging'/name).read_text()) for name in ['openalex_checkpoint.json'] if (DATA/'staging'/name).exists()}
-    payload={'schema_version':'3.1.0','tables':{name:read(name) for name in TABLES},'checkpoints':checkpoints,'state':json.loads((DATA/'sync_state.json').read_text()),'publisher_check':json.loads((DATA/'publisher_check.json').read_text()) if (DATA/'publisher_check.json').exists() else {}}
+    payload={'schema_version':'4.0.0','tables':{name:read(name) for name in TABLES},'checkpoints':checkpoints,'state':json.loads((DATA/'sync_state.json').read_text()),'publisher_check':json.loads((DATA/'publisher_check.json').read_text()) if (DATA/'publisher_check.json').exists() else {}}
     blob=gzip.compress(json.dumps(payload,ensure_ascii=False,sort_keys=True).encode(),mtime=0)
     target=DATA/'live_state.json.gz';tmp=target.with_suffix('.tmp');tmp.write_bytes(blob);tmp.replace(target)
     return {'bytes':len(blob),'sha256':hashlib.sha256(blob).hexdigest()}
@@ -27,13 +27,12 @@ def restore(ref=None):
         if not path.exists():return {'status':'bootstrap'}
         blob=path.read_bytes()
     payload=json.loads(gzip.decompress(blob));tables=payload['tables']
-    if payload.get('schema_version')=='3.0.0':
-        # Restore all v3 releases safely; newly introduced research claims
-        # begin empty until actual accessible source text is processed.
-        tables.setdefault('study_claims.jsonl',[])
-    elif payload.get('schema_version')!='3.1.0':
-        raise ValueError('Unrecognized data artifact')
+    if payload.get('schema_version') in {'3.0.0','3.1.0'}:
+        for name in TABLES:tables.setdefault(name,[])
+    elif payload.get('schema_version')!='4.0.0':raise ValueError('Unrecognized data artifact')
     if set(tables)!=set(TABLES):raise ValueError('Unrecognized data artifact')
+    from .research import validate_record
+    for record in tables['research_records.jsonl']:validate_record(record)
     papers=tables['papers.jsonl'];ids=set()
     for p in papers:Paper.model_validate(p);assert p['paper_id'] not in ids;ids.add(p['paper_id'])
     for v in tables['variables.jsonl']:
@@ -97,6 +96,11 @@ def gate():
 def refresh(mode='daily',dry_run=False):
     from argparse import Namespace
     from .enrich import harvest,acquire
+    if mode in {'exhaust_oa','continue_oa','pause_oa','resume_oa','restart_oa'}:
+        from .crawl import tick
+        if dry_run:return {'status':'dry_run','mode':mode,'source_budget':180,'requests':450,'seconds':600,'paid_api_calls':0}
+        result=tick(mode,persist=os.getenv('GITHUB_ACTIONS')=='true')
+        snapshot();build();return result
     if dry_run:return {'status':'dry_run','mode':mode,'metadata_pages':20,
         'enrichment_requests':12 if mode in {'weekly','batch'} else 4 if mode=='daily' else 0,
         'fulltext_papers':60 if mode=='batch' else 40 if mode=='weekly' else 4 if mode=='daily' else 0,
@@ -126,7 +130,7 @@ def refresh(mode='daily',dry_run=False):
     build();snapshot();return run
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('command',choices=['snapshot','restore','refresh','gate','publisher','restore-checkpoints']);p.add_argument('--from-ref');p.add_argument('--mode',choices=['daily','weekly','batch','monthly'],default='daily');p.add_argument('--dry-run',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('command',choices=['snapshot','restore','refresh','gate','publisher','restore-checkpoints']);p.add_argument('--from-ref');p.add_argument('--mode',choices=['daily','weekly','batch','monthly','exhaust_oa','continue_oa','pause_oa','resume_oa','restart_oa'],default='daily');p.add_argument('--dry-run',action='store_true');a=p.parse_args()
     action={'snapshot':snapshot,'restore':lambda:restore(a.from_ref),'restore-checkpoints':restore_checkpoints,'refresh':lambda:refresh(a.mode,a.dry_run),'gate':gate,'publisher':publisher_check}[a.command]
     print(json.dumps(action(),ensure_ascii=False))
 if __name__=='__main__':main()

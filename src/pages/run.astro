@@ -8,11 +8,14 @@ const workflow="https://github.com/oliver0923-hub/smj-research-atlas/actions/wor
   <p class="lead">從 Crossref 找出 Strategic Management Journal 論文，使用 OpenAlex 探索合法開放全文，解析可取得的 PDF／HTML，抽取假設、變數及衡量、實證結果與 Robustness／Sensitivity，通過來源驗證後自動更新網站。無須逐篇人工審核。</p>
   <section class="card manual-control" aria-labelledby="launch-title">
     <h2 id="launch-title">手動啟動</h2>
-    <p class="muted">這個網站部署於靜態 GitHub Pages，沒有安全的伺服器端操作憑證。按下按鈕會開啟 GitHub 授權的工作流程頁面；請登入擁有執行權限的帳號，點選 <strong>Run workflow</strong>，選擇 <strong>batch</strong>，再確認執行。確認後其餘步驟由 GitHub Actions 自動完成。</p>
-    <a class="launch-button" href={workflow} target="_blank" rel="noopener noreferrer" aria-label="開啟 GitHub Actions 的啟動頁面">前往 GitHub 啟動抓取與分析 ↗</a>
-    <p class="status-line">預設 batch：每次最多嘗試 60 篇符合合法開放條件的全文，全文階段最多 12 分鐘；整體執行仍受工作流程上限與來源限制。此按鈕不會在未經 GitHub 授權時啟動任何工作。</p>
+    <p class="muted">這個網站部署於靜態 GitHub Pages，沒有安全的伺服器端操作憑證。按下按鈕會開啟 GitHub 授權的工作流程頁面；請登入擁有執行權限的帳號，點選 <strong>Run workflow</strong>，選擇 <strong>exhaust_oa</strong>，再確認執行。確認後其餘步驟由 GitHub Actions 自動完成。</p>
+    <a class="launch-button" href={workflow} target="_blank" rel="noopener noreferrer" aria-label="開啟 GitHub Actions 的啟動頁面">開始完整 OA 抓取（GitHub 授權）↗</a>
+    <p class="status-line">exhaust_oa 建立或接續全庫 DOI／來源佇列；每次最多處理 180 個來源、450 個來源 HTTP 請求、10 分鐘。每 3 小時由 GitHub cron 有界續跑，每 15 個來源或約 50 秒保存已驗證快照。此按鈕不會在未經 GitHub 授權時啟動任何工作。</p>
   </section>
 
+  <section class="notice"><h2>暫停、恢復與完成</h2><p>進入同一 GitHub 工作流程選擇 pause_oa 暫停，resume_oa 恢復，continue_oa 從持久 checkpoint 接續。暫停在目前有界工作結束後生效；不會取消已驗證的進度。完整本輪必須所有 DOI 都有來源探索紀錄，且本快照每個候選來源都有嘗試或明確政策阻擋原因。完成後改為低頻來源追蹤，並不代表每篇都取得全文。</p><a href={workflow}>查看進度／暫停／恢復（需 GitHub 執行權限）</a></section>
+  <h2>全庫 OA 遍歷進度</h2><div id="crawl-progress" aria-live="polite">正在讀取持久進度…</div>
+  <h2>逐欄完整度與獨立評估</h2><div id="field-coverage"></div>
   <h2>選擇執行範圍</h2>
   <div class="grid">
     <article class="card"><h3>batch · 大批處理</h3><p class="muted">手動推薦。更新書目、擴充 OA 來源、最多嘗試 60 篇，解析全部可驗證欄位。</p></article>

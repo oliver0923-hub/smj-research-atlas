@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Persistent paper/source traversal ledger",
+  "type": "object",
+  "required": [
+    "paper_id",
+    "doi",
+    "first_seen_at",
+    "updated_at",
+    "discovery_status",
+    "sources",
+    "source_attempts",
+    "attempts_count",
+    "last_successful_evidence",
+    "candidate_version"
+  ],
+  "properties": {
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "url",
+          "state",
+          "attempts",
+          "cycle_attempted",
+          "next_retry_at"
+        ],
+        "properties": {
+          "state": {
+            "enum": [
+              "fetch_pending",
+              "fetched",
+              "parsed",
+              "extraction_partial",
+              "extraction_complete_for_available_evidence",
+              "policy_blocked",
+              "transient_failure",
+              "permanent_failure_for_url"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

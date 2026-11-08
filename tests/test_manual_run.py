@@ -17,9 +17,9 @@ def test_manual_batch_has_explicit_budget_and_no_paid_provider():
 def test_workflow_accepts_manual_batch_and_keeps_scheduled_daily():
     source=(ROOT/".github/workflows/sync-metadata.yml").read_text(encoding="utf-8")
     assert "workflow_dispatch:" in source
-    assert "options: [daily, weekly, batch, monthly]" in source
-    assert "default: batch" in source
-    assert 'case "$mode" in daily|weekly|batch|monthly)' in source
+    assert "options: [exhaust_oa, continue_oa, pause_oa, resume_oa, daily, weekly, batch, monthly]" in source
+    assert "default: exhaust_oa" in source
+    assert 'exhaust_oa|continue_oa|pause_oa|resume_oa)' in source
     assert 'mode="${REQUESTED_MODE:-daily}"' in source
 
 

@@ -1,0 +1,467 @@
+{
+  "schema_version": "1.0",
+  "sampling": "15 distinct available SMJ PDFs, purposive 2010–2026; excludes smj.3340 development fixture; not representative of all SMJ",
+  "scope": "Named acquisition sources, explicit methods and primary sample periods on listed PDF pages only. Accuracy of other fields remains unknown.",
+  "papers": [
+    {
+      "paper_id": "doi:10.1002/smj.831",
+      "doi": "10.1002/smj.831",
+      "title": "Polychronicity in top management teams: The impact on strategic decision processes and performance of new technology ventures",
+      "year": 2010,
+      "source_url": "https://openaccess.city.ac.uk/id/eprint/7162/5/SMJ%20final%204th%20submission%20with%20corrected%20table%202.pdf",
+      "source_hash": "181bc9ddadf32c6f445ee78f46755fb6985492fc199f17eb1ba20f9971975631",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        20,
+        21,
+        22,
+        23,
+        27,
+        28,
+        29
+      ],
+      "queries": {
+        "data_source": [
+          "fame"
+        ],
+        "empirical_method": [
+          "hierarchical_regression",
+          "ols"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.2110",
+      "doi": "10.1002/smj.2110",
+      "title": "From core to periphery and back: A study on the deliberate shaping of knowledge flows in interfirm dyads and networks",
+      "year": 2014,
+      "source_url": "https://openaccess.city.ac.uk/id/eprint/17953/1/Lipparini_et_al-2013-Strategic_Management_Journal.pdf",
+      "source_hash": "378a576ff9372ea61e85aa88a9c9ac52c5e8aede094c524500c34d8d58e21241",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        4,
+        5,
+        6
+      ],
+      "queries": {
+        "data_source": [],
+        "empirical_method": [
+          "multiple_case_study",
+          "temporal_bracketing"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.2741",
+      "doi": "10.1002/smj.2741",
+      "title": "Strategy processes and practices: Dialogues and intersections",
+      "year": 2018,
+      "source_url": "https://ora.ox.ac.uk/objects/uuid:36dc1a88-091d-45ad-baab-2f757ff77fa0/files/m91101cfe63c20fffce62f2b00c890241",
+      "source_hash": "f501301bc9e4848c095e1054e69b66e72a31984566f7d48e7b3006f382908bc4",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "queries": {
+        "data_source": [],
+        "empirical_method": []
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.2904",
+      "doi": "10.1002/smj.2904",
+      "title": "Towards a theory of ecosystems",
+      "year": 2018,
+      "source_url": "https://lbsresearch.london.edu/id/eprint/982/1/JCG%20Ecosystem%20Theory%20SMJ%20accepted.pdf",
+      "source_hash": "069a67203c32f684271300e9851a3e0f0ad0b6a70265d1c8044c05a50bb57b93",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "queries": {
+        "data_source": [],
+        "empirical_method": []
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.3044",
+      "doi": "10.1002/smj.3044",
+      "title": "Fight or flight? Market positions, submarket interdependencies, and strategic responses to entry threats",
+      "year": 2019,
+      "source_url": "https://lbsresearch.london.edu/id/eprint/1123/1/Ethiraj_Market%20interdependence.pdf",
+      "source_hash": "3960911e77b5df0e47ea9405de57372fffe7a10195f017617d6c2128e129c792",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "queries": {
+        "data_source": [
+          "db1b",
+          "oag_scheduler"
+        ],
+        "empirical_method": [],
+        "sample_period": [
+          "2003–2012"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.3051",
+      "doi": "10.1002/smj.3051",
+      "title": "Which matters more? Group fear versus hope in entrepreneurial escalation of commitment",
+      "year": 2019,
+      "source_url": "https://openaccess.city.ac.uk/id/eprint/22148/8/Huang%20Souitaris%20Barsade_2019_SMJ_prepublication%20version.pdf",
+      "source_hash": "15989646ea7496dec5f12375a7c75ee716bd82cefce7d5adf1df7053aa02da68",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        23,
+        24,
+        25,
+        26
+      ],
+      "queries": {
+        "data_source": [],
+        "empirical_method": [
+          "cox",
+          "logit"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.3204",
+      "doi": "10.1002/smj.3204",
+      "title": "Stakeholder engagement strategies, national institutions, and firm performance: A configurational perspective",
+      "year": 2020,
+      "source_url": "https://lbsresearch.london.edu/id/eprint/1436/1/Stakeholder%20Engagement%20Strategies%20smj.3204.pdf",
+      "source_hash": "786b7aaf38f8eec27d6c8e3d51da2d41db18c22703703811ab9d4589b2b16434",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        4,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "queries": {
+        "data_source": [
+          "asset4",
+          "worldscope"
+        ],
+        "empirical_method": [
+          "qca"
+        ],
+        "sample_period": [
+          "2004–2011"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.3264",
+      "doi": "10.1002/smj.3264",
+      "title": "Organizing for innovation: A contingency view on innovative team configuration",
+      "year": 2021,
+      "source_url": "https://utoronto.scholaris.ca/server/api/core/bitstreams/04207e0d-6a81-4748-9861-01aeb4614330/content",
+      "source_hash": "7d37874d7fe8a0a11d8820dcd17007a7875584787b72584e17a0c0fc1b0180b5",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        12,
+        19
+      ],
+      "queries": {
+        "data_source": [
+          "uspto",
+          "nber_patent_dataset",
+          "harvard_patent_dataverse"
+        ],
+        "empirical_method": [
+          "logit"
+        ],
+        "sample_period": [
+          "1970–2010"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.3265",
+      "doi": "10.1002/smj.3265",
+      "title": "Strategic management during the financial crisis: How firms adjust their strategic investments in response to credit market disruptions",
+      "year": 2021,
+      "source_url": "https://lbsresearch.london.edu/id/eprint/1619/1/FlammerIoannou_Nov2020.pdf",
+      "source_hash": "e9bbe1ecd5a4f649fd53b71f1bb6be2191a8b008cce3e17c65f4059228e3dac6",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "queries": {
+        "data_source": [
+          "compustat",
+          "kld",
+          "dealscan",
+          "asset4",
+          "thomson_reuters"
+        ],
+        "empirical_method": [
+          "did"
+        ],
+        "sample_period": [
+          "2007–2009"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.3575",
+      "doi": "10.1002/smj.3575",
+      "title": "Status and consensus: Heterogeneity in audience evaluations of female‐ versus male‐lead films",
+      "year": 2024,
+      "source_url": "https://lbsresearch.london.edu/id/eprint/3601/1/Strategic%20Management%20Journal%20-%202024%20-%20Stroube%20-%20Status%20and%20consensus%20%20Heterogeneity%20in%20audience%20evaluations%20of%20female%E2%80%90.pdf",
+      "source_hash": "1d7b8afebde0c5e3ac16bf59f8a9147882b9d541197ae2fd0bc1efbd09b7eceb",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "queries": {
+        "data_source": [
+          "kids_in_mind",
+          "imdb",
+          "box_office_mojo"
+        ],
+        "empirical_method": [
+          "ols"
+        ],
+        "sample_period": [
+          "1992–2018"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.3580",
+      "doi": "10.1002/smj.3580",
+      "title": "A scientific approach to entrepreneurial decision‐making: Large‐scale replication and extension",
+      "year": 2024,
+      "source_url": "https://openaccess.city.ac.uk/id/eprint/32437/8/Strategic%20Management%20Journal%20-%202024%20-%20Camuffo%20-%20A%20scientific%20approach%20to%20entrepreneurial%20decision%E2%80%90making%20Large%E2%80%90scale.pdf",
+      "source_hash": "bb2441a8f0079f5a7371f0610d1beae95f23b7727e4ef7670b1e8de9b4cec6d0",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        4,
+        13,
+        15,
+        18
+      ],
+      "queries": {
+        "data_source": [],
+        "empirical_method": [
+          "rct",
+          "ols",
+          "cox",
+          "probit"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.70006",
+      "doi": "10.1002/smj.70006",
+      "title": "Perceptions of knowledge transferability and entrepreneurial entry: The role of firm‐initiated turnover",
+      "year": 2026,
+      "source_url": "https://lbsresearch.london.edu/id/eprint/4154/3/Strategic%20Management%20Journal%20-%202025%20-%20Oyedeji%20-%20Perceptions%20of%20knowledge%20transferability%20and%20entrepreneurial%20entry%20%20The.pdf",
+      "source_hash": "6f82c333062f23fea219261182b0cc4c0ec105b5950587674d38a7e064cdb021",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        10,
+        11,
+        12
+      ],
+      "queries": {
+        "data_source": [
+          "klips"
+        ],
+        "empirical_method": [
+          "ols",
+          "logit"
+        ],
+        "sample_period": [
+          "2000–2007"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.70027",
+      "doi": "10.1002/smj.70027",
+      "title": "Beyond the front page: In‐text citations to patents as traces of inventor knowledge",
+      "year": 2026,
+      "source_url": "https://researchonline.lse.ac.uk/id/eprint/129932/1/smj.70027.pdf",
+      "source_hash": "eceb7534141d3d2f871a4752f1d80e0d2879efbb19af13baa8e0f5369a6c0ea3",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "queries": {
+        "empirical_method": [
+          "ols",
+          "poisson"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.70040",
+      "doi": "10.1002/smj.70040",
+      "title": "Navigating uncertainty in a nascent ecosystem: How shifting cognitive frames influence an incumbent firm's platform scope strategies",
+      "year": 2026,
+      "source_url": "https://eprints.whiterose.ac.uk/id/eprint/234624/11/Strategic%20Management%20Journal%20-%202025%20-%20Putra%20-%20Navigating%20uncertainty%20in%20a%20nascent%20ecosystem%20%20How%20shifting%20cognitive%20frames.pdf",
+      "source_hash": "cd1985ce783fea516f354c6265c2648a6404636b93b64896ceca44be39a806dc",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        7,
+        8,
+        9
+      ],
+      "queries": {
+        "data_source": [],
+        "empirical_method": [
+          "temporal_bracketing"
+        ],
+        "sample_period": [
+          "2011–2020"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    },
+    {
+      "paper_id": "doi:10.1002/smj.70105",
+      "doi": "10.1002/smj.70105",
+      "title": "Unwind the clock? Temporal distance and user interactions on a digital platform",
+      "year": 2026,
+      "source_url": "https://researchonline.lse.ac.uk/id/eprint/140136/8/SO_Paper_Time_Zone_1_.pdf",
+      "source_hash": "a4ece6433b72df54c6c4ae91e9ac6b4718e3c3795dce44a266992cea317bc617",
+      "content_type": "application/pdf",
+      "reviewed_pages": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        24,
+        25
+      ],
+      "queries": {
+        "data_source": [
+          "stack_overflow"
+        ],
+        "empirical_method": [
+          "poisson",
+          "did",
+          "ols"
+        ],
+        "sample_period": [
+          "2015–2018"
+        ]
+      },
+      "annotation_method": "Independent raw-PDF source inspection; no extractor output used as a label; no second blind reviewer"
+    }
+  ]
+}

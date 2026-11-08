@@ -9,12 +9,13 @@ on:
     - cron: '23 2 * * *'
     - cron: '47 3 * * 0'
     - cron: '17 4 1 * *'
+    - cron: '41 */3 * * *'
   workflow_dispatch:
     inputs:
       mode:
         type: choice
-        options: [daily, weekly, batch, monthly]
-        default: batch
+        options: [exhaust_oa, continue_oa, pause_oa, resume_oa, daily, weekly, batch, monthly]
+        default: exhaust_oa
 permissions:
   actions: read
   contents: write
@@ -57,7 +58,8 @@ jobs:
           mode="${REQUESTED_MODE:-daily}"
           if [ "$SCHEDULE" = '47 3 * * 0' ]; then mode=weekly; fi
           if [ "$SCHEDULE" = '17 4 1 * *' ]; then mode=monthly; fi
-          case "$mode" in daily|weekly|batch|monthly) ;; *) echo "Unsupported mode"; exit 2 ;; esac
+          if [ "$SCHEDULE" = '41 */3 * * *' ]; then mode=continue_oa; fi
+          case "$mode" in daily|weekly|batch|monthly|exhaust_oa|continue_oa|pause_oa|resume_oa) ;; *) echo "Unsupported mode"; exit 2 ;; esac
           python -m pipeline.release refresh --mode "$mode"
       - run: python -m pytest
       - run: python -m pipeline.release gate
@@ -69,20 +71,7 @@ jobs:
           SITE_URL: https://${{ github.repository_owner }}.github.io
           BASE_PATH: /${{ github.event.repository.name }}/
       - name: Commit validated data artifact only
-        run: |
-          git config user.name 'SMJ Atlas data bot'
-          git config user.email 'atlas-bot@users.noreply.github.com'
-          blob=$(git hash-object -w data/live_state.json.gz)
-          sub=$(printf '100644 blob %s	live_state.json.gz\n' "$blob" | git mktree)
-          tree=$(printf '040000 tree %s	data\n' "$sub" | git mktree)
-          parent=$(git rev-parse --verify origin/atlas-data 2>/dev/null || true)
-          if [ -n "$parent" ]; then
-            commit=$(printf 'Validated automatic data release\n' | git commit-tree "$tree" -p "$parent")
-          else
-            commit=$(printf 'Initial validated data release\n' | git commit-tree "$tree")
-          fi
-          git push origin "$commit:refs/heads/atlas-data"
-          echo "PAGES_BUILD_VERSION=$commit" >> "$GITHUB_ENV"
+        run: python -m pipeline.crawl persist
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
