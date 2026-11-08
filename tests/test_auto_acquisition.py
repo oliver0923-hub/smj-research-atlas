@@ -83,6 +83,8 @@ def test_daily_targets_missing_dois_with_no_cursor(tmp_path,monkeypatch):
     def reader(name):
         return {"papers.jsonl":rows,"enrichment.jsonl":enriched}.get(name,[])
     class Response:
+        status_code=200
+        def raise_for_status(self):pass
         def json(self):
             return {"results":[{
                 "id":"https://openalex.org/W123",
