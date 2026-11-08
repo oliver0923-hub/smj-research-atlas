@@ -112,7 +112,9 @@ def validate_taxonomy(taxonomy, assignments=(), papers=(), variables=()):
     seen_pairs = set()
     for raw in assignments:
         a = Assignment.model_validate(raw)
-        if a.assignment_id in seen or a.term_id not in nodes or a.taxonomy_version != version or a.paper_id not in paper_ids:
+        if (a.assignment_id in seen or a.term_id not in nodes or a.paper_id not in paper_ids or
+            (a.taxonomy_version != version and not (a.taxonomy_version in taxonomy.get('legacy_versions',[])
+              and a.review_status in {'approved','rejected'}))):
             raise ValueError('Duplicate or dangling classification assignment')
         if (a.paper_id,a.term_id) in seen_pairs:
             raise ValueError('Conflicting duplicate classification for the same paper and term')
@@ -207,17 +209,43 @@ def enrich_papers(papers, taxonomy, assignments):
         result['taxonomy_version'] = taxonomy['version']
         result['classifications'] = by_paper[paper['paper_id']]
         result['taxonomy_tags'] = {status:{level:[] for level in ['domain','research_topic','construct','operational_variable','theory']} for status in ['approved','suggested']}
-        result['taxonomy_tags'].update({status:{level:[] for level in ['domain','research_topic','construct','operational_variable','theory']} for status in ['automatic','provisional','active']})
+        result['taxonomy_tags'].update({status:{level:[] for level in ['domain','research_topic','construct','operational_variable','theory']} for status in ['automatic','provisional','active','unresolved']})
         for a in result['classifications']:
             if a['review_status'] in result['taxonomy_tags']:
                 result['taxonomy_tags'][a['review_status']][nodes[a['term_id']]['level']].append(a['term_id'])
             level=nodes[a['term_id']]['level']
+            if a.get('is_fallback_other') and a['review_status']!='rejected':
+                result['taxonomy_tags']['unresolved'][level].append(a['term_id'])
             if a.get('validation_status') in {'validated_automatic','provisional'} and a['review_status']!='rejected':
                 target='automatic' if a['validation_status']=='validated_automatic' else 'provisional'
                 result['taxonomy_tags'][target][level].append(a['term_id'])
-            if a['review_status']=='approved' or (a['review_status']!='rejected' and a.get('validation_status') in {'validated_automatic','provisional'}):
+            if a['review_status']=='approved' or (a['review_status']!='rejected' and
+                    (a.get('validation_status') in {'validated_automatic','provisional'} or a.get('is_fallback_other'))):
                 result['taxonomy_tags']['active'][level].append(a['term_id'])
         result['domain_codes'] = sorted(set(result['taxonomy_tags']['active']['domain']))
         result['theory_tags'] = sorted(set(result['taxonomy_tags']['active']['theory']))
+        quality={}
+        for level in ('domain','research_topic','construct','theory'):
+            active=[a for a in result['classifications'] if nodes[a['term_id']]['level']==level
+                    and a['review_status']!='rejected']
+            substantive=[a for a in active if not a.get('is_fallback_other')
+                         and (a['review_status']=='approved' or a.get('validation_status') in {'validated_automatic','provisional'})]
+            approved=[a for a in substantive if a['review_status']=='approved']
+            abstract=[a for a in substantive if a.get('evidence_grade')=='E1_abstract']
+            exact=[a for a in substantive if a.get('validation_status')=='validated_automatic']
+            best=approved or abstract or exact or substantive
+            quality[level]=dict(
+                state=('human_approved' if approved else 'abstract_supported' if abstract else
+                       'title_supported' if exact else
+                       'provisional' if substantive else 'unresolved_other'),
+                substantive_terms=sorted({a['term_id'] for a in substantive}),
+                is_unresolved=not bool(substantive),
+                fallback_terms=sorted({a['term_id'] for a in active if a.get('is_fallback_other')}),
+                best_evidence_grade='E1_abstract' if abstract else 'E0_metadata' if substantive else None,
+                matching_rules=[a.get('method') for a in best],
+                score=max((a.get('heuristic_score') or 0 for a in substantive),default=None),
+                disclaimer='Uncalibrated automatic lexical tagging; no guarantee of paper-level semantic accuracy'
+            )
+        result['taxonomy_quality']=quality
         output.append(result)
     return output

@@ -197,7 +197,7 @@ def build():
     write(out/'publication.json',json.dumps(manifest))
     # Search metadata only; full records are chunked into per-paper detail files.
     search_fields=['paper_id','doi','title','authors','publication_year','domain_codes','theory_tags','method_tags','verification_status','oa_url','metadata_provenance']
-    search_fields+=['taxonomy_version','taxonomy_tags','legacy_domain_codes','legacy_theory_tags']
+    search_fields+=['taxonomy_version','taxonomy_tags','taxonomy_quality','legacy_domain_codes','legacy_theory_tags']
     for p in papers:
         p['evidence_grades']=sorted({a.get('evidence_grade','E0_metadata') for a in p['classifications']})
         p['variable_labels']=[v['variable_label_original'] for v in p['variables']]

@@ -20,7 +20,9 @@ def derive(papers,variables,taxonomy,receipts=(),enrichment=()):
     topic_counts=Counter();pairs=Counter();matrix=Counter();year_topic=Counter();representatives=defaultdict(list)
     citation={e['paper_id']:e.get('citation_count') or 0 for e in enrichment}
     for p in in_scope:
-        tags=p['taxonomy_tags']['active'];topics=set(tags['research_topic']);theories=set(tags['theory'])
+        tags=p['taxonomy_tags']['active']
+        topics={t for t in tags['research_topic'] if not t.startswith('OTHER-')}
+        theories={t for t in tags['theory'] if not t.startswith('OTHER-')}
         topic_counts.update(topics);pairs.update(combinations(sorted(topics),2));matrix.update((t,topic) for t in theories for topic in topics)
         year_topic.update((p['publication_year'],topic) for topic in topics)
         for topic in topics:representatives[topic].append({'paper_id':p['paper_id'],'title':p['title'],'year':p['publication_year'],'citations':citation.get(p['paper_id'],0),'fulltext_accessible':p['paper_id'] in available})
@@ -45,7 +47,20 @@ def coverage(papers,variables,assignments,receipts,enrichment,publisher):
     doi=[p['doi'] for p in papers];counts=Counter(p['publication_year'] for p in papers)
     classified={a['paper_id'] for a in assignments if a['review_status']!='rejected' and (a.get('validation_status') in {'validated_automatic','provisional'} or a['review_status']=='approved')}
     aligned=[v for v in variables if v.get('evidence_grade')=='E3_measurement_text' and v.get('validation_status')=='validated_automatic']
-    return dict(papers=len(papers),unique_doi=len(set(doi)),duplicate_doi=len(doi)-len(set(doi)),duplicate_rate=(len(doi)-len(set(doi)))/len(doi) if doi else 0,
+    dimensions=('domain','research_topic','construct','theory')
+    class_dimension_counts={
+        level:{
+            'abstract_supported':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='abstract_supported' for p in papers),
+            'title_supported':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='title_supported' for p in papers),
+            'provisional':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='provisional' for p in papers),
+            'unresolved_other':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' for p in papers),
+            'substantive_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms')) for p in papers),
+            'denominator':len(papers)
+        } for level in dimensions}
+    return dict(classification_by_dimension=class_dimension_counts,
+        classification_quality_method='automatic lexical evidence by dimension; Other is abstention, not a scholarly category',
+        taxonomy_coverage_papers_all_dimensions=sum(
+            all(p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms') for level in dimensions) for p in papers),papers=len(papers),unique_doi=len(set(doi)),duplicate_doi=len(doi)-len(set(doi)),duplicate_rate=(len(doi)-len(set(doi)))/len(doi) if doi else 0,
         missing_fields={field:sum(not p.get(field) for p in papers) for field in ['title','authors','volume','issue','pages','online_date','print_date']},
         years=sorted(counts),year_counts=dict(sorted(counts.items())),publication_type_mix=dict(Counter(article_kind(p) for p in papers)),
         classified_papers=len(classified),classification_denominator=len(papers),classification_coverage=len(classified)/len(papers) if papers else None,
@@ -54,7 +69,8 @@ def coverage(papers,variables,assignments,receipts,enrichment,publisher):
         variable_records=len(variables),measurement_text_aligned=len(aligned),formula_backed_variables=sum(bool(v.get('formula')) for v in aligned),
         verified_variables=len(aligned),verified_papers=len({v['paper_id'] for v in aligned}),
         measure_coverage=len({v['paper_id'] for v in aligned})/len(papers) if papers else None,
-        evidence_tiers=dict(Counter(a.get('evidence_grade','E0_metadata') for a in assignments)),validation_statuses=dict(Counter(a.get('validation_status','provisional') for a in assignments)),
+        evidence_tiers=dict(Counter(a.get('evidence_grade','E0_metadata') for a in assignments if not a.get('is_fallback_other'))),
+        validation_statuses=dict(Counter(a.get('validation_status','provisional') for a in assignments)),
         publisher_reconciliation=publisher,coverage_status='coverage_not_audited',missing_publisher_coverage_estimate=None,
         denominator='目前收錄之去重 SMJ Crossref 書目；出版社逐期完整母體未核對，缺漏比例未知',generated_at=now(),schema_version='3.0.0')
 
@@ -79,8 +95,10 @@ def gap_candidates(papers,taxonomy,minimum=10,maximum_joint=2):
     topics=defaultdict(set);theories=defaultdict(set)
     for p in scope:
         tags=p['taxonomy_tags']['active']
-        for term in set(tags['research_topic']):topics[term].add(p['paper_id'])
-        for term in set(tags['theory']):theories[term].add(p['paper_id'])
+        for term in set(tags['research_topic']):
+            if not term.startswith('OTHER-'):topics[term].add(p['paper_id'])
+        for term in set(tags['theory']):
+            if not term.startswith('OTHER-'):theories[term].add(p['paper_id'])
     eligible=sorted(t for t,ids in topics.items() if len(ids)>=minimum)
     rows=[]
     for a,b in combinations(eligible,2):
