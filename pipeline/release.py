@@ -121,7 +121,7 @@ def refresh(mode='daily',dry_run=False):
             # Upgrade all previously indexed abstract features in bounded
             # blocks instead of letting a six-thousand-tag ontology refresh
             # trickle in at four API calls each day. No extra fulltext requests.
-            backlog=sum(e.get('abstract_feature_method')!='allowed_phrase_occurrence_v6'
+            backlog=sum(e.get('abstract_feature_method')!='allowed_phrase_occurrence_v7'
                         for e in read('enrichment.jsonl'))
             # The first post-upgrade refresh can process the outstanding
             # legacy abstract feature inventory in one bounded pass, avoiding
