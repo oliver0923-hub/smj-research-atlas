@@ -63,8 +63,8 @@ def test_prefer_new_recent_papers_and_outdated_parser():
                  "failures":[{"url":"https://research.example.edu/article.pdf","reason":"HTTPStatusError:403"},
                              {"url":"https://research.example.edu/item/1","reason":"HTTPStatusError:403"}]}}
     picked=choose_papers(papers,rows,old,"measure-v2","study-v2",max_papers=10,current=now)
-    assert [x["entry"]["paper_id"] for x in picked]==["new","old-new","upgrade"]
-    assert [x["reason"] for x in picked]==["new","new","parser_upgrade"]
+    assert [x["entry"]["paper_id"] for x in picked]==["upgrade","new","old-new"]
+    assert [x["reason"] for x in picked]==["parser_upgrade","new","new"]
 
 
 def test_no_fulltext_for_metadata_without_open_sources():
@@ -148,3 +148,16 @@ def test_real_daily_refresh_calls_metadata_and_acquisition(tmp_path,monkeypatch)
     result=release.refresh("daily")
     assert result["status"]=="validated_automatic"
     assert events==["crossref",("openalex",4,True),("fulltext",4,150)]
+
+
+def test_existing_11_fulltexts_are_prioritized_over_large_new_backlog():
+    known={f"p:{i}":{"paper_id":f"p:{i}","publication_year":2010+i} for i in range(11)}
+    fresh={f"new:{i}":{"paper_id":f"new:{i}","publication_year":2026} for i in range(100)}
+    papers={**known,**fresh}
+    enrichments=[entry(pid) for pid in papers]
+    old={pid:{"accessible":True,"extraction_algorithm_version":"measurement-span-v1",
+              "study_algorithm_version":None} for pid in known}
+    selected=choose_papers(papers,enrichments,old,"measurement-span-v2-multi",
+                           "study-claims-v1",max_papers=4)
+    assert len(selected)==4
+    assert all(x["reason"]=="parser_upgrade" for x in selected)
