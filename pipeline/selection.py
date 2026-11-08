@@ -64,6 +64,10 @@ def retry_reason(entry,receipt,measurement_version,study_version,current=None):
     if not receipt:return "new"
     if receipt.get("accessible"):
         if receipt.get("extraction_algorithm_version")!=measurement_version or receipt.get("study_algorithm_version")!=study_version:
+            attempted=parsed_datetime(receipt.get("last_upgrade_attempt_at"))
+            now=current or datetime.now(timezone.utc)
+            if attempted and now-attempted<timedelta(days=RETRY_DAYS):
+                return None
             return "parser_upgrade"
         return None
     previous={f.get("url") for f in receipt.get("failures",[]) if f.get("url")}
