@@ -209,11 +209,13 @@ def enrich_papers(papers, taxonomy, assignments):
         result['taxonomy_version'] = taxonomy['version']
         result['classifications'] = by_paper[paper['paper_id']]
         result['taxonomy_tags'] = {status:{level:[] for level in ['domain','research_topic','construct','operational_variable','theory']} for status in ['approved','suggested']}
-        result['taxonomy_tags'].update({status:{level:[] for level in ['domain','research_topic','construct','operational_variable','theory']} for status in ['automatic','provisional','active','unresolved']})
+        result['taxonomy_tags'].update({status:{level:[] for level in ['domain','research_topic','construct','operational_variable','theory']} for status in ['automatic','provisional','active','unresolved','candidate']})
         for a in result['classifications']:
             if a['review_status'] in result['taxonomy_tags']:
                 result['taxonomy_tags'][a['review_status']][nodes[a['term_id']]['level']].append(a['term_id'])
             level=nodes[a['term_id']]['level']
+            if a.get('is_semantic_candidate') and a['review_status']!='rejected':
+                result['taxonomy_tags']['candidate'][level].append(a['term_id'])
             if a.get('is_fallback_other') and a['review_status']!='rejected':
                 result['taxonomy_tags']['unresolved'][level].append(a['term_id'])
             if a.get('validation_status') in {'validated_automatic','provisional'} and a['review_status']!='rejected':
@@ -230,6 +232,7 @@ def enrich_papers(papers, taxonomy, assignments):
                     and a['review_status']!='rejected']
             substantive=[a for a in active if not a.get('is_fallback_other')
                          and (a['review_status']=='approved' or a.get('validation_status') in {'validated_automatic','provisional'})]
+            candidates=[a for a in active if a.get('is_semantic_candidate')]
             approved=[a for a in substantive if a['review_status']=='approved']
             abstract=[a for a in substantive if a.get('evidence_grade')=='E1_abstract']
             exact=[a for a in substantive if a.get('validation_status')=='validated_automatic']
@@ -241,10 +244,14 @@ def enrich_papers(papers, taxonomy, assignments):
                 substantive_terms=sorted({a['term_id'] for a in substantive}),
                 is_unresolved=not bool(substantive),
                 fallback_terms=sorted({a['term_id'] for a in active if a.get('is_fallback_other')}),
+                weak_candidate_terms=sorted({a['term_id'] for a in candidates}),
+                weak_candidate_count=len({a['term_id'] for a in candidates}),
+                has_weak_candidates=bool(candidates),
+                potential_terms=sorted({a['term_id'] for a in substantive+candidates}),
                 best_evidence_grade='E1_abstract' if abstract else 'E0_metadata' if substantive else None,
                 matching_rules=[a.get('method') for a in best],
                 score=max((a.get('heuristic_score') or 0 for a in substantive),default=None),
-                disclaimer='Uncalibrated automatic lexical tagging; no guarantee of paper-level semantic accuracy'
+                disclaimer='Explicit and provisional source matches are not peer-reviewed. Weak contextual candidates are not evidence of an adopted theory or measured construct.'
             )
         result['taxonomy_quality']=quality
         output.append(result)
