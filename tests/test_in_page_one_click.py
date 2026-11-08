@@ -41,12 +41,13 @@ def test_results_show_evidence_and_unknowns_without_fake_studies():
     assert "GitHub 全文擷取任務" not in s
     assert "issues/new" not in s
 
-def test_no_browser_secrets_server_posts_or_untrusted_proxy():
+def test_no_browser_secrets_or_untrusted_proxy():
     s=(ROOT/"src/scripts/browser-oa.ts").read_text(encoding="utf-8")
     for unsafe in ("localStorage","sessionStorage","Authorization","Bearer ","ghp_",
                    "github_pat_", "api.github.com", "allorigins.win","r.jina.ai",
-                   "method:'POST'", "mode:'no-cors'"):
+                   "mode:'no-cors'"):
         assert unsafe not in s
+    assert "body:JSON.stringify({doi:paper.doi})" in s
     profile=(ROOT/"src/scripts/research-app.ts").read_text(encoding="utf-8")
     assert "GitHub 預填分析任務" not in profile
     assert "需要重新擷取全文？前往 GitHub" not in profile
