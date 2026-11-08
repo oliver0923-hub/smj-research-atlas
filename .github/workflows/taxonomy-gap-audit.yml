@@ -22,4 +22,4 @@ jobs:
       - run: python -m pipeline.release restore
       - run: python -m pipeline.release restore --from-ref origin/atlas-data
       - name: Inspect unresolved abstracts via OpenAlex (no copied abstract text)
-        run: python -m pipeline.taxonomy_gap_audit --batches 12 --top 85
+        run: python -m pipeline.taxonomy_gap_audit --batches 24 --top 90
