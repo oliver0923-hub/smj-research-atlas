@@ -45,7 +45,7 @@ def seed(papers,enrichment,receipts,old=(),control=None):
     queue={r['paper_id']:r for r in old};stamp=now()
     corpus=digest('|'.join(sorted(p['paper_id'] for p in papers)))
     control=dict(control or dict(state='paused',cycle_id='cycle:'+stamp,first_seen_at=stamp))
-    changed=control.get('corpus_fingerprint')!=corpus
+    changed=control.get('corpus_fingerprint')!=corpus or control.get('parser_version')!=PARSER_VERSION or control.get('extractor_version')!=EXTRACTOR_VERSION
     control.update(schema_version='4.0.0',corpus_fingerprint=corpus,updated_at=stamp,
                    parser_version=PARSER_VERSION,extractor_version=EXTRACTOR_VERSION,continuation_interval_hours=3)
     for p in sorted(papers,key=lambda p:p['paper_id']):
@@ -147,7 +147,7 @@ def discover(queue,control,fetcher,budget=4):
     from .taxonomy import text_key
     papers={p['paper_id']:p for p in read('papers.jsonl')}
     enrichment={e['paper_id']:e for e in read('enrichment.jsonl')}
-    pending=sorted((p for p in queue if not p.get('discovery_checked_at')),key=lambda p:p['paper_id'])
+    pending=sorted((p for p in queue if not p.get('discovery_checked_at') and due(p.get('next_retry_at'))),key=lambda p:p['paper_id'])
     tax=json.loads((DATA/'ontology.yaml').read_text(encoding='utf-8'))
     for offset in range(0,min(len(pending),budget*30),30):
         batch=pending[offset:offset+30]
@@ -185,6 +185,8 @@ def tick(command='continue_oa',max_sources=180,max_requests=450,seconds=600,pers
     elif command in {'exhaust_oa','resume_oa'}:control['state']='running'
     elif command=='restart_oa':
         control.update(state='running',cycle_id='cycle:'+now(),completed_at=None)
+    elif control['state']=='cycle_complete' and plan(queue,control,1):
+        control['state']='running'
     elif control['state']=='cycle_complete' and due(control.get('next_discovery_at')):
         # Low-frequency provider refresh reopens discovery without re-fetching every known URL.
         for p in queue:

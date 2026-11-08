@@ -95,7 +95,8 @@ def gate():
 
 def refresh(mode='daily',dry_run=False):
     from argparse import Namespace
-    from .enrich import harvest,acquire
+    from .enrich import harvest
+    from .crawl import tick
     if mode in {'exhaust_oa','continue_oa','pause_oa','resume_oa','restart_oa'}:
         from .crawl import tick
         if dry_run:return {'status':'dry_run','mode':mode,'source_budget':180,'requests':450,'seconds':600,'paid_api_calls':0}
@@ -112,7 +113,7 @@ def refresh(mode='daily',dry_run=False):
             if (DATA/'staging/incremental/checkpoint.json').exists():raise ValueError('Incremental sync incomplete; old deployment retained')
         if mode=='daily':
             run['enrichment']=harvest(4,priority_new=True)
-            run['acquisition']=acquire(4,max_runtime_seconds=150)
+            run['acquisition']=tick('continue_oa',max_sources=4,max_requests=20,seconds=150,persist=os.getenv('GITHUB_ACTIONS')=='true')
         if mode in {'weekly','batch'}:
             run['enrichment']=harvest(12)
             run['new_papers_enrichment']=harvest(4,priority_new=True)
@@ -120,7 +121,7 @@ def refresh(mode='daily',dry_run=False):
             # gate as scheduled jobs; 720 seconds leaves time for build/deploy.
             count=60 if mode=='batch' else 40
             seconds=720 if mode=='batch' else 600
-            run['acquisition']=acquire(count,max_runtime_seconds=seconds)
+            run['acquisition']=tick('continue_oa',max_sources=count,max_requests=count*3,seconds=seconds,persist=os.getenv('GITHUB_ACTIONS')=='true')
         run['publisher']=publisher_check();run['quality']=gate();run['status']='validated_automatic'
     except Exception as exc:
         run.update(status='failed',error_type=type(exc).__name__);raise

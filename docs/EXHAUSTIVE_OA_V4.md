@@ -41,3 +41,5 @@ evaluation/gold.json 為 15 篇不同真實 SMJ PDF 的獨立原文標註，排�
 無付費 LLM／OCR key 依賴；採可重現規則，因此未見過的資料庫別名、定性方法、隱含變數與複雜模型的 recall 有限。文獻回顧與實際使用的識別仍可能誤判，公開評估會計入 false positives。表格無框線、跨頁合併與公式影像常無法可靠復原，保留缺口。研究缺口與新興主題仍是演算法建議，不能聲稱為已證實理論缺口。
 
 正式網站與 raw atlas-data 的進度可能有部署時間差；執行頁優先讀取 durable progress JSON，並保留網站 fallback。
+
+所有 daily/weekly/batch 相容入口也使用同一 v4 佇列並尊重 pause；不會由舊取得器繞過暫停。完成狀態仍會在任何到期失敗重試或 parser/extractor 升級時重開，不必等待 provider 重查。

@@ -18,9 +18,9 @@ const workflow="https://github.com/oliver0923-hub/smj-research-atlas/actions/wor
   <h2>逐欄完整度與獨立評估</h2><div id="field-coverage"></div>
   <h2>選擇執行範圍</h2>
   <div class="grid">
-    <article class="card"><h3>batch · 大批處理</h3><p class="muted">手動推薦。更新書目、擴充 OA 來源、最多嘗試 60 篇，解析全部可驗證欄位。</p></article>
-    <article class="card"><h3>weekly · 歷史補抓</h3><p class="muted">最多嘗試 40 篇，兼顧已取得文獻的重新解析與歷史候選。</p></article>
-    <article class="card"><h3>daily · 快速更新</h3><p class="muted">優先新論文，最多嘗試 4 篇；適合測試或新 DOI 的快速補抓。</p></article>
+    <article class="card"><h3>exhaust_oa · 全庫遍歷</h3><p class="muted">主要入口。接續所有已索引 DOI／來源，每次最多 180 個來源，跨工作保存進度。</p></article>
+    <article class="card"><h3>weekly／batch · 來源擴充</h3><p class="muted">更新書目與 OA 候選，沿同一佇列最多嘗試 40／60 個來源，遵循暫停狀態。</p></article>
+    <article class="card"><h3>daily · 快速更新</h3><p class="muted">同步新論文，再沿持久佇列最多嘗試 4 個來源，遵循暫停狀態。</p></article>
     <article class="card"><h3>monthly · 重新產生分析</h3><p class="muted">更新資料品質與網站分析，不新增全文下載。</p></article>
   </div>
 

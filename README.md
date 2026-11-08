@@ -19,13 +19,13 @@ Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state
 
 ## 網站手動啟動全文抓取
 
-網站側邊導覽的「啟動論文分析」開啟 `/run/`。按鈕會導向 GitHub 的 [Autonomous data release](https://github.com/oliver0923-hub/smj-research-atlas/actions/workflows/sync-metadata.yml) 執行頁。用具備 Actions 執行權限的 GitHub 帳號登入，點選 **Run workflow → batch → Run workflow**。確認後後端自動同步 SMJ 書目、尋找合法 OA 全文、解析變數／假設／實證結果／穩健性檢驗、驗證並部署。**GitHub Pages 是靜態網站，不能直接安全地發出具有寫入權限的 workflow_dispatch；因此 GitHub 的登入與確認不可省略。**網站不保存任何 Personal Access Token。
+網站側邊導覽的「啟動論文分析」開啟 `/run/`。按鈕會導向 GitHub 的 [Autonomous data release](https://github.com/oliver0923-hub/smj-research-atlas/actions/workflows/sync-metadata.yml) 執行頁。用具備 Actions 執行權限的 GitHub 帳號登入，點選 **Run workflow → exhaust_oa → Run workflow**。確認後後端自動同步 SMJ 書目、尋找合法 OA 全文、解析變數／假設／實證結果／穩健性檢驗、驗證並部署。**GitHub Pages 是靜態網站，不能直接安全地發出具有寫入權限的 workflow_dispatch；因此 GitHub 的登入與確認不可省略。**網站不保存任何 Personal Access Token。
 
 主要入口選擇 `exhaust_oa`，沿用全庫來源佇列，每三小時自動 `continue_oa`，每次最多 180 sources／450 requests／600 秒。可選 `pause_oa` 暫停、`resume_oa` 接續。原 `batch` 保留 v3 相容用途。網站 `/run/` 會讀取 GitHub 公開工作流程紀錄、durable 來源進度與最近發布的欄位覆蓋率，三者可能具有時間差。
 
 ## 更新（無人工審核門檻）
-- `python -m pipeline.release refresh --mode daily`：Crossref 新論文 DOI 增量、優先補充新 DOI 的 OpenAlex 資訊，最多嘗試 4 篇 OA 正文（時間預算 150 秒），自動抽取逐篇變數、H/P 假設、結果顯著性、Robustness 與 Sensitivity，通過 QA 後更新網站。
-- `python -m pipeline.release refresh --mode weekly`：補充歷史 OpenAlex 資訊及新 DOI，最多嘗試 40 篇 OA 正文（時間預算 600 秒），包含抽取器升級時重新處理既有正文。
+- `python -m pipeline.release refresh --mode daily`：Crossref 新論文 DOI 增量、優先補充新 DOI 的 OpenAlex 資訊，沿持久佇列最多嘗試 4 個 OA 來源（時間預算 150 秒），自動抽取逐篇變數、H/P 假設、結果顯著性、Robustness 與 Sensitivity，通過 QA 後更新網站。
+- `python -m pipeline.release refresh --mode weekly`：補充歷史 OpenAlex 資訊及新 DOI，沿持久佇列最多嘗試 40 個 OA 來源（時間預算 600 秒），包含抽取器升級時重新處理既有正文。
 - 取得來源：只嘗試 OpenAlex 指向的合法 OA accepted/published 版本；優先嘗試機構典藏 PDF，失敗後可嘗試獨立 landing URL。HTTP 403 或 robots 限制不繞過。失敗來源有 14／60 日冷卻，新 OA 連結出現可提前重試。
 - `main` 上的分析程式或同步 workflow 更新也會觸發一輪 daily 處理，並有時間與 GitHub Actions 配額上限。
 - `python -m pipeline.release refresh --mode monthly`：重算分析與QA。
