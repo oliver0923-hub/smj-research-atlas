@@ -8,6 +8,7 @@ import re
 
 from .study import sentences
 from .taxonomy import text_key
+from .semantic import hits_for_text
 
 THEORY_EXTRACTOR_VERSION="fulltext-theory-v1"
 MAX_EVIDENCE_PER_TERM=3
@@ -68,7 +69,9 @@ def extract_theories(doc,taxonomy,registry,hypotheses=()):
 
     Status author_declared_use: a narrow first-person author statement.
     Status mentioned_in_section: a named theory occurred, but authorship
-    or actual use is NOT inferred. Author use is not peer-reviewed.
+    or actual use is NOT inferred.
+    Status context_candidate: only a weak related-lens multiword cue occurred.
+    Author use is not peer-reviewed.
     """
     theory_nodes=[n for n in taxonomy.get("nodes",[]) if n.get("level")=="theory"
                   and not n["id"].startswith("OTHER-")]
@@ -116,6 +119,30 @@ def extract_theories(doc,taxonomy,registry,hypotheses=()):
                 if declared:
                     entry["hypothesis_ids"]=sorted(set(entry["hypothesis_ids"])|
                         hypothesis_blocks.get(block["block_id"],set()))
+    # Light, local contextual-retrieval layer: multiword theory lens
+    # associations are candidates ONLY, not an embedding model or proof that
+    # the author drew on a theory. Always subordinate to named phrase evidence.
+    for block in scoped:
+        if len(block["text"])>20000:continue
+        for cue in hits_for_text(block["text"],taxonomy):
+            if cue["dimension"]!="theory" or cue["term_id"] in result:continue
+            phrase=cue["trigger"]
+            normalized=text_key(block["text"])
+            if text_key(phrase) not in normalized:continue
+            # Locators need a byte-accurate source span; require the trigger
+            # phrase to be literally present before creating an E2 record.
+            pat=_phrase_pattern(phrase)
+            match=pat.search(block["text"]) if pat else None
+            if not match:continue
+            start=max(0,match.start()-40);end=min(len(block["text"]),match.end()+45)
+            ev=registry.add(block,start,end,"fulltext_contextual_theory_candidate")
+            result[cue["term_id"]]=dict(
+                term_id=cue["term_id"],status="context_candidate",
+                evidence_ids=[ev],source_url=doc.source_url,source_hash=doc.source_hash,
+                section=block["section"],page=block.get("page"),
+                matched_phrase=block["text"][match.start():match.end()],
+                hypothesis_ids=[],validation_status="candidate_not_verified",
+                algorithm_version=THEORY_EXTRACTOR_VERSION)
     return (list(sorted(result.values(),key=lambda x:x["term_id"])),
             dict(status="scanned" if scoped else "no_identifiable_theory_sections",
                  scoped_blocks=len(scoped),scoped_sections=sorted({b["section"] for b in scoped}),
