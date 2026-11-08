@@ -57,14 +57,14 @@ def coverage(papers,variables,assignments,receipts,enrichment,publisher):
             'provisional':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='provisional' for p in papers),
             'unresolved_other':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' for p in papers),
             'unresolved_with_abstract':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' and
-                abstract_map.get(p['paper_id'],{}).get('abstract_available') for p in papers),
+                bool(abstract_map.get(p['paper_id'],{}).get('abstract_available')) for p in papers),
             'unresolved_without_abstract':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' and
-                not abstract_map.get(p['paper_id'],{}).get('abstract_available') for p in papers),
+                not bool(abstract_map.get(p['paper_id'],{}).get('abstract_available')) for p in papers),
             'unresolved_pending_feature_backfill':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' and
-                abstract_map.get(p['paper_id'],{}).get('abstract_available') and
+                bool(abstract_map.get(p['paper_id'],{}).get('abstract_available')) and
                 abstract_map[p['paper_id']].get('abstract_feature_method')!=feature_version for p in papers),
             'unresolved_after_current_abstract_scan':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' and
-                abstract_map.get(p['paper_id'],{}).get('abstract_available') and
+                bool(abstract_map.get(p['paper_id'],{}).get('abstract_available')) and
                 abstract_map[p['paper_id']].get('abstract_feature_method')==feature_version for p in papers),
             'substantive_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms')) for p in papers),
             'weak_candidate_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('weak_candidate_terms')) for p in papers),
