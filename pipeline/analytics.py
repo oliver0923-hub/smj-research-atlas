@@ -55,10 +55,14 @@ def coverage(papers,variables,assignments,receipts,enrichment,publisher):
             'provisional':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='provisional' for p in papers),
             'unresolved_other':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' for p in papers),
             'substantive_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms')) for p in papers),
+            'weak_candidate_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('weak_candidate_terms')) for p in papers),
+            'additional_candidate_only_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('weak_candidate_terms')) and
+                not p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms') for p in papers),
+            'potential_coverage_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('potential_terms')) for p in papers),
             'denominator':len(papers)
         } for level in dimensions}
     return dict(classification_by_dimension=class_dimension_counts,
-        classification_quality_method='automatic lexical evidence by dimension; Other is abstention, not a scholarly category',
+        classification_quality_method='Exact source matches counted separately from weak contextual *candidate* tags; candidates do not prove theory adoption. Other is abstention.',
         taxonomy_coverage_papers_all_dimensions=sum(
             all(p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms') for level in dimensions) for p in papers),papers=len(papers),unique_doi=len(set(doi)),duplicate_doi=len(doi)-len(set(doi)),duplicate_rate=(len(doi)-len(set(doi)))/len(doi) if doi else 0,
         missing_fields={field:sum(not p.get(field) for p in papers) for field in ['title','authors','volume','issue','pages','online_date','print_date']},
