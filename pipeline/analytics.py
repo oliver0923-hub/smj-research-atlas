@@ -48,12 +48,24 @@ def coverage(papers,variables,assignments,receipts,enrichment,publisher):
     classified={a['paper_id'] for a in assignments if a['review_status']!='rejected' and (a.get('validation_status') in {'validated_automatic','provisional'} or a['review_status']=='approved')}
     aligned=[v for v in variables if v.get('evidence_grade')=='E3_measurement_text' and v.get('validation_status')=='validated_automatic']
     dimensions=('domain','research_topic','construct','theory')
+    abstract_map={x['paper_id']:x for x in enrichment}
+    feature_version='allowed_phrase_occurrence_v7'
     class_dimension_counts={
         level:{
             'abstract_supported':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='abstract_supported' for p in papers),
             'title_supported':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='title_supported' for p in papers),
             'provisional':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='provisional' for p in papers),
             'unresolved_other':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' for p in papers),
+            'unresolved_with_abstract':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' and
+                abstract_map.get(p['paper_id'],{}).get('abstract_available') for p in papers),
+            'unresolved_without_abstract':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' and
+                not abstract_map.get(p['paper_id'],{}).get('abstract_available') for p in papers),
+            'unresolved_pending_feature_backfill':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' and
+                abstract_map.get(p['paper_id'],{}).get('abstract_available') and
+                abstract_map[p['paper_id']].get('abstract_feature_method')!=feature_version for p in papers),
+            'unresolved_after_current_abstract_scan':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='unresolved_other' and
+                abstract_map.get(p['paper_id'],{}).get('abstract_available') and
+                abstract_map[p['paper_id']].get('abstract_feature_method')==feature_version for p in papers),
             'substantive_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms')) for p in papers),
             'weak_candidate_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('weak_candidate_terms')) for p in papers),
             'additional_candidate_only_papers':sum(bool(p.get('taxonomy_quality',{}).get(level,{}).get('weak_candidate_terms')) and
@@ -62,7 +74,7 @@ def coverage(papers,variables,assignments,receipts,enrichment,publisher):
             'denominator':len(papers)
         } for level in dimensions}
     return dict(classification_by_dimension=class_dimension_counts,
-        classification_quality_method='Exact source matches counted separately from weak contextual *candidate* tags; candidates do not prove theory adoption. Other is abstention.',
+        classification_quality_method='Exact source matches counted separately from weak contextual *candidate* tags; unknowns split by missing abstract versus v7 processing gap; no lexical match never proves a theory is absent.',
         taxonomy_coverage_papers_all_dimensions=sum(
             all(p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms') for level in dimensions) for p in papers),papers=len(papers),unique_doi=len(set(doi)),duplicate_doi=len(doi)-len(set(doi)),duplicate_rate=(len(doi)-len(set(doi)))/len(doi) if doi else 0,
         missing_fields={field:sum(not p.get(field) for p in papers) for field in ['title','authors','volume','issue','pages','online_date','print_date']},
