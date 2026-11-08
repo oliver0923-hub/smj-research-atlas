@@ -88,7 +88,10 @@ def extract_theories(doc,taxonomy,registry,hypotheses=()):
     for block in scoped:
         raw=block["text"]
         if len(raw)>20000:continue
-        for sent_start,sent_end,sent in sentences(raw):
+        for sent_start,sent_end,_ in sentences(raw):
+            # Raw offsets must be used for source-hash alignment even when
+            # the sentence splitter strips leading whitespace.
+            sent=raw[sent_start:sent_end]
             if len(sent)>1200:continue
             for term,patterns in compiled.items():
                 matched=next((m for pat in patterns if (m:=pat.search(sent))),None)
