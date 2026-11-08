@@ -93,6 +93,12 @@ def gate():
         if v.get('human_reviewer') and v.get('inference_origin') not in {None,'human_review'}:raise ValueError('Automatic extraction cannot fabricate a reviewer')
     return {'status':'passed','papers':len(papers),'variables':len(variables),'validation_scope':'schema, provenance, referential consistency; not peer review'}
 
+def taxonomy_backfill_pages(backlog,max_pages=80,batch_size=40):
+    """Bounded DOI lookups for stale OpenAlex abstract feature migrations."""
+    if backlog<160:return 4
+    return min(max_pages,max(4,(backlog+batch_size-1)//batch_size))
+
+
 def refresh(mode='daily',dry_run=False):
     from argparse import Namespace
     from .enrich import harvest
@@ -123,7 +129,7 @@ def refresh(mode='daily',dry_run=False):
             # per-request throttling, rate limits, and GitHub job budgets.
             # 80 pages * 40 DOI max = 3,200 DOI candidates; harvest uses
             # 0.4-second gaps, existing HTTP backoff and early failure exit.
-            pages=min(80,max(4,(backlog+39)//40)) if backlog>=160 else 4
+            pages=taxonomy_backfill_pages(backlog)
             run['taxonomy_backfill_backlog_at_start']=backlog
             run['taxonomy_backfill_budget_pages']=pages
             run['enrichment']=harvest(pages,priority_new=True)
