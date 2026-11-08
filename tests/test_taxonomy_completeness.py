@@ -17,7 +17,7 @@ def paper(title,pid="doi:10.1002/test"):
 
 def test_ontology_keeps_twelve_sms_domains_and_four_explicit_other_terms():
     nodes=validate_taxonomy(TAX)
-    assert TAX["version"]=="2.3.0"
+    assert TAX["version"]=="2.4.0"
     assert len([n for n in TAX["nodes"] if n["level"]=="construct"])>=77
     assert len([n for n in TAX["nodes"] if n["level"]=="theory"])>=45
     official=[n for n in nodes.values() if n.level=="domain" and n.origin=="official_academic_organization"]
