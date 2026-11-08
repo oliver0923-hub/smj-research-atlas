@@ -1,6 +1,6 @@
 {
   "schema_version": "4.0.0",
-  "generated_at": "2026-11-08T04:21:09.739813+00:00",
+  "generated_at": "2026-11-08T04:25:30.509446+00:00",
   "state": "cycle_complete",
   "cycle_id": "cycle:2026-11-08T03:37:57.874768+00:00",
   "doi_total": 3949,
@@ -18,9 +18,8 @@
   "parsed_papers": 20,
   "source_states": {
     "policy_blocked": 1890,
-    "permanent_failure_for_url": 110,
-    "extraction_partial": 22,
-    "transient_failure": 1
+    "permanent_failure_for_url": 111,
+    "extraction_partial": 22
   },
   "failure_classes": {
     "http_403_access_denied_not_assumed_paywall": 1522,
@@ -32,7 +31,7 @@
     "article_identity_mismatch": 11,
     "ssrf_unsafe_url": 16,
     "robots_disallowed": 6,
-    "http_429_or_host_backoff": 1
+    "parse_or_extraction_failure:NoneType": 1
   },
   "retry_waiting": 1936,
   "round_complete": true,
@@ -40,7 +39,7 @@
   "discovery_scope": "OpenAlex indexed OA accepted/published locations and prior lawful receipts; not the entire internet",
   "snapshot_doi_fingerprint": "d7d28b8331dcab2b654a8092cfc0a8adf82fccc0a64f98de9b7b60876c59d021",
   "next_continuation": "cron every 3 hours while running; completed rounds enter low-frequency discovery monitoring",
-  "run_id": "42446351187",
+  "run_id": "42446717523",
   "parser_version": "article-document-4.0",
   "extractor_version": "research-fields-4.0"
 }
