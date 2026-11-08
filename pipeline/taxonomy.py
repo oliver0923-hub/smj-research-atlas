@@ -64,7 +64,7 @@ class Assignment(BaseModel):
     audit_log: list[dict] = Field(default_factory=list)
     inference_origin: Origin | None = None
     evidence_grade: Grade | None = None
-    validation_status: Validation | None = None
+    validation_status: Validation | Literal['semantic_candidate'] | None = None
     heuristic_score: float | None = Field(default=None,ge=0,le=1)
     algorithm_version: str | None = None
     source_hash: str | None = None
