@@ -1,6 +1,6 @@
 {
   "schema_version": "4.0.0",
-  "generated_at": "2026-11-08T09:16:37.134249+00:00",
+  "generated_at": "2026-11-08T10:00:44.503987+00:00",
   "state": "running",
   "cycle_id": "cycle:2026-11-08T03:37:57.874768+00:00",
   "doi_total": 3949,
@@ -17,14 +17,14 @@
   "papers_attempted_this_cycle": 1038,
   "parsed_papers": 20,
   "source_states": {
-    "policy_blocked": 1910,
+    "policy_blocked": 1911,
     "permanent_failure_for_url": 111,
-    "extraction_partial": 22,
+    "extraction_partial": 21,
     "fetch_pending": 409
   },
   "failure_classes": {
     "http_403_access_denied_not_assumed_paywall": 1542,
-    "robots_unavailable_http_403": 306,
+    "robots_unavailable_http_403": 307,
     "metadata_landing_not_fulltext": 9,
     "ssrf_blocked": 40,
     "http_404": 13,
@@ -34,13 +34,13 @@
     "robots_disallowed": 6,
     "http_405_unexpected_response": 1
   },
-  "retry_waiting": 1956,
+  "retry_waiting": 1957,
   "round_complete": false,
   "completion_definition": "Every indexed DOI has a provider discovery receipt; every OA URL in this snapshot has a traceable attempt or policy reason",
   "discovery_scope": "OpenAlex indexed OA accepted/published locations and prior lawful receipts; not the entire internet",
   "snapshot_doi_fingerprint": "d7d28b8331dcab2b654a8092cfc0a8adf82fccc0a64f98de9b7b60876c59d021",
   "next_continuation": "cron every 3 hours while running; completed rounds enter low-frequency discovery monitoring",
-  "run_id": "42466312393",
+  "run_id": "42469479007",
   "parser_version": "article-document-4.0",
-  "extractor_version": "research-fields-4.0"
+  "extractor_version": "research-fields-4.1-theory-source"
 }
