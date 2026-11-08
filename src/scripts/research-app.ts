@@ -162,6 +162,12 @@ link(otherLink,String(other)+' 篇（查看）',href);
 return [label,a.abstract_supported??0,a.title_supported??0,a.provisional??0,otherLink,a.weak_candidate_papers??0,a.additional_candidate_only_papers??0,`${a.substantive_papers??0} / ${a.denominator??r.papers}`];
 }));
 box('「其他」代表標題／摘要索引沒有足夠證據。弱監督候選是使用多詞組線索所發現的可能關聯，不能當作作者明確使用理論，且不列入具來源分類。候選新增涵蓋是原本沒有實質標籤但出現弱線索的論文數；各分子不可相加。');
+add(app,'h2','其他／未判定：缺失來源診斷');
+table(['維度','尚無摘要','已有摘要、等待最新版詞典重索引','已用最新版摘要詞典掃描仍未命中'],dims.map(([level,label])=>{
+ const a=stats[level]||{};
+ return [label,a.unresolved_without_abstract??'未提供',a.unresolved_pending_feature_backfill??'未提供',a.unresolved_after_current_abstract_scan??'未提供'];
+}));
+add(app,'p','這些是資料處理進度與詞彙吻合狀態，不等於論文未引用理論或未定義研究構念。摘要與正文的涵蓋範圍不同。','muted');
 add(app,'h2','分類品質定義');
 table(['狀態','解讀'],[['abstract_supported','OpenAlex 摘要的對應關鍵詞命中（E1）'],['title_supported','Crossref 標題的明確詞組命中，或由 Atlas 層級往上對應（E0）'],['provisional','標題詞彙相似推測；需要保守解讀'],['semantic_candidate','弱監督多詞組候選；不證明實際採用理論或衡量構念'],['unresolved_other','沒有充分辨識證據；使用其他／未判定標籤'],['human_approved','僅歷史上確有明確紀錄的人工作業，不代表自動分類已審閱']]);
 add(app,'h2','自動來源一致性檢查');

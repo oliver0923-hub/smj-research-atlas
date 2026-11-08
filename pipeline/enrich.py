@@ -51,7 +51,7 @@ def harvest(max_pages=50,dry_run=False,priority_new=False):
         # Newly indexed DOI always go first; old features are upgraded in
         # bounded daily batches without retaining or redistributing abstracts.
         stale_dois=sorted((doi for doi,p in papers.items() if p['paper_id'] in known and
-                           existing[p['paper_id']].get('abstract_feature_method')!='allowed_phrase_occurrence_v6'),
+                           existing[p['paper_id']].get('abstract_feature_method')!='allowed_phrase_occurrence_v7'),
                           key=lambda doi:(-papers[doi].get('publication_year',0),doi))
         batch_ids=new_dois+stale_dois
         state={'batch':0}
@@ -100,7 +100,7 @@ def harvest(max_pages=50,dry_run=False,priority_new=False):
                 locations=merge_wiley_candidate(doi,raw,locations)
                 entry=dict(paper_id=paper['paper_id'],openalex_id=raw['id'],citation_count=raw.get('cited_by_count'),citation_count_asof=now()[:10],
                     external_topics=raw.get('topics',[]),openalex_type=raw.get('type'),is_retracted=raw.get('is_retracted'),
-                    abstract_available=bool(abstract),abstract_phrase_hits=features,abstract_feature_method='allowed_phrase_occurrence_v6',abstract_weak_hits=weak,abstract_weak_method=FEATURE_VERSION,abstract_hash=hashlib.sha256(abstract.encode()).hexdigest() if abstract else None,
+                    abstract_available=bool(abstract),abstract_phrase_hits=features,abstract_feature_method='allowed_phrase_occurrence_v7',abstract_weak_hits=weak,abstract_weak_method=FEATURE_VERSION,abstract_hash=hashlib.sha256(abstract.encode()).hexdigest() if abstract else None,
                     abstract_license='OpenAlex metadata CC0; full abstract is not redistributed by Atlas',
                     oa_locations=locations,oa_url=(raw.get('best_oa_location') or {}).get('landing_page_url'),source_url=raw['id'],retrieved_at=now(),
                     inference_origin='openalex_metadata',evidence_grade='E1_abstract' if abstract else 'E0_metadata')

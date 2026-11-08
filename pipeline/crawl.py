@@ -172,7 +172,7 @@ def discover(queue,control,fetcher,budget=4):
                 enrichment[p['paper_id']]=dict(paper_id=p['paper_id'],openalex_id=raw['id'],source_url=raw['id'],retrieved_at=stamp,
                     abstract_available=bool(abstract),abstract_hash=digest(abstract) if abstract else None,
                     abstract_phrase_hits=[n['id'] for n in tax['nodes'] if n['level'] in {'research_topic','construct','theory'} and any(' '+text_key(s)+' ' in normalized for s in n.get('match_phrases',[]))],
-                    abstract_feature_method='allowed_phrase_occurrence_v6',
+                    abstract_feature_method='allowed_phrase_occurrence_v7',
                     abstract_weak_hits=hits_for_text(abstract,tax) if abstract else [],
                     abstract_weak_method=FEATURE_VERSION,
                     oa_locations=merge_wiley_candidate(p['doi'],raw,[l for l in locs if l.get('is_oa')]),

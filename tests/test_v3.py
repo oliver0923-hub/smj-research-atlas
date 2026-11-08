@@ -91,9 +91,12 @@ def test_provider_dry_run_never_requires_key(monkeypatch):
 def test_taxonomy_snapshot_preserved():
     active=json.loads((ROOT/'data/ontology.yaml').read_text(encoding='utf-8'))
     snapshot=json.loads((ROOT/'data/taxonomy_versions/2.0.0.json').read_text(encoding='utf-8'))
-    assert active['version']=='2.3.0' and snapshot['version']=='2.0.0'
+    assert active['version']=='2.4.0' and snapshot['version']=='2.0.0'
     upgraded=json.loads((ROOT/'data/taxonomy_versions/2.2.0.json').read_text(encoding='utf-8'))
     assert upgraded['version']=='2.2.0'
+    previously_active=json.loads((ROOT/'data/taxonomy_versions/2.3.0.json').read_text(encoding='utf-8'))
+    assert previously_active['version']=='2.3.0'
+    assert {n['id'] for n in previously_active['nodes']} <= {n['id'] for n in active['nodes']}
     assert {n['id'] for n in upgraded['nodes']} <= {n['id'] for n in active['nodes']}
     intermediate=json.loads((ROOT/'data/taxonomy_versions/2.1.0.json').read_text(encoding='utf-8'))
     assert intermediate['version']=='2.1.0'
