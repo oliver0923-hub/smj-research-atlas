@@ -67,7 +67,10 @@ def retry_reason(entry,receipt,measurement_version,study_version,current=None):
             return "parser_upgrade"
         return None
     previous={f.get("url") for f in receipt.get("failures",[]) if f.get("url")}
-    if any(x["url"] not in previous for x in sources):
+    # Legacy receipts may not list the URLs they tried. Treat them as
+    # temporarily cooled down rather than generating a perpetual new-source
+    # retry every day.
+    if previous and any(x["url"] not in previous for x in sources):
         return "new_oa_location"
     latest=parsed_datetime(receipt.get("checked_at"))
     if not latest:return "retry_missing_timestamp"
