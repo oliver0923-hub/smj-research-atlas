@@ -18,6 +18,7 @@ import httpx
 
 from .cli import DATA,read
 from .classify import classify
+from .analytics import article_kind
 from .enrich import abstract_text, FIELDS
 from .taxonomy import text_key
 
@@ -75,6 +76,7 @@ def choose_papers(papers,enrichment,assignments,dimension,limit):
     nodes=json.loads((DATA/'ontology.yaml').read_text(encoding='utf-8'))['nodes']
     levels={n['id']:n['level'] for n in nodes}
     rows=[p for p in papers if
+          article_kind(p)=='research_or_other_unresolved' and
           enrichment.get(p['paper_id'],{}).get('abstract_available') and
           enrichment.get(p['paper_id'],{}).get('openalex_id') and
           not any(levels.get(t)==dimension for t in bypaper[p['paper_id']])]
