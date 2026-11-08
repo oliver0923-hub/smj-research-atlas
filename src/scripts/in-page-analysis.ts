@@ -1,3 +1,4 @@
+import {analyzeBrowserOA,type OAExtract} from './browser-oa';
 /**
  * Single-click, source-constrained analysis on the public static paper page.
  *
@@ -7,7 +8,6 @@
  * are read-only and optional. New deep crawling still needs authenticated
  * GitHub issue submission because GitHub Pages has no trusted backend.
  */
-const REPO='oliver0923-hub/smj-research-atlas';
 const FIELDS=['sample_period','data_source','empirical_method'] as const;
 const FIELD_LABELS:Record<string,string>={
   sample_period:'研究樣本期間',
@@ -132,103 +132,103 @@ function abstractFindings(parent:Element,abstract:string|null,sourceUrl:string){
   }
 }
 
-async function loadGitHubAnalysis(doi:string){
-  const q='repo:'+REPO+' is:issue in:title "Atlas analyze: '+doi+'"';
-  const api='https://api.github.com';
-  const headers={Accept:'application/vnd.github+json'};
-  const r=await fetch(api+'/search/issues?q='+encodeURIComponent(q)+'&per_page=20',{headers});
-  if(!r.ok)throw new Error('GitHub public API HTTP '+r.status);
-  const data=await r.json();
-  const issue=(data.items||[]).find((x:any)=>
-    x.title==='Atlas analyze: '+doi
-    && x.user?.login==='oliver0923-hub'
-    && !x.pull_request);
-  if(!issue)return null;
-  const c=await fetch(api+'/repos/'+REPO+'/issues/'+issue.number+'/comments?per_page=100',{headers});
-  if(!c.ok)throw new Error('GitHub issue comments HTTP '+c.status);
-  const comments=await c.json();
-  const comment=[...comments].reverse().find((x:any)=>
-    x.user?.login==='github-actions[bot]' &&
-    typeof x.body==='string'&&x.body.includes('## 單篇 SMJ 研究資料擷取結果'));
-  const status=comment?.body?.match(/\*\*執行狀態：\*\*\s*\\?\x60([^\\\x60]+)\\?\x60/)?.[1]||'等待 GitHub 工作結果';
-  return {html_url:issue.html_url,number:issue.number,status,comment_url:comment?.html_url||issue.html_url};
-}
-
-function reportGitHubStatus(parent:Element,doi:string,issueURL:string){
-  const region=node(parent,'div',undefined,'record');
-  node(region,'h4','GitHub 全文擷取任務');
-  const status=node(region,'p','查詢這篇 DOI 是否已有全文分析紀錄…','muted');
-  void (async()=>{
-    try{
-      const record=await loadGitHubAnalysis(doi);
-      if(record){
-        const descriptions:Record<string,string>={
-          no_provider_oa_source:'目前來源索引沒有可自動擷取的 OA 候選（不代表不存在其他合法版本）',
-          fulltext_not_acquired:'已嘗試取得全文，但尚未成功，請查看各來源回應狀態',
-          source_extracted:'已成功解析本次合法來源',
-          existing_validated_fulltext:'已使用先前擷取、可來源對齊的全文',
-        };
-        status.textContent='已找到 Issue #'+record.number+' · '+(descriptions[record.status]||('GitHub 狀態：'+record.status));
-        const a=node(region,'a','查看完整 GitHub 分析報告與來源紀錄') as HTMLAnchorElement;
-        a.href=record.comment_url;a.target='_blank';a.rel='noopener noreferrer';
-      }else{
-        status.textContent='尚未找到此 DOI 的 GitHub 全文擷取 Issue。';
-      }
-    }catch{
-      status.textContent='GitHub 公開結果暫時無法讀取；不影響上方的頁內分析。';
+function renderParsedOA(parent:Element,oa:OAExtract,review:boolean){
+  const summary=node(parent,'p',oa.report,'notice');
+  node(parent,'p',oa.format==='pdf'?'已在本頁直接解析 '+oa.pages+' 頁 PDF':'已在本頁直接解析 '+oa.pages+' 個 HTML 文字段落；不儲存或重新發布全文','status-line');
+  if(oa.source_url)evidenceLink(parent,oa.source_url);
+  node(parent,'h4','研究設計與方法（全文詞組對齊）');
+  const table=node(parent,'table'),header=node(table,'thead'),tr=node(header,'tr');
+  node(tr,'th','欄位');node(tr,'th','擷取結果／原文來源');
+  const body=node(table,'tbody');
+  for(const k of FIELDS){
+    const cellRow=node(body,'tr');node(cellRow,'td',FIELD_LABELS[k]+' ('+k+')');
+    const cell=node(cellRow,'td');const f=oa.fields[k];
+    if(f?.value){
+      node(cell,'strong',f.value);
+      if(f.excerpt)node(cell,'p',f.excerpt,'evidence');
+      node(cell,'p','E2 · 合法全文自動詞組比對 · '+(oa.format==='pdf'?'PDF 第 '+f.page+' 頁':'HTML 第 '+f.page+' 段')+' · 非人工驗證','tiny');
+      if(oa.source_url)evidenceLink(cell,oa.source_url,oa.format==='pdf'?f.page:null);
+    }else if(review){
+      node(cell,'strong','暫定不適用於原創實證估計');
+      node(cell,'p','此篇依標題判斷為回顧文章；文獻檢索方法仍需另行辨識。','tiny');
+    }else{
+      node(cell,'strong','未從本次可解析文字確認');
+      node(cell,'p','沒有可靠文字命中，不代表作者沒有報告此資訊。','tiny');
     }
-    const a=node(region,'a','需要重新抓取／解析全文？前往 GitHub 確認提交任務') as HTMLAnchorElement;
-    a.href=issueURL;a.target='_blank';a.rel='noopener noreferrer';
-    node(region,'p','GitHub Pages 是靜態網站：不能在未經授權的情況下直接建立 Issue 或執行 GitHub Actions。此連結會開啟預填表單，須由專案擁有者提交。','tiny');
-  })();
+  }
+  for(const [key,label] of [['hypotheses','假設／命題'],['findings','實證發現'],['robustness','穩健性／敏感性檢驗']] as const){
+    node(parent,'h4',label+' · '+oa[key].length+' 筆原文線索');
+    if(!oa[key].length){
+      node(parent,'p','本次文字擷取未能可靠定位；不代表原文沒有。','muted');
+      continue;
+    }
+    for(const x of oa[key]){
+      const row=node(parent,'article',undefined,'record');
+      node(row,'strong',x.label);
+      node(row,'p',x.excerpt,'evidence');
+      node(row,'p','E2 · '+(oa.format==='pdf'?'PDF 第 '+x.page+' 頁':'HTML 第 '+x.page+' 段')+' · 機器搜尋所得，不保證與統計模型對應','tiny');
+      if(oa.source_url)evidenceLink(row,oa.source_url,oa.format==='pdf'?x.page:null);
+    }
+  }
 }
 
-/** User click -> immediate inline evidence display. No credential or paid API. */
+/** Clicking immediately fetches legal OA sources and analyses PDF/HTML in-browser. */
 export async function renderInPageAnalysis(
-  parent:HTMLElement,paper:any,abstractPromise:Promise<string|null>|undefined,issueURL:string
+ parent:HTMLElement,paper:any,abstractPromise:Promise<string|null>|undefined
 ){
   parent.replaceChildren();
   parent.setAttribute('aria-live','polite');
-  const progress=node(parent,'p','整理 Atlas 的逐篇來源與 OpenAlex 摘要…','status-line');
+  const progress=node(parent,'p','開始查詢 Open Access 全文來源…','status-line');
+  const oaPromise=analyzeBrowserOA(paper,(status)=>{progress.textContent=status;});
   let abstract:string|null=null;
   try{abstract=await abstractPromise||null;}catch{abstract=null;}
+  let oa:OAExtract;
+  try{oa=await oaPromise;}catch(e){
+    oa={status:'browser_error',source_url:null,open_access:false,pages:0,format:null,
+       attempts:[],fields:{},hypotheses:[],findings:[],robustness:[],
+       report:e instanceof Error?e.message:'瀏覽器全文讀取失敗'};
+  }
   parent.replaceChildren();
   const record=paper.research_v4;
-  const typeIsReview=/\b(?:strategic management review|literature review|systematic review|meta.analysis|bibliometric review)\b/i.test(paper.title);
+  const review=/\b(?:strategic management review|literature review|systematic review|meta.analysis|bibliometric review)\b/i.test(paper.title);
   const original='https://doi.org/'+encodeURIComponent(paper.doi);
-  node(parent,'h3','這篇論文的即時證據分析');
-  node(parent,'p',
-    record?'已有可對齊的合法正文紀錄；同時參照摘要。':'目前只使用已索引書目及可取得的 OpenAlex 摘要，沒有假裝解析出版社完整 PDF。',
-    'notice');
-  node(parent,'p','論文類型：'+(typeIsReview?'Review／Synthesis（標題推定，非全文查核）':
-      '研究論文／概念論文類型尚待核查'),'status-line');
-  node(parent,'h4','研究設計欄位');
-  const grid=node(parent,'div',undefined,'data-table');
-  const t=node(grid,'table');const h=node(t,'thead');const tr=node(h,'tr');
-  for(const label of ['欄位','值與證據'])node(tr,'th',label);
-  const body=node(t,'tbody');
-  for(const k of FIELDS){
-    const row=node(body,'tr');node(row,'td',FIELD_LABELS[k]+' ('+k+')');
-    const cell=node(row,'td');
-    fieldDetails(cell,k,record?.fields?.[k],typeIsReview,abstract,original);
+  node(parent,'h3','這篇論文的全文與來源分析');
+  if(oa.status==='parsed'){
+    renderParsedOA(parent,oa,review);
+    return;
   }
-  node(parent,'h4','假設與理論命題');
+  node(parent,'p','OA 全文直接讀取狀態：'+oa.status,'status-line');
+  node(parent,'p',oa.report,'notice');
+  if(oa.attempts.length){
+    const details=node(parent,'details');
+    node(details,'summary','查看這次 OA 全文存取結果（'+oa.attempts.length+' 個來源）');
+    for(const a of oa.attempts.slice(0,8)){
+      const entry=node(details,'p',a.status+' · ','tiny');
+      evidenceLink(entry,a.url);
+    }
+  }
+  node(parent,'p','以下提供既有 Atlas 資料／OpenAlex 摘要支持的較低證據層級分析；這不是已成功讀取完整 PDF。','muted');
+  node(parent,'h4','研究設計欄位');
+  const table=node(parent,'table'),header=node(table,'thead'),head=node(header,'tr');
+  node(head,'th','欄位');node(head,'th','值與證據');
+  const body=node(table,'tbody');
+  for(const k of FIELDS){
+    const row=node(body,'tr');
+    node(row,'td',FIELD_LABELS[k]+' ('+k+')');
+    const cell=node(row,'td');
+    fieldDetails(cell,k,record?.fields?.[k],review,abstract,original);
+  }
   if(record){
     const evidence=new Map<string,any>((record.evidence||[]).map((x:any)=>[x.evidence_id,x]));
-    localResearchRows(parent,record.hypotheses||[],evidence,'hypotheses');
-    localResearchRows(parent,record.findings||[],evidence,'findings');
-    localResearchRows(parent,record.checks||[],evidence,'checks');
+    for(const key of ['hypotheses','findings','checks'])
+      localResearchRows(parent,record[key]||[],evidence,key);
   }else{
     const claims=paper.study_claims||[];
     if(claims.length)existingLegacyClaims(parent,claims,original);
-    else node(parent,'p','H1／H2、命題與其檢驗狀態目前未知：摘要的發現句不能當成原文正式假設。','muted');
+    else node(parent,'p','目前無正文證據可確認 H1、H2 或正式命題。','muted');
     abstractFindings(parent,abstract,original);
     node(parent,'h4','穩健性／敏感性檢驗');
-    if(!claims.some((x:any)=>x.claim_type==='robustness'||x.claim_type==='sensitivity')){
-      node(parent,'p','目前沒有可靠的正文穩健性證據，不能判定研究是否執行或結果是否成立。','muted');
-    }
+    if(!claims.some((x:any)=>['robustness','sensitivity'].includes(x.claim_type)))
+      node(parent,'p','目前無正文穩健性證據；不能判定是否執行。','muted');
   }
-  const doi=safeDoi(paper.doi);
-  if(doi)reportGitHubStatus(parent,doi,issueURL);
-  progress.remove();
 }

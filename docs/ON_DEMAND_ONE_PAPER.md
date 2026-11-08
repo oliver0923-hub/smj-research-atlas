@@ -1,69 +1,33 @@
-# 指定一篇 SMJ 論文的深入解析（On-Demand One-Paper）
+# 指定一篇 SMJ：直接按鈕取得 Open Access 全文與分析
 
-## 網站直接按「分析這篇論文」（新增頁內分析）
+## 主要操作（網站已提供）
 
-在論文頁（例如 `/paper/?id=doi%3A10.1002%2Fsmj.3724`）按 **「分析這篇論文（直接在本頁顯示）」**。此動作不跳轉 Github、不要求登入，會直接：
+在任何 Atlas 單篇詳細頁按下 **「抓取 OA 全文並分析這篇論文」**。按鈕會在目前的網頁當中執行，不開啟其他 GitHub 表單或 Issue。
 
-- 重用頁面已向 OpenAlex API 取得的摘要，以及 Atlas 靜態資料庫既有的來源對齊 `research_v4` 或 `study_claims`。
-- 顯示 `sample_period`、`data_source`、`empirical_method`：有 E2 正文來源則列出明確值；若只有摘要指出 NBA/Compustat 等資料，列為 **E1 摘要線索，不當成完整實證資料表**；無證據則保持「未知」。Review 類型以「暫定不適用原創實證欄位」為原則。
-- 將摘要中 **作者明確報告的發現句** 以 E1 英文原文短句呈現，絕不臆測 H1 編號、迴歸係數、顯著水準或 Robustness。若資料庫已擁有合法全文，則優先列出對齊的 Hypotheses / Findings / Checks 與頁碼證據。
-- 使用 GitHub 官方 public API（僅 GET）尋找此 DOI 過往已由 owner 送出的 `Atlas analyze:` Issue，直接在頁面呈現上一個全文任務的成功／失敗狀態與報告連結。不需 GitHub token、帳號授權或額外伺服器。
+1. 讀取本篇的 DOI 與 Atlas 已核對的書目，向 OpenAlex 即時查詢 `is_oa` 和可用 `publishedVersion`／`acceptedVersion` 正文來源。僅在 OpenAlex 確認出版社 OA 時，才加入 Wiley `pdfdirect` 下載候選；不能由 DOI 猜測免費全文。
+2. 依序嘗試有限量的 HTTPS PDF／HTML 來源（最多 8 個），遵守瀏覽器的來源限制與 HTTP 回應。PDF 使用固定版本 PDF.js 在瀏覽器暫時解析（最多 65 頁／22MB），HTML 使用 DOMParser 暫時擷取文字。不將 PDF 檔案儲存到 Atlas。
+3. 對照 DOI、標題詞彙及作者驗證是同一篇文章，避免錯抓出版社登入頁或其他書目。
+4. 本頁直接顯示樣本期間、資料庫／資料來源、實證方法、H1/H2 或 P1/P2、研究結果與 Robustness／Sensitivity，附來源頁碼。每個數值必須有來源文字；正文關鍵詞檢索屬於尚待人工驗證的機器擷取，**不是研究設計、係數及假設支持狀態的正式審核**。
+5. 若全部 OA URL 均因 CORS、403、無正文、非本篇或其他因素失敗，顯示來源與錯誤狀態，並保留 OpenAlex 摘要支持的 E1 分析；不得宣稱已完成全文檢索。
 
-**重要限制：** GitHub Pages 是靜態頁面；新的一次 PDF/HTML 全文抓取是 GitHub Actions 的工作，不能安全地在沒有身分驗證、後端密鑰與濫用控管的情況下由任意訪客的按鈕直接啟動。故「頁內分析」按一下就有**已有證據支持的結果**，但「新發起合法全文深度分析」仍須由 Repo Owner 透過**另一個清楚標示需提交**的 GitHub Issue 預填連結授權發出。它不是頁內按鈕已經啟動了 GitHub 爬蟲。
+### 本次例子：10.1002/smj.3657
 
-針對 `10.1002/smj.3724`，完整的前一次自動分析可查 [GitHub Issue #23](https://github.com/oliver0923-hub/smj-research-atlas/issues/23)：該執行流程成功，但在當時的 OpenAlex OA 來源索引中未找到可自動取得的全文（`no_provider_oa_source`），因此全文假設、模型與 Robustness 無法證實。出版社摘要另可用以做 E1 層級初步分析。不要把「系統沒找到 OA 候選」誤寫成「學術界沒有合法作者版本」或「該文沒有穩健性」。
+Kraft, P. S., Dickler, T. A., & Withers, M. C. (2025). *When do firms benefit from overconfident CEOs? The role of board expertise and power for technological breakthrough innovation*. Strategic Management Journal, 46(2), 381–410. https://doi.org/10.1002/smj.3657
 
-## 使用者工作流程
+Wiley 頁面標示 **Open Access（CC BY-NC-ND）**，但即便已開放閱讀，出版社也可能沒有提供允許第三方網頁直接讀取的 `Access-Control-Allow-Origin` 標頭。因此，在 GitHub Pages 無專屬後端的情況下，**Open Access 不保證瀏覽器 JavaScript 下載成功**。UI 必須反映實際傳輸及 PDF 解析結果，不可因 Wiley 標記 OA 就顯示「已完成」。
 
-你不必等 3,949 篇 SMJ 書目全部完成 OA 正文解析。現在可以只給一篇 DOI 或接近完全相符的標題，直接要求有限、有來源紀錄的單篇分析。
+## 未啟用的替代後端（保留在 Repository）
 
-**ChatGPT 指令範例：**
+`pipeline/live_api.py` 實作了 DOI 限定、OpenAlex OA 來源核對、既有 Python PDF/HTML 解析器、DNS pinning／robots、請求速率與單次下載上限的來源證據 API，可在具備受管理的後端環境時啟動。現有 Railway 帳戶回覆試用期已結束，沒有完成部署。**前端不會指向尚未存在的 API**，也不會暗藏 GitHub PAT 或把 GitHub workflow 當成匿名公共服務。
 
-> 幫我深入分析這篇 SMJ 論文：Value capture theory: A strategic management review。請抓這篇的假設／命題、實證結果與穩健性，以及 sample_period、data_source、empirical_method。
+## 過去的 GitHub Actions 單篇工作流
 
-系統會解析為 DOI [10.1002/smj.2592](https://doi.org/10.1002/smj.2592)，並可替 repository owner 建立標題為 `Atlas analyze: 10.1002/smj.2592` 的 GitHub Issue。GitHub Actions `Analyze one SMJ paper on demand` 工作流程將自動針對這一篇 DOI 取用合法 OA 候選並產生報告；結果以 Issue 留言回覆並保存 JSON artifact（30 天）。
+`.github/workflows/analyze-one-paper.yml` 與 `pipeline/on_demand.py` 仍保留為 repo owner 的進階／命令列工作流，但 Atlas 論文頁不會再展示其 Issue 建立連結，因為使用者的主要操作已是同頁直接擷取與分析。
 
-也可從 Atlas 單篇論文頁的「啟動這篇論文的單篇深入擷取」連結，建立預先填妥 DOI 的 GitHub Issue；或直接在 GitHub Actions 介面開啟 `workflow_dispatch`，填入 `paper` 標題／DOI。
+## 方法有效性與限制
 
-**實際觸發的安全限制：** Issue 觸發只允許 GitHub repo owner 的新 Issue，且標題必須以 `Atlas analyze:` 開頭；沒有提供任意 URL 參數，僅能搜尋 Atlas 已有的、可唯一辨認的 SMJ DOI。Github Issue 的自然語言內容不會作為 shell 指令執行。AI 訊息本身不會自動觸發，需由連接 GitHub 的對應工具建立該 Issue。
+- 本文的自動 H／P 偵測只是辨認明確標示 `Hypothesis 1` 等句型，不能把摘要推測當成正式假設。
+- 估計方法依正文顯性名稱及附近的作者描述辨識；變數在不同模型的角色、統計支持狀態及多種估計規格需人工檢查。
+- 適當區分 `not applicable`、`unknown`、`source found but not accessible`、`parsed but not found`。
+- 依 Grimmer & Stewart (2013), *Political Analysis*, 21(3), 267–297, https://doi.org/10.1093/pan/mps028，自動文本分類須針對特定研究任務做有效性驗證。
 
-## 檢索與輸出
-
-`pipeline.on_demand` 使用 Atlas 已索引的 DOI/標題，僅限單篇。來源優先重用已經有完整來源驗證的正文記錄；若沒有，就以 OpenAlex 已標記的公開 accepted/published OA 來源為候選，限制最多 8 個來源與 24 個 HTTP 請求，沿用既有 DNS／SSRF、robots、Redirect、429 Backoff、檔案大小與 DOI+題名／作者內容驗證。**不猜測出版社付費 PDF，也不繞過授權。**
-
-報告輸出：
-
-| 分類 | 輸出 |
-|---|---|
-| 確切 DOI、標題 | 先驗證 Atlas 書目唯一匹配 |
-| 論文類型 | Review / Synthesis（有明確題名指標，僅暫定）；否則 unknown |
-| `sample_period` | 有原始來源文字對齊 → 值與 evidence；Review 暫定不適用「原創實證樣本」，與文獻回顧涵蓋期間分開；其他 Unknown |
-| `data_source` | 有原始來源文字對齊 → 原文記載資料庫；Review 不將被引用研究的資料庫當作者的原創實證數據 |
-| `empirical_method` | 有來源對齊 → 原始研究估計方法；Review 的理論／回顧方法獨立，不亂推成 OLS |
-| 假設／命題 | 僅輸出正文的 H/P 或來源句型擷取，對齊段落、頁碼與 hash |
-| 實證結果與穩健性 | 本篇論文的原創檢驗記錄；不把他人被引述成果當作本篇結果 |
-| Theory | 作者明示 E2 / 章節提及／候選，來源對齊，不推定學術有效性 |
-
-若無合法 OA，保留精確狀態 `no_provider_oa_source` 或 `fulltext_not_acquired`，輸出未知與原因，**不能說明該文沒有假設或資料**。Review 類型的「不適用」標記必須與「全文不足，尚待查核」並列。
-
-### 本例的背景
-
-Gans, J., & Ryall, M. D. (2017). *Value capture theory: A strategic management review*. Strategic Management Journal, 38(1), 17–41. https://doi.org/10.1002/smj.2592
-
-這篇文章在摘要與題名清楚說明是 Value Capture Theory 的回顧，主要以 cooperative game theory 作為基礎。它不等同典型有公司樣本、資料庫、回歸模型、H1–Hn 估計的原創實證研究；這些欄位不應一概顯示毫無區別的「未知」。尚未讀取全文時仍保留「暫定」而非絕對排除。
-
-## 維運與限制
-
-- 每次 Issue 對應一次 bounded workflow；已發出的結果可在 Issues 與 JSON artifact 查閱，不直接改寫 Atlas 3,949 篇的正式分類庫，以免單篇工作流與排程更新互相覆蓋。
-- 網站只能開啟預填 GitHub Issue，必須有 GitHub 登入且是專案 owner 才能觸發自動分析；不會在 GitHub Pages 靜態站上直接執行伺服器爬蟲。
-- GitHub Actions 工作流程有執行期限與權限限制；透過 GitHub 來源站受限的 403 不代表 ChatGPT 或瀏覽器也必定無法查看，也不會繞過。
-- 摘要未必揭露所有 Review 文獻納入準則；「原創實證樣本不適用」不能代替系統性回顧研究的 sample window。
-- 只發布簡短對齊片段、統計與原文跳轉連結，**不儲存、不重新上傳出版社 PDF**。
-
-## 技術驗證
-
-`python -m pytest tests/test_on_demand.py`
-
-`python -m pipeline.on_demand --query '10.1002/smj.2592' --output-dir data/staging/on_demand`
-
-完整成果以發出 Issue 後 GitHub Actions 的真實 workflow status、實際 OA 存取結果與回覆內容為準。

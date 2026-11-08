@@ -139,5 +139,5 @@ def test_owner_only_workflow_and_issue_button_are_wired():
     assert "pipeline.on_demand" in y
     assert "gh issue comment" in y
     s=(root/"src/scripts/research-app.ts").read_text()
-    assert "Atlas analyze: " in s
-    assert "issues/new?title=" in s
+    assert "抓取 OA 全文並分析這篇論文" in s
+    assert "issues/new?title=" not in s

@@ -44,9 +44,11 @@ Node 22.12+、Python 3.11+；CI Python 3.12。白名單資料由 data/live_state
 `pipeline/wiley.py` 會針對經 OpenAlex 明確標記出版社 Open Access 的 `10.1002/smj.*` 論文，額外加入 `https://sms.onlinelibrary.wiley.com/doi/pdfdirect/<DOI>` 作為有界抓取候選。仍必須通過 robots、403、來源身份與 PDF 解析，不會以 DOI 本身認定所有原版 PDF 可公開下載。以 `10.1002/smj.3735` 為實際 OA 煙霧測試範例：`python -m pipeline.wiley_probe`，只印出下載／解析與變數／假設記錄數，不儲存或公開 PDF。詳見 [擴充與來源方法](docs/TAXONOMY_ABSTRACT_WILEY_V2_2.md)。
 
 
-## 單篇論文按需深入分析（On-demand）
+## 單篇論文直接擷取合法 OA 全文
 
-不必等待全庫合法 OA 正文採集：Atlas 每篇論文詳細頁現在提供「**分析這篇論文（直接在本頁顯示）**」按鈕，按一下立即整合既有 Atlas E2 全文證據、E1 OpenAlex 摘要明示的研究發現，呈現樣本期間、資料來源、實證方法、假設與穩健性缺漏，並以 GitHub 公開讀取 API 查詢先前單篇分析 Issue 的執行結果；不用登入、沒有 Github token，也不假裝已下載全文。若要全新啟動 GitHub Actions 的合法 OA 全文擷取，仍須由 repo owner 透過另一個明確標示「**需要提交 GitHub 任務**」的連結開啟 `Atlas analyze: <DOI>` 的 GitHub Issue。限專案擁有者送出後，`Analyze one SMJ paper on demand` Actions 工作流程就會只針對該 DOI 限量嘗試合法 OA 來源，優先重用既有的來源可驗證全文擷取結果，並把 `sample_period`、`data_source`、`empirical_method`、假設／命題、實證結果、穩健性和來源頁碼回覆至 Issue、附上 JSON artifact。Review 類論文的原創實證樣本欄位可標為**暫定不適用**，而不是與缺來源的「未知」混用。從 ChatGPT 直接指定論文時，也可經已連接的 GitHub 建立 Issue 來觸發。詳見 [單篇按需分析手冊](docs/ON_DEMAND_ONE_PAPER.md)。
+Atlas 每篇 `/paper/?id=...` 詳細頁提供 **「抓取 OA 全文並分析這篇論文」** 按鈕。按一下就會在**同一頁**向 OpenAlex 查詢最新的 OA 來源，嘗試由瀏覽器以 CORS 合規方式直接下載出版社／機構儲存庫的 PDF 或 HTML，並以 PDF.js（v4.10.38）擷取文本、核對標題/DOI/作者後，顯示 `sample_period`、`data_source`、`empirical_method`、假設／理論命題、研究結果及穩健性檢驗，附來源頁碼。無須 GitHub Issue、登入或另一個網頁。若現有 Atlas 研究資料已證實某欄位，原文證據仍可沿用。
+
+**執行環境限制：** Open Access 授權不一定等於網頁允許 JavaScript 跨網域 `fetch`。遇到出版社 403、CORS 阻擋或頁面身份驗證失敗時，按鈕會說明實際嘗試結果，退回 OpenAlex 摘要支持的有限分析，而不是虛構已解析全文、估計結果或 H1。瀏覽器擷取的文章內容不寫入 Atlas 或重新發布。若需克服 CORS，已預備 `pipeline/live_api.py` 具來源審核與速率限制的 API，但現有 Railway 帳戶需升級方案方可部署；這不影響瀏覽器端的直接按鈕。詳見 [單篇 OA 分析規則](docs/ON_DEMAND_ONE_PAPER.md)。
 
 ## 合法全文的理論證據（v4.1）
 
