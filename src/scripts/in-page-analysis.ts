@@ -134,7 +134,7 @@ function abstractFindings(parent:Element,abstract:string|null,sourceUrl:string){
 
 function renderParsedOA(parent:Element,oa:OAExtract,review:boolean){
   const summary=node(parent,'p',oa.report,'notice');
-  node(parent,'p','已在本頁直接讀取 '+oa.pages+' 頁 PDF／HTML 文字；不儲存或重新發布全文。','status-line');
+  node(parent,'p',oa.format==='pdf'?'已在本頁直接解析 '+oa.pages+' 頁 PDF':'已在本頁直接解析 '+oa.pages+' 個 HTML 文字段落；不儲存或重新發布全文','status-line');
   if(oa.source_url)evidenceLink(parent,oa.source_url);
   node(parent,'h4','研究設計與方法（全文詞組對齊）');
   const table=node(parent,'table'),header=node(table,'thead'),tr=node(header,'tr');
@@ -146,8 +146,8 @@ function renderParsedOA(parent:Element,oa:OAExtract,review:boolean){
     if(f?.value){
       node(cell,'strong',f.value);
       if(f.excerpt)node(cell,'p',f.excerpt,'evidence');
-      node(cell,'p','E2 · 合法全文自動詞組比對 · page '+(f.page??'HTML')+' · 非人工驗證','tiny');
-      if(oa.source_url)evidenceLink(cell,oa.source_url,f.page);
+      node(cell,'p','E2 · 合法全文自動詞組比對 · '+(oa.format==='pdf'?'PDF 第 '+f.page+' 頁':'HTML 第 '+f.page+' 段')+' · 非人工驗證','tiny');
+      if(oa.source_url)evidenceLink(cell,oa.source_url,oa.format==='pdf'?f.page:null);
     }else if(review){
       node(cell,'strong','暫定不適用於原創實證估計');
       node(cell,'p','此篇依標題判斷為回顧文章；文獻檢索方法仍需另行辨識。','tiny');
@@ -166,8 +166,8 @@ function renderParsedOA(parent:Element,oa:OAExtract,review:boolean){
       const row=node(parent,'article',undefined,'record');
       node(row,'strong',x.label);
       node(row,'p',x.excerpt,'evidence');
-      node(row,'p','E2 · 全文來源 page '+x.page+' · 機器搜尋所得，不保證與統計模型對應','tiny');
-      if(oa.source_url)evidenceLink(row,oa.source_url,x.page);
+      node(row,'p','E2 · '+(oa.format==='pdf'?'PDF 第 '+x.page+' 頁':'HTML 第 '+x.page+' 段')+' · 機器搜尋所得，不保證與統計模型對應','tiny');
+      if(oa.source_url)evidenceLink(row,oa.source_url,oa.format==='pdf'?x.page:null);
     }
   }
 }
@@ -184,7 +184,7 @@ export async function renderInPageAnalysis(
   try{abstract=await abstractPromise||null;}catch{abstract=null;}
   let oa:OAExtract;
   try{oa=await oaPromise;}catch(e){
-    oa={status:'browser_error',source_url:null,open_access:false,pages:0,
+    oa={status:'browser_error',source_url:null,open_access:false,pages:0,format:null,
        attempts:[],fields:{},hypotheses:[],findings:[],robustness:[],
        report:e instanceof Error?e.message:'瀏覽器全文讀取失敗'};
   }
