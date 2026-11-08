@@ -62,8 +62,8 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
         if extra.get('abstract_hash'):
             for item in extra.get('abstract_weak_hits',[]):
                 term_id=item.get('term_id')
-                if term_id in nodes and term_id not in hits and (pid,term_id) not in manual and
-                        item.get('dimension')==nodes[term_id]['level']:
+                if (term_id in nodes and term_id not in hits and (pid,term_id) not in manual
+                        and item.get('dimension')==nodes[term_id]['level']):
                     weak[term_id]=item
         for ident,item in sorted(weak.items()):
             abstract_evidence=item.get('source')=='abstract_context' and bool(extra.get('abstract_hash'))
