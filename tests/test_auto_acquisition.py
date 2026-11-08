@@ -161,3 +161,15 @@ def test_existing_11_fulltexts_are_prioritized_over_large_new_backlog():
                            "study-claims-v1",max_papers=4)
     assert len(selected)==4
     assert all(x["reason"]=="parser_upgrade" for x in selected)
+
+
+def test_upgrades_reuse_proven_oa_url_before_other_candidates():
+    papers={"p":{"paper_id":"p","publication_year":2023}}
+    receipt={"accessible":True,
+             "extraction_algorithm_version":"old","study_algorithm_version":"old",
+             "source_url":"https://university.edu/repository/accepted-manuscript.pdf",
+             "version":"acceptedVersion","license":None}
+    picked=choose_papers(papers,[entry("p")],{"p":receipt},"new-measure","new-study")
+    assert picked[0]["reason"]=="parser_upgrade"
+    assert picked[0]["sources"][0]["url"]==receipt["source_url"]
+    assert len(picked[0]["sources"])>=2
