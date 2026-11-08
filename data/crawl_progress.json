@@ -1,6 +1,6 @@
 {
   "schema_version": "4.0.0",
-  "generated_at": "2026-11-08T04:19:56.742328+00:00",
+  "generated_at": "2026-11-08T04:20:52.292303+00:00",
   "state": "cycle_complete",
   "cycle_id": "cycle:2026-11-08T03:37:57.874768+00:00",
   "doi_total": 3949,
@@ -40,7 +40,7 @@
   "discovery_scope": "OpenAlex indexed OA accepted/published locations and prior lawful receipts; not the entire internet",
   "snapshot_doi_fingerprint": "d7d28b8331dcab2b654a8092cfc0a8adf82fccc0a64f98de9b7b60876c59d021",
   "next_continuation": "cron every 3 hours while running; completed rounds enter low-frequency discovery monitoring",
-  "run_id": "42446298809",
+  "run_id": "42446351187",
   "parser_version": "article-document-4.0",
   "extractor_version": "research-fields-4.0"
 }
