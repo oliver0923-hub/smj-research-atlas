@@ -89,12 +89,14 @@ def retry_reason(entry,receipt,measurement_version,study_version,current=None):
 
 
 def choose_papers(papers,enrichment,receipts,measurement_version,study_version,max_papers=40,current=None):
-    """Recent untried papers first, then upgrades, then cooldown-eligible retry.
+    """Reparse previously successful texts first, then try new OA manuscripts.
 
+    Reusing proven source locations reduces uncertainty during upgrades.
+    New OA candidates follow, with failures cooled down to avoid churn.
     This controls network budget, not scientific representativeness.
     """
     rows=[]
-    priority={"new":0,"new_oa_location":1,"parser_upgrade":2,
+    priority={"parser_upgrade":0,"new":1,"new_oa_location":2,
               "retry_missing_timestamp":3,"retry_after_cooldown":4}
     for e in enrichment:
         p=papers.get(e.get("paper_id"))
