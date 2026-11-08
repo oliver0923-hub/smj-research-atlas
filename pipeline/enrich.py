@@ -146,7 +146,7 @@ def parse_document(content,content_type):
                 return [{'page':None,'text':text}],'beautifulsoup-v2-structured'
     raise ValueError('Not an inspectable full-text document')
 
-def acquire(max_papers=40,dry_run=False):
+def acquire(max_papers=40,dry_run=False,max_runtime_seconds=None):
     from .evidence import extract_variables, EXTRACTION_VERSION
     from .study import extract_study_claims, STUDY_VERSION
     papers={p['paper_id']:p for p in read('papers.jsonl')}
@@ -165,8 +165,11 @@ def acquire(max_papers=40,dry_run=False):
                 'budget':max_papers,'provider':'deterministic','paid_api_calls':0}
     (CACHE/'fulltext').mkdir(parents=True,exist_ok=True)
     robots={};processed=0
-    with httpx.Client(timeout=25,follow_redirects=True,headers={'User-Agent':USER_AGENT}) as client:
+    started=time.monotonic()
+    with httpx.Client(timeout=20,follow_redirects=True,headers={'User-Agent':USER_AGENT}) as client:
         for plan in plans:
+            if max_runtime_seconds is not None and time.monotonic()-started>=max_runtime_seconds:
+                break
             e=plan['entry']
             paper=papers[e['paper_id']]
             key=hashlib.sha256(paper['paper_id'].encode()).hexdigest()[:16]
@@ -228,6 +231,7 @@ def acquire(max_papers=40,dry_run=False):
             write(DATA/'extraction_runs.jsonl',lines(runs))
             print(json.dumps({'processed':processed,'paper_id':e['paper_id'],'accessible':receipt['accessible'],'total_variables':len(variables)}),flush=True)
     return {'processed':processed,'eligible':len(all_plans),
+            'budget_exhausted':processed<len(plans),
             'accessible':sum(r['accessible'] for r in old.values()),
             'variables':len(variables),'study_claims':len(claims)}
 
