@@ -1,0 +1,19 @@
+{
+  "source_revision": "e2ebc6bc4b01895b7ce92efcdea220304c211cf6",
+  "data_revision": "feba78eb4c87a5828988bcef471effee3e3d1b08",
+  "papers": 3949,
+  "oa_candidates": 1038,
+  "attempted": 185,
+  "parsed": 11,
+  "variables": 21,
+  "claims": 77,
+  "field_counts": {
+    "role": 0,
+    "formula": 0,
+    "lag": 0,
+    "sample_period": 0,
+    "data_source": 1,
+    "empirical_method": 0
+  },
+  "taxonomy_sha256": "439f1c44a5787c0800039b1cb2a608084b9251adca4707a5351d32e0e6400a76"
+}

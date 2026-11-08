@@ -18,7 +18,12 @@ def read(name):
     return [json.loads(s) for s in p.read_text(encoding='utf-8').splitlines() if s.strip()] if p.exists() else []
 def write(path, value):
     path.parent.mkdir(parents=True,exist_ok=True)
-    tmp=path.with_suffix(path.suffix+'.tmp'); tmp.write_text(value,encoding='utf-8'); tmp.replace(path)
+    tmp=path.with_suffix(path.suffix+'.tmp'); tmp.write_text(value,encoding='utf-8')
+    for attempt in range(8):
+        try:tmp.replace(path);break
+        except PermissionError:
+            if attempt==7:raise
+            time.sleep(min(1,.05*2**attempt))
 def lines(rows): return ''.join(json.dumps(r,ensure_ascii=False,sort_keys=True)+'\n' for r in rows)
 def request(client,url,params):
     for attempt in range(5):
@@ -116,6 +121,10 @@ def validate():
         linked=claim.get('related_hypothesis_id')
         if linked and linked not in claim_ids:
             raise ValueError('Study finding refers to missing hypothesis')
+    from .research import validate_record
+    for record in read('research_records.jsonl'):
+        validate_record(record)
+        if record['paper_id'] not in ids:raise ValueError('Research paper missing')
     taxonomy_path=DATA/'ontology.yaml'
     if taxonomy_path.exists():
         taxonomy=yaml.safe_load(taxonomy_path.read_text(encoding='utf-8'))
@@ -128,6 +137,10 @@ def build():
     manual=read('classifications.jsonl')
     enrichment=read('enrichment.jsonl');receipts=read('content_receipts.jsonl');runs=read('extraction_runs.jsonl')
     study_claims=read('study_claims.jsonl')
+    from .crawl import active_records,progress
+    from .research import report as field_report
+    researches=active_records(read('research_records.jsonl'),read('crawl_queue.jsonl'))
+    by_research={r['paper_id']:r for r in researches}
     assignments=classify(papers,ontology,enrichment,manual)
     validate_taxonomy(ontology,assignments,papers,variables)
     papers=enrich_papers(papers,ontology,assignments)
@@ -139,6 +152,9 @@ def build():
     for p in papers:
         p['title']=display_text(p['title'])
         p['enrichment']=extra.get(p['paper_id']);p['content_access']=content.get(p['paper_id'],{'accessible':False,'missing_reason':'not_yet_attempted'})
+        p['research_v4']=by_research.get(p['paper_id'])
+        if p['research_v4']:
+            p['content_access']=dict(accessible=True,source_url=p['research_v4']['source_url'],source_hash=p['research_v4']['source_hash'],version='v4 source-identified document')
         p['variables']=by_variable.get(p['paper_id'],[])
         p['study_claims']=by_claim.get(p['paper_id'],[])
         p['is_retracted']=extra.get(p['paper_id'],{}).get('is_retracted');p['article_kind']=article_kind(p)
@@ -163,7 +179,12 @@ def build():
     report['robustness_records']=sum(c['claim_type']=='robustness' for c in study_claims)
     report['sensitivity_records']=sum(c['claim_type']=='sensitivity' for c in study_claims)
     report['study_claim_papers']=len({c['paper_id'] for c in study_claims})
-    report['schema_version']='3.1.0'
+    report['schema_version']='4.0.0'
+    report['legacy_variable_records']=len(variables)
+    report['research_v4_papers']=len(researches)
+    report['research_v4_variables']=sum(len(r['variables']) for r in researches)
+    report['crawl']=progress(read('crawl_queue.jsonl'),next(iter(read('crawl_control.jsonl')),{}))
+    report['field_coverage']=field_report(researches,len(papers))
     analysis=derive(papers,variables,ontology,receipts,enrichment)
     title_map={p['paper_id']:p['title'] for p in papers}
     for v in variables:v['paper_title']=title_map[v['paper_id']]
@@ -187,7 +208,21 @@ def build():
     for p in papers:
         k=f"{p['publication_year']}/{p.get('volume')}/{p.get('issue')}";issue_counts[k]=issue_counts.get(k,0)+1
     issues=[dict(year_volume_issue=k,indexed_articles=n,publisher_expected_articles=None,coverage_status='not_reconciled') for k,n in sorted(issue_counts.items())]
-    for name,obj in [('coverage_report',report),('coverage_issues',issues),('analytics',analysis),('gap_candidates',gap_candidates(papers,ontology)),('measurement_paths',paths),('research_graph',graph),('pipeline_history',read('pipeline_history.jsonl')),('ontology',[n for n in ontology['nodes'] if n['level']=='domain']),('taxonomy',ontology),('classifications',assignments),('emerging_topics',emerging),('variables',variables),('study_claims',study_claims)]:
+    public_variables=[v for v in variables if v['paper_id'] not in by_research]
+    for r in researches:
+        ev={e['evidence_id']:e for e in r['evidence']}
+        for v in r['variables']:
+            f=v['fields'];primary=next((ev[i] for i in f['operational_definition']['evidence_ids']),None)
+            if primary:
+                public_variables.append(dict(variable_id=v['variable_id'],paper_id=r['paper_id'],paper_title=title_map[r['paper_id']],variable_label_original=v['name'],construct_en=v['name'],construct_zh=None,role=f['role']['value'] or 'unknown',proxy_name=f['proxy']['value'],operational_definition=f['operational_definition']['value'],formula=f['formula']['value'],unit=f['unit']['value'],source_url=r['source_url'],source_page=primary['page'],evidence_locator='page '+str(primary['page'])+' / '+primary['section']+' / '+str(primary['table']),evidence_grade='E3_measurement_text',validation_status='validated_automatic',fields=f,field_evidence={i:ev[i] for f in v['fields'].values() for i in f['evidence_ids']},schema_version='4.0.0'))
+    report['variable_records']=len(public_variables)
+    report['measurement_text_aligned']=len(public_variables)
+    report['verified_variables']=len(public_variables)
+    report['verified_papers']=len({v['paper_id'] for v in public_variables})
+    report['accessible_fulltexts']=len({r['paper_id'] for r in receipts if r.get('accessible')}|set(by_research))
+    report['fulltexts_attempted']=len({r['paper_id'] for r in receipts}|{r['paper_id'] for r in read('crawl_queue.jsonl') if r['attempts_count']})
+    evaluation=json.loads((ROOT/'evaluation/results.json').read_text(encoding='utf-8')) if (ROOT/'evaluation/results.json').exists() else {'status':'not_yet_evaluated','accuracy':None}
+    for name,obj in [('evaluation',evaluation),('crawl_progress',report['crawl']),('field_coverage',report['field_coverage']),('coverage_report',report),('coverage_issues',issues),('analytics',analysis),('gap_candidates',gap_candidates(papers,ontology)),('measurement_paths',paths),('research_graph',graph),('pipeline_history',read('pipeline_history.jsonl')),('ontology',[n for n in ontology['nodes'] if n['level']=='domain']),('taxonomy',ontology),('classifications',assignments),('emerging_topics',emerging),('variables',public_variables),('study_claims',study_claims)]:
         write(out/(name+'.json'),json.dumps(obj,ensure_ascii=False)); write(DATA/'generated'/(name+'.json'),json.dumps(obj,ensure_ascii=False,indent=2))
     classification_queue=[dict(task_id='review:'+a['assignment_id'],paper_id=a['paper_id'],term_id=a['term_id'],assignment_id=a['assignment_id'],taxonomy_version=a['taxonomy_version'],task_type='classification_review',status='open',origin=a['origin'],method=a['method'],source_url=a['source_url'],evidence_locator=a['evidence_locator']) for a in assignments if a['review_status']=='suggested']
     write(DATA/'generated'/'classification_review_queue.jsonl',lines(classification_queue))

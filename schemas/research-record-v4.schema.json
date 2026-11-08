@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Source aligned research record v4",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "paper_id",
+    "source_url",
+    "source_hash",
+    "fields",
+    "variables",
+    "evidence",
+    "hypotheses",
+    "models",
+    "estimates",
+    "findings",
+    "checks",
+    "search_coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "4.0.0"
+    },
+    "paper_id": {
+      "type": "string"
+    },
+    "source_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/field"
+      }
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "variable_id",
+          "name",
+          "fields"
+        ],
+        "properties": {
+          "fields": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "source_hash",
+          "block_id",
+          "start",
+          "end",
+          "page",
+          "table",
+          "row",
+          "column",
+          "span_hash",
+          "verification_status"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "field": {
+      "type": "object",
+      "required": [
+        "value",
+        "status",
+        "reason",
+        "evidence_ids"
+      ],
+      "properties": {
+        "value": {},
+        "status": {
+          "type": "string"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Python validate_record additionally enforces all field inventories, evidence source identity, hashes, independent field links and relational referential integrity."
+}

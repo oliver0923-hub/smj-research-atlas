@@ -17,9 +17,9 @@ def test_manual_batch_has_explicit_budget_and_no_paid_provider():
 def test_workflow_accepts_manual_batch_and_keeps_scheduled_daily():
     source=(ROOT/".github/workflows/sync-metadata.yml").read_text(encoding="utf-8")
     assert "workflow_dispatch:" in source
-    assert "options: [daily, weekly, batch, monthly]" in source
-    assert "default: batch" in source
-    assert 'case "$mode" in daily|weekly|batch|monthly)' in source
+    assert "options: [exhaust_oa, continue_oa, pause_oa, resume_oa, daily, weekly, batch, monthly]" in source
+    assert "default: exhaust_oa" in source
+    assert 'exhaust_oa|continue_oa|pause_oa|resume_oa)' in source
     assert 'mode="${REQUESTED_MODE:-daily}"' in source
 
 
@@ -45,8 +45,9 @@ def test_batch_actual_orchestration_uses_bounded_fulltext(monkeypatch,tmp_path):
     monkeypatch.setattr(release,"sync",lambda args:called.append("crossref"))
     monkeypatch.setattr(enrich,"harvest",lambda n,priority_new=False:
                         called.append(("enrich",n,priority_new)) or {"status":"complete"})
-    monkeypatch.setattr(enrich,"acquire",lambda n,max_runtime_seconds=None:
-                        called.append(("acquire",n,max_runtime_seconds)) or {"processed":n})
+    import pipeline.crawl as crawl
+    monkeypatch.setattr(crawl,"tick",lambda command,max_sources,max_requests,seconds,persist:
+                        called.append((command,max_sources,max_requests,seconds)) or {"processed":max_sources})
     monkeypatch.setattr(release,"publisher_check",lambda:{"status":"unavailable"})
     monkeypatch.setattr(release,"gate",lambda:{"status":"passed"})
     monkeypatch.setattr(release,"build",lambda:None)
@@ -54,4 +55,4 @@ def test_batch_actual_orchestration_uses_bounded_fulltext(monkeypatch,tmp_path):
     result=refresh("batch")
     assert result["status"]=="validated_automatic"
     assert called==["crossref",("enrich",12,False),("enrich",4,True),
-                    ("acquire",60,720)]
+                    ("continue_oa",60,180,720)]

@@ -24,3 +24,7 @@ data/extraction_runs.jsonl
 data/papers.jsonl
 data/pipeline_history.jsonl
 data/publisher_check.json
+
+# v4 private execution state; published through the validated atlas-data snapshot
+data/crawl_*.jsonl
+data/research_*.jsonl

@@ -1,0 +1,11 @@
+{
+  "before": {
+    "pipeline/research.py": "0b64382cfb5df5fc7f824553e4740cb7fecf02506548342574bed24398e72b93",
+    "pipeline/article.py": "eb521db47a1804bc31fa311b3be4691fe6dc87b992c2c767651fb944ef0b720e"
+  },
+  "after": {
+    "pipeline/research.py": "5e12e8b2a5c48d47b812934dbedaa22198a21b386921fdcd736b3af11f4e6254",
+    "pipeline/article.py": "eb521db47a1804bc31fa311b3be4691fe6dc87b992c2c767651fb944ef0b720e"
+  },
+  "reason": "Safety-only table numeric labeling: retain reported_estimate, leave coefficient/type unknown without model scale. No change to the three evaluated extraction fields. Period evaluator corrected to treat [start,end] as one interval, not two independent years. Source span alignment permits leading whitespace before a bounded quote; no evaluated field rules changed. Generic proxy safety correction excludes ratio denominators and honors explicit proxied-by clauses. This is not an evaluated field and does not alter evaluation extraction rules."
+}

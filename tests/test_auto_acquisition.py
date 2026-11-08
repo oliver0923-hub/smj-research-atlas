@@ -139,8 +139,9 @@ def test_real_daily_refresh_calls_metadata_and_acquisition(tmp_path,monkeypatch)
     monkeypatch.setattr(release,"sync",lambda args:events.append("crossref"))
     monkeypatch.setattr(enrichmod,"harvest",
                         lambda pages,priority_new=False:events.append(("openalex",pages,priority_new)) or {"status":"complete"})
-    monkeypatch.setattr(enrichmod,"acquire",
-                        lambda limit,max_runtime_seconds=None:events.append(("fulltext",limit,max_runtime_seconds)) or {"processed":limit})
+    import pipeline.crawl as crawl
+    monkeypatch.setattr(crawl,"tick",
+                        lambda command,max_sources,max_requests,seconds,persist:events.append(("fulltext",max_sources,seconds)) or {"processed":max_sources})
     monkeypatch.setattr(release,"publisher_check",lambda:{"status":"unavailable"})
     monkeypatch.setattr(release,"gate",lambda:{"status":"passed"})
     monkeypatch.setattr(release,"build",lambda:None)
