@@ -136,6 +136,7 @@ def test_real_daily_refresh_calls_metadata_and_acquisition(tmp_path,monkeypatch)
     import pipeline.enrich as enrichmod
     events=[]
     monkeypatch.setattr(release,"DATA",tmp_path)
+    monkeypatch.setattr(release,"read",lambda name:[])
     monkeypatch.setattr(release,"sync",lambda args:events.append("crossref"))
     monkeypatch.setattr(enrichmod,"harvest",
                         lambda pages,priority_new=False:events.append(("openalex",pages,priority_new)) or {"status":"complete"})
