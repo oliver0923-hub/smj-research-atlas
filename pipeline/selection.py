@@ -89,12 +89,14 @@ def retry_reason(entry,receipt,measurement_version,study_version,current=None):
 
 
 def choose_papers(papers,enrichment,receipts,measurement_version,study_version,max_papers=40,current=None):
-    """Recent untried papers first, then upgrades, then cooldown-eligible retry.
+    """Reparse previously successful texts first, then try new OA manuscripts.
 
+    Reusing proven source locations reduces uncertainty during upgrades.
+    New OA candidates follow, with failures cooled down to avoid churn.
     This controls network budget, not scientific representativeness.
     """
     rows=[]
-    priority={"new":0,"new_oa_location":1,"parser_upgrade":2,
+    priority={"parser_upgrade":0,"new":1,"new_oa_location":2,
               "retry_missing_timestamp":3,"retry_after_cooldown":4}
     for e in enrichment:
         p=papers.get(e.get("paper_id"))
@@ -102,6 +104,16 @@ def choose_papers(papers,enrichment,receipts,measurement_version,study_version,m
         reason=retry_reason(e,receipts.get(e["paper_id"]),measurement_version,study_version,current)
         if not reason:continue
         options=source_candidates(e.get("oa_locations"))
+        receipt=receipts.get(e["paper_id"]) or {}
+        if reason=="parser_upgrade" and receipt.get("accessible"):
+            # Reuse the exact previously accessible OA URL first, while still
+            # respecting current robots/access checks on every request.
+            prior=receipt.get("source_url")
+            if safe_url(prior):
+                options=[x for x in options if x["url"]!=prior]
+                options.insert(0,{"url":prior,"kind":"previously_accessible",
+                                  "version":receipt.get("version"),
+                                  "license":receipt.get("license")})
         if not options:continue
         year=p.get("publication_year") or 1980
         rows.append((priority[reason],-year,e["paper_id"],e,reason,options))
