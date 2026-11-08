@@ -80,7 +80,7 @@ def classify(papers,taxonomy,enrichment=(),decisions=()):
                     evidence_locator="No supported category match in available title/abstract feature index",
                     input_hash=digest,review_status='suggested').model_dump()
                 record.update(is_fallback_other=True,inference_origin='deterministic_rule',
-                    evidence_grade='E1_abstract' if extra.get('abstract_available') and extra.get('abstract_hash') else 'E0_metadata',
+                    evidence_grade='E0_metadata',
                     validation_status='insufficient_evidence',heuristic_score=None,
                     confidence_score=None,source_hash=digest,
                     algorithm_version=CLASSIFIER_VERSION,
