@@ -38,7 +38,6 @@ def test_no_client_side_authentication_secret_or_anonymous_github_write():
     assert "https://api.github.com" in s
     assert "api+'/search/issues" in s
     assert "api+'/repos/'+REPO+'/issues/'" in s
-    assert "startsWith" not in s or "startsWith" in s
     for unsafe in ("localStorage","sessionStorage","Authorization:","Bearer ",
                    "ghp_","github_pat_", "fetch(api+'/repos/'+REPO+'/issues',{method:'POST')"):
         assert unsafe not in s
@@ -49,9 +48,8 @@ def test_no_client_side_authentication_secret_or_anonymous_github_write():
 
 def test_existing_automated_issue_result_is_linked_not_faked():
     s=(ROOT/"src/scripts/in-page-analysis.ts").read_text(encoding="utf-8")
-    assert "Atlas analyze: "+"" in s
+    assert "Atlas analyze: " in s
     assert "x.user?.login==='oliver0923-hub'" in s
     assert "x.user?.login==='github-actions[bot]'" in s
     assert "no_provider_oa_source" in s
     assert "查看完整 GitHub 分析報告與來源紀錄" in s
-    assert "本頁的頁內分析" not in s or True
