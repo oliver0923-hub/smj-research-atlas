@@ -124,6 +124,9 @@ def test_target_only_one_oa_source_and_no_publish_pdf(tmp_path,monkeypatch):
     assert seen==[oa]
     assert r["acquisition_status"]=="fulltext_not_acquired"
     assert r["attempts"][0]["status"]=="http_403"
+    reply=on_demand.markdown(r)
+    assert "http_403" in reply
+    assert oa in reply and "本次來源存取嘗試" in reply
     assert all(not x.get("source_url") for x in r["hypotheses"])
     assert not list(tmp_path.rglob("*.pdf"))
 
