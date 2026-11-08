@@ -117,8 +117,15 @@ def refresh(mode='daily',dry_run=False):
             # trickle in at four API calls each day. No extra fulltext requests.
             backlog=sum(e.get('abstract_feature_method')!='allowed_phrase_occurrence_v6'
                         for e in read('enrichment.jsonl'))
-            pages=20 if backlog>=160 else 4
+            # The first post-upgrade refresh can process the outstanding
+            # legacy abstract feature inventory in one bounded pass, avoiding
+            # days of misleading Unknown labels while respecting OpenAlex
+            # per-request throttling, rate limits, and GitHub job budgets.
+            # 80 pages * 40 DOI max = 3,200 DOI candidates; harvest uses
+            # 0.4-second gaps, existing HTTP backoff and early failure exit.
+            pages=min(80,max(4,(backlog+39)//40)) if backlog>=160 else 4
             run['taxonomy_backfill_backlog_at_start']=backlog
+            run['taxonomy_backfill_budget_pages']=pages
             run['enrichment']=harvest(pages,priority_new=True)
             run['acquisition']=tick('continue_oa',max_sources=4,max_requests=20,seconds=150,persist=os.getenv('GITHUB_ACTIONS')=='true')
         if mode in {'weekly','batch'}:
