@@ -52,6 +52,7 @@ def coverage(papers,variables,assignments,receipts,enrichment,publisher):
     feature_version='allowed_phrase_occurrence_v7'
     class_dimension_counts={
         level:{
+            'fulltext_author_declared':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='fulltext_author_declared' for p in papers),
             'abstract_supported':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='abstract_supported' for p in papers),
             'title_supported':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='title_supported' for p in papers),
             'provisional':sum(p.get('taxonomy_quality',{}).get(level,{}).get('state')=='provisional' for p in papers),
@@ -74,7 +75,7 @@ def coverage(papers,variables,assignments,receipts,enrichment,publisher):
             'denominator':len(papers)
         } for level in dimensions}
     return dict(classification_by_dimension=class_dimension_counts,
-        classification_quality_method='Exact source matches counted separately from weak contextual *candidate* tags; unknowns split by missing abstract versus v7 processing gap; no lexical match never proves a theory is absent.',
+        classification_quality_method='Author-declared E2 fulltext, E1 abstract, and E0 title separated from weak contextual candidates; source alignment does not imply expert semantic validation; missing theory remains unknown.',
         taxonomy_coverage_papers_all_dimensions=sum(
             all(p.get('taxonomy_quality',{}).get(level,{}).get('substantive_terms') for level in dimensions) for p in papers),papers=len(papers),unique_doi=len(set(doi)),duplicate_doi=len(doi)-len(set(doi)),duplicate_rate=(len(doi)-len(set(doi)))/len(doi) if doi else 0,
         missing_fields={field:sum(not p.get(field) for p in papers) for field in ['title','authors','volume','issue','pages','online_date','print_date']},
