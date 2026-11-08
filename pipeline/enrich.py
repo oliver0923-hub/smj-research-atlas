@@ -13,6 +13,7 @@ import httpx
 
 from .cli import DATA, ROOT, read, write, lines
 from .core import ISSNS, doi_key, now
+from .selection import choose_papers, source_candidates
 
 USER_AGENT='SMJResearchAtlas/3.0 (scholarly metadata and lawful OA evidence)'
 FIELDS='id,doi,title,publication_year,primary_location,best_oa_location,locations,abstract_inverted_index,cited_by_count,type,open_access,topics,is_retracted'
@@ -30,26 +31,39 @@ def abstract_text(index):
     pairs=[(i,word) for word,positions in (index or {}).items() for i in positions]
     return ' '.join(w for _,w in sorted(pairs))
 
-def harvest(max_pages=50,dry_run=False):
+def harvest(max_pages=50,dry_run=False,priority_new=False):
     papers={p['doi']:p for p in read('papers.jsonl')}
     existing={p['paper_id']:p for p in read('enrichment.jsonl')}
     status={'source':'OpenAlex','started_at':now(),'budget_pages':max_pages,'status':'running','requests':0,'matched':0,'errors':[]}
     if dry_run:return dict(status,status='dry_run',potential_papers=len(papers))
     CACHE.mkdir(exist_ok=True);(CACHE/'abstracts').mkdir(exist_ok=True)
     checkpoint=DATA/'staging/openalex_checkpoint.json'
-    state=json.loads(checkpoint.read_text()) if checkpoint.exists() else {'cursor':'*'}
-    batch_ids=sorted(papers)
     api_token=os.getenv('OPENALEX_API_KEY')
-    if not api_token and 'batch' not in state:state={'batch':0}
+    if priority_new:
+        # Target Crossref additions directly rather than waiting for an OpenAlex
+        # journal cursor to eventually reach the new DOI.
+        known=set(existing)
+        batch_ids=sorted((doi for doi,p in papers.items() if p['paper_id'] not in known),
+                         key=lambda doi:(-papers[doi].get('publication_year',0),doi))
+        state={'batch':0}
+    else:
+        batch_ids=sorted(papers)
+        state=json.loads(checkpoint.read_text()) if checkpoint.exists() else {'cursor':'*'}
+        if not api_token and 'batch' not in state:state={'batch':0}
     with httpx.Client(timeout=50,follow_redirects=True,headers={'User-Agent':USER_AGENT}) as client:
         for _ in range(max_pages):
             try:
                 params={'filter':'primary_location.source.issn:1097-0266','per_page':100,'select':FIELDS}
-                if api_token:params.update(cursor=state.get('cursor','*'),api_key=api_token)
+                if api_token:params['api_key']=api_token
+                if api_token and not priority_new:
+                    params['cursor']=state.get('cursor','*')
                 else:
                     batch=batch_ids[state['batch']:state['batch']+40]
-                    if not batch:status['status']='complete';checkpoint.unlink(missing_ok=True);break
-                    params['filter']='doi:'+'|'.join(batch)
+                    if not batch:
+                        status['status']='complete'
+                        if not priority_new:checkpoint.unlink(missing_ok=True)
+                        break
+                    params['filter']='doi:'+'|'.join('https://doi.org/'+doi for doi in batch)
                 payload=get(client,'https://api.openalex.org/works',params).json()
             except Exception as exc:
                 status['errors'].append({'kind':type(exc).__name__,'http_status':getattr(getattr(exc,'response',None),'status_code',None)});status['status']='partial_failure';break
@@ -66,7 +80,13 @@ def harvest(max_pages=50,dry_run=False):
                 from .taxonomy import text_key
                 normalized=' '+text_key(abstract)+' '
                 features=[n['id'] for n in tax['nodes'] if n['level'] in {'research_topic','theory'} and any(' '+text_key(phrase)+' ' in normalized for phrase in n.get('match_phrases',[]))]
-                locations=[l for l in raw.get('locations',[]) if l.get('is_oa') and (l.get('is_accepted') or l.get('is_published'))]
+                candidates=list(raw.get('locations') or [])
+                for special in ('best_oa_location','primary_location'):
+                    if raw.get(special):candidates.append(raw[special])
+                locations=[l for l in candidates if l.get('is_oa') and
+                           (l.get('is_accepted') or l.get('is_published') or
+                            l.get('version') in {'acceptedVersion','publishedVersion'})]
+                locations=list({(l.get('pdf_url'),l.get('landing_page_url')):l for l in locations}.values())
                 entry=dict(paper_id=paper['paper_id'],openalex_id=raw['id'],citation_count=raw.get('cited_by_count'),citation_count_asof=now()[:10],
                     external_topics=raw.get('topics',[]),openalex_type=raw.get('type'),is_retracted=raw.get('is_retracted'),
                     abstract_available=bool(abstract),abstract_phrase_hits=features,abstract_feature_method='allowed_phrase_occurrence_v3',abstract_hash=hashlib.sha256(abstract.encode()).hexdigest() if abstract else None,
@@ -77,8 +97,11 @@ def harvest(max_pages=50,dry_run=False):
                 if old and {k:v for k,v in old.items() if k!='retrieved_at'}=={k:v for k,v in entry.items() if k!='retrieved_at'}:entry=old
                 existing[paper['paper_id']]=entry;status['matched']+=1
             write(DATA/'enrichment.jsonl',lines(sorted(existing.values(),key=lambda p:p['paper_id'])))
-            if not os.getenv('OPENALEX_API_KEY'):
-                state['batch']+=40;write(checkpoint,json.dumps(state));time.sleep(.4);continue
+            if not api_token or priority_new:
+                state['batch']+=40
+                if not priority_new:write(checkpoint,json.dumps(state))
+                time.sleep(.4)
+                continue
             nxt=payload.get('meta',{}).get('next_cursor')
             if not nxt or not payload.get('results'):
                 status['status']='complete';checkpoint.unlink(missing_ok=True);break
@@ -123,7 +146,7 @@ def parse_document(content,content_type):
                 return [{'page':None,'text':text}],'beautifulsoup-v2-structured'
     raise ValueError('Not an inspectable full-text document')
 
-def acquire(max_papers=40,dry_run=False):
+def acquire(max_papers=40,dry_run=False,max_runtime_seconds=None):
     from .evidence import extract_variables, EXTRACTION_VERSION
     from .study import extract_study_claims, STUDY_VERSION
     papers={p['paper_id']:p for p in read('papers.jsonl')}
@@ -131,31 +154,31 @@ def acquire(max_papers=40,dry_run=False):
     variables={v['variable_id']:v for v in read('variables.jsonl')}
     claims={v['claim_id']:v for v in read('study_claims.jsonl')}
     runs=read('extraction_runs.jsonl')
-    candidates=[e for e in enrich if e.get('oa_locations') and e['paper_id'] in papers and (not old.get(e['paper_id'],{}).get('accessible') or (old[e['paper_id']].get('extraction_algorithm_version')!=EXTRACTION_VERSION or old[e['paper_id']].get('study_algorithm_version')!=STUDY_VERSION))]
-    candidates.sort(key=lambda e:(not any(l.get('pdf_url') and not any(h in l['pdf_url'] for h in ['wiley','ssrn','jstor']) for l in e['oa_locations']),e['paper_id'] in old))
-    # Round-robin title-derived domains ensures the budget is not only the most-cited stream.
-    from .taxonomy import suggest_assignments
-    tax=json.loads((DATA/'ontology.yaml').read_text(encoding='utf-8'))
-    bins={};unassigned=[]
-    for e in candidates:
-        tags=[a['term_id'] for a in suggest_assignments([papers[e['paper_id']]],tax) if a['term_id'].startswith('SMS-')]
-        (bins.setdefault(tags[0],[]) if tags else unassigned).append(e)
-    ordered=[]
-    while any(bins.values()):
-        for group in bins.values():
-            if group:ordered.append(group.pop(0))
-    ordered+=unassigned
-    if dry_run:return {'status':'dry_run','candidate_papers':len(ordered),'budget':max_papers,'provider':'deterministic','paid_api_calls':0}
+    # New OA items are processed first; previously denied or failed sources
+    # receive a bounded cooldown rather than monopolising every weekly run.
+    all_plans=choose_papers(papers,enrich,old,EXTRACTION_VERSION,STUDY_VERSION,max_papers=len(enrich))
+    plans=all_plans[:max_papers]
+    if dry_run:
+        from collections import Counter
+        return {'status':'dry_run','candidate_papers':len(all_plans),
+                'selected_papers':len(plans),'reasons':dict(Counter(p['reason'] for p in plans)),
+                'budget':max_papers,'provider':'deterministic','paid_api_calls':0}
     (CACHE/'fulltext').mkdir(parents=True,exist_ok=True)
     robots={};processed=0
-    with httpx.Client(timeout=25,follow_redirects=True,headers={'User-Agent':USER_AGENT}) as client:
-        for e in ordered[:max_papers]:
-            paper=papers[e['paper_id']];key=hashlib.sha256(paper['paper_id'].encode()).hexdigest()[:16]
-            receipt=dict(paper_id=paper['paper_id'],accessible=False,checked_at=now(),source_url=None,license=None,source_hash=None,parser_version=None,failures=[],missing_reason='no_accessible_lawful_fulltext')
-            locs=sorted(e['oa_locations'],key=lambda l:('wiley.com' in (l.get('pdf_url') or l.get('landing_page_url') or ''),not bool(l.get('pdf_url'))))
-            for loc in locs[:4]:
-                url=loc.get('pdf_url') or loc.get('landing_page_url')
-                if not url or urlparse(url).scheme!='https':continue
+    started=time.monotonic()
+    with httpx.Client(timeout=20,follow_redirects=True,headers={'User-Agent':USER_AGENT}) as client:
+        for plan in plans:
+            if max_runtime_seconds is not None and time.monotonic()-started>=max_runtime_seconds:
+                break
+            e=plan['entry']
+            paper=papers[e['paper_id']]
+            key=hashlib.sha256(paper['paper_id'].encode()).hexdigest()[:16]
+            receipt=dict(paper_id=paper['paper_id'],accessible=False,checked_at=now(),
+                         source_url=None,license=None,source_hash=None,parser_version=None,
+                         failures=[],missing_reason='no_accessible_lawful_fulltext',
+                         attempt_reason=plan['reason'])
+            for loc in plan['sources']:
+                url=loc['url']
                 # OA metadata is an access lead, not a right to bypass publisher controls.
                 try:
                     if not robots_allowed(client,url,robots):raise ValueError('robots_disallowed_or_unavailable')
@@ -194,9 +217,11 @@ def acquire(max_papers=40,dry_run=False):
             # Failed reprocessing must not invalidate evidence from the last
             # successful source, which may no longer be accessible this run.
             if not receipt['accessible'] and old.get(e['paper_id'],{}).get('accessible'):
-                previous=old[e['paper_id']]
-                receipt['missing_reason']='refresh_failed_prior_evidence_retained'
-                receipt['prior_source_preserved']=previous['source_url']
+                previous=dict(old[e['paper_id']])
+                # Keep source hash and extracted claims consistent with the
+                # previously accepted PDF while throttling future retries.
+                previous['last_upgrade_attempt_at']=receipt['checked_at']
+                previous['refresh_failures']=receipt['failures']
                 old[e['paper_id']]=previous
             else:
                 old[e['paper_id']]=receipt
@@ -207,7 +232,10 @@ def acquire(max_papers=40,dry_run=False):
             write(DATA/'study_claims.jsonl',lines(sorted(claims.values(),key=lambda p:p['claim_id'])))
             write(DATA/'extraction_runs.jsonl',lines(runs))
             print(json.dumps({'processed':processed,'paper_id':e['paper_id'],'accessible':receipt['accessible'],'total_variables':len(variables)}),flush=True)
-    return {'processed':processed,'accessible':sum(r['accessible'] for r in old.values()),'variables':len(variables),'study_claims':len(claims)}
+    return {'processed':processed,'eligible':len(all_plans),
+            'budget_exhausted':processed<len(plans),
+            'accessible':sum(r['accessible'] for r in old.values()),
+            'variables':len(variables),'study_claims':len(claims)}
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('command',choices=['metadata','fulltext']);parser.add_argument('--budget',type=int,default=40);parser.add_argument('--dry-run',action='store_true');args=parser.parse_args()

@@ -97,13 +97,22 @@ def gate():
 def refresh(mode='daily',dry_run=False):
     from argparse import Namespace
     from .enrich import harvest,acquire
-    if dry_run:return {'status':'dry_run','mode':mode,'metadata_pages':20,'enrichment_requests':12 if mode=='weekly' else 0,'fulltext_papers':40 if mode=='weekly' else 0,'paid_api_calls':0,'publication_gate':'schema+tests+build'}
+    if dry_run:return {'status':'dry_run','mode':mode,'metadata_pages':20,
+        'enrichment_requests':12 if mode=='weekly' else 4 if mode=='daily' else 0,
+        'fulltext_papers':40 if mode=='weekly' else 4 if mode=='daily' else 0,
+        'paid_api_calls':0,'publication_gate':'schema+tests+build'}
     start=time.perf_counter();run={'started_at':now(),'mode':mode,'status':'running'}
     try:
         if mode in {'daily','weekly'}:
             sync(Namespace(backfill=False,max_pages=20,rows=500))
             if (DATA/'staging/incremental/checkpoint.json').exists():raise ValueError('Incremental sync incomplete; old deployment retained')
-        if mode=='weekly':run['enrichment']=harvest(12);run['acquisition']=acquire(40)
+        if mode=='daily':
+            run['enrichment']=harvest(4,priority_new=True)
+            run['acquisition']=acquire(4,max_runtime_seconds=150)
+        if mode=='weekly':
+            run['enrichment']=harvest(12)
+            run['new_papers_enrichment']=harvest(4,priority_new=True)
+            run['acquisition']=acquire(40,max_runtime_seconds=600)
         run['publisher']=publisher_check();run['quality']=gate();run['status']='validated_automatic'
     except Exception as exc:
         run.update(status='failed',error_type=type(exc).__name__);raise
