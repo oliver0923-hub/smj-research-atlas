@@ -87,7 +87,7 @@ const onDemand=add(app,'section',undefined,'record');
 add(onDemand,'h3','指定這篇論文：按需分析（限 Atlas 專案擁有人）');
 add(onDemand,'p','不必等待全庫爬蟲：送出 GitHub Issue 後會只針對這篇 DOI 嘗試合法 OA 正文，回覆假設／命題、實證結果與穩健性，及 sample_period、data_source、empirical_method。Review 文章會標明暫定不適用，不會把取不到正文解讀成研究沒有假設。','muted');
 const query='Atlas analyze: '+p.doi;
-const body='DOI: '+p.doi+'\\nTitle: '+p.title;
+const body=['DOI: '+p.doi,'Title: '+p.title].join(String.fromCharCode(10));
 const issueURL='https://github.com/oliver0923-hub/smj-research-atlas/issues/new?title='+encodeURIComponent(query)+'&body='+encodeURIComponent(body);
 link(onDemand,'啟動這篇論文的單篇深入擷取（開啟預填 GitHub Issue，送出後執行）',issueURL);
 box('本頁自動驗證的是來源、文字對齊與資料一致性，不是人工專家審閱；沒有從標題推定公式、係數或因果效果。');add(app,'h2','研究分類總覽');
