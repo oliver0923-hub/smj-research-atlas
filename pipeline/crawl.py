@@ -146,6 +146,7 @@ def discover(queue,control,fetcher,budget=4):
     from .cli import DATA,read,write,lines
     from .enrich import FIELDS,abstract_text
     from .wiley import merge_wiley_candidate
+    from .semantic import hits_for_text,FEATURE_VERSION
     from .taxonomy import text_key
     papers={p['paper_id']:p for p in read('papers.jsonl')}
     enrichment={e['paper_id']:e for e in read('enrichment.jsonl')}
@@ -171,7 +172,9 @@ def discover(queue,control,fetcher,budget=4):
                 enrichment[p['paper_id']]=dict(paper_id=p['paper_id'],openalex_id=raw['id'],source_url=raw['id'],retrieved_at=stamp,
                     abstract_available=bool(abstract),abstract_hash=digest(abstract) if abstract else None,
                     abstract_phrase_hits=[n['id'] for n in tax['nodes'] if n['level'] in {'research_topic','construct','theory'} and any(' '+text_key(s)+' ' in normalized for s in n.get('match_phrases',[]))],
-                    abstract_feature_method='allowed_phrase_occurrence_v5',
+                    abstract_feature_method='allowed_phrase_occurrence_v6',
+                    abstract_weak_hits=hits_for_text(abstract,tax) if abstract else [],
+                    abstract_weak_method=FEATURE_VERSION,
                     oa_locations=merge_wiley_candidate(p['doi'],raw,[l for l in locs if l.get('is_oa')]),
                     citation_count=raw.get('cited_by_count'),is_retracted=raw.get('is_retracted'))
             p['discovery_status']='oa_location_found' if raw and locations(enrichment[p['paper_id']]) else 'not_oa_found_yet'
