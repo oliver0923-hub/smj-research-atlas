@@ -1,7 +1,7 @@
 {
   "schema_version": "4.0.0",
-  "generated_at": "2026-11-08T19:59:50.064049+00:00",
-  "state": "running",
+  "generated_at": "2026-11-09T01:12:58.647200+00:00",
+  "state": "cycle_complete",
   "cycle_id": "cycle:2026-11-08T03:37:57.874768+00:00",
   "doi_total": 3949,
   "discovered": 3949,
@@ -9,21 +9,20 @@
   "with_oa_candidates": 1038,
   "no_oa_found_yet": 2911,
   "source_candidates": 2452,
-  "source_attempted_this_cycle": 2441,
-  "source_unvisited": 11,
-  "sources_with_http_attempt": 2423,
+  "source_attempted_this_cycle": 2452,
+  "source_unvisited": 0,
+  "sources_with_http_attempt": 2434,
   "papers_with_http_200_body": 102,
   "sources_with_http_200_body": 119,
   "papers_attempted_this_cycle": 1038,
   "parsed_papers": 20,
   "source_states": {
-    "policy_blocked": 2309,
+    "policy_blocked": 2320,
     "permanent_failure_for_url": 111,
-    "extraction_partial": 21,
-    "fetch_pending": 11
+    "extraction_partial": 21
   },
   "failure_classes": {
-    "http_403_access_denied_not_assumed_paywall": 1940,
+    "http_403_access_denied_not_assumed_paywall": 1951,
     "robots_unavailable_http_403": 307,
     "metadata_landing_not_fulltext": 9,
     "ssrf_blocked": 40,
@@ -34,13 +33,13 @@
     "robots_disallowed": 6,
     "http_405_unexpected_response": 1
   },
-  "retry_waiting": 2355,
-  "round_complete": false,
+  "retry_waiting": 2366,
+  "round_complete": true,
   "completion_definition": "Every indexed DOI has a provider discovery receipt; every OA URL in this snapshot has a traceable attempt or policy reason",
   "discovery_scope": "OpenAlex indexed OA accepted/published locations and prior lawful receipts; not the entire internet",
   "snapshot_doi_fingerprint": "d7d28b8331dcab2b654a8092cfc0a8adf82fccc0a64f98de9b7b60876c59d021",
   "next_continuation": "cron every 3 hours while running; completed rounds enter low-frequency discovery monitoring",
-  "run_id": "42517533591",
+  "run_id": "42544315528",
   "parser_version": "article-document-4.0",
   "extractor_version": "research-fields-4.1-theory-source"
 }
