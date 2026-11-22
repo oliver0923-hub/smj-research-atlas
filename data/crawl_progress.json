@@ -1,6 +1,6 @@
 {
   "schema_version": "4.0.0",
-  "generated_at": "2026-11-22T11:59:13.488293+00:00",
+  "generated_at": "2026-11-22T11:59:25.884509+00:00",
   "state": "running",
   "cycle_id": "cycle:2026-11-08T03:37:57.874768+00:00",
   "doi_total": 3954,
@@ -22,8 +22,8 @@
     "extraction_partial": 22
   },
   "failure_classes": {
-    "http_403_access_denied_not_assumed_paywall": 2022,
-    "robots_unavailable_http_403": 244,
+    "http_403_access_denied_not_assumed_paywall": 2037,
+    "robots_unavailable_http_403": 229,
     "metadata_landing_not_fulltext": 9,
     "ssrf_blocked": 40,
     "http_404": 13,
