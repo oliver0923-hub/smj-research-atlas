@@ -1,6 +1,6 @@
 {
   "schema_version": "4.0.0",
-  "generated_at": "2026-11-22T20:01:15.840803+00:00",
+  "generated_at": "2026-11-22T20:01:21.813234+00:00",
   "state": "running",
   "cycle_id": "cycle:2026-11-08T03:37:57.874768+00:00",
   "doi_total": 3954,
@@ -23,14 +23,14 @@
     "fetch_pending": 7
   },
   "failure_classes": {
-    "http_403_access_denied_not_assumed_paywall": 2243,
+    "http_403_access_denied_not_assumed_paywall": 2246,
     "metadata_landing_not_fulltext": 9,
     "ssrf_blocked": 40,
     "http_404": 13,
     "not_article_document": 109,
     "article_identity_mismatch": 11,
     "ssrf_unsafe_url": 22,
-    "robots_unavailable_http_403": 52,
+    "robots_unavailable_http_403": 49,
     "robots_disallowed": 8,
     "parse_or_extraction_failure:RemoteProtocolError": 2,
     "http_405_unexpected_response": 1
